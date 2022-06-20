@@ -14,5 +14,5 @@ For now, plugin supports Aircarft type "Aircraft with tail" only
 
 ## Datarefs
 
-Some datarefs are available under *inavhitl/* node for debugging.
+Some datarefs are available under **inavhitl/** node for debugging.
 
