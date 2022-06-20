@@ -103,6 +103,12 @@ void TStats::init()
     [](void* inRefcon) {return g_stats.fDebug0; },
     [](void* inRefcon, float inValue) { g_stats.fDebug0 = inValue;  }
   );
+
+  this->df_cyclesPerSecond = this->registerIntDataRef("inav_hitl/debug/cyclesPerSecond",
+    [](void* inRefcon) {return g_stats.cyclesPerSecond; },
+    [](void* inRefcon, int inValue) { g_stats.cyclesPerSecond = inValue;  }
+  );
+
 }
 
 //==============================================================
@@ -123,6 +129,9 @@ void TStats::loop()
 
     this->serialPacketsReceivedPerSecond = this->serialPacketsReceived - this->serialPacketsReceivedLast;
     this->serialPacketsReceivedLast = this->serialPacketsReceived;
+
+    this->cyclesPerSecond = this->cycles - this->cyclesLast;
+    this->cyclesLast = this->cycles;
 
     this->lastUpdate = GetTickCount();
   }

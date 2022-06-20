@@ -40,6 +40,11 @@ public:
   XPLMDataRef df_fDebug0;
   float fDebug0 = 0;
 
+  XPLMDataRef df_cyclesPerSecond;
+  int cyclesPerSecond = 0;
+  int cycles = 0;
+  int cyclesLast = 0;
+
   uint32_t lastUpdate;
 
   void init();

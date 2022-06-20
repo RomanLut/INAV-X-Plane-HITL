@@ -26,6 +26,8 @@
 uint32_t lastUpdateTime;
 bool wait;
 
+XPLMFlightLoopID loopId;
+
 //==============================================================
 //==============================================================
 void cbConnect( bool connected)
@@ -65,6 +67,7 @@ float floop_cb(float elapsed1, float elapsed2, int ctr, void* refcon)
     }
   }
 
+  g_stats.cycles++;
   g_stats.loop();
   return -1;
 }
@@ -91,16 +94,6 @@ PLUGIN_API void	XPluginStop(void)
 
 //==============================================================
 //==============================================================
-PLUGIN_API void XPluginDisable(void) 
-{
-  g_stats.close();
-  g_msp.disconnect();
-  g_menu.destroyMenu();
-  XPLMUnregisterFlightLoopCallback(floop_cb, NULL);
-}
-
-//==============================================================
-//==============================================================
 
 PLUGIN_API int XPluginEnable(void) 
 { 
@@ -110,11 +103,27 @@ PLUGIN_API int XPluginEnable(void)
 
   g_menu.createMenu();
 
-  XPLMRegisterFlightLoopCallback(floop_cb, 1, NULL);
+  XPLMCreateFlightLoop_t params;
+  params.structSize = sizeof(XPLMCreateFlightLoop_t);
+  params.callbackFunc = &floop_cb;
+  params.phase = xplm_FlightLoop_Phase_AfterFlightModel;
+  params.refcon = NULL;
+  loopId = XPLMCreateFlightLoop(&params);
+  XPLMScheduleFlightLoop(loopId, -1, true);
 
   playSound("assets\\ready_to_connect.wav");
 
   return 1;
+}
+
+//==============================================================
+//==============================================================
+PLUGIN_API void XPluginDisable(void)
+{
+  g_stats.close();
+  g_msp.disconnect();
+  g_menu.destroyMenu();
+  XPLMDestroyFlightLoop(loopId);
 }
 
 //==============================================================
