@@ -25,7 +25,7 @@ You have to build and flash Simulator-enabled INAV firmware from: https://github
 - Select Aircraft **Aerolite 103**
 - Start flight
 - Select **Plugins->INAV HITL->Link->Connect to flight controller**. Plugin should automatically detect COM port.
-- Flight using RC Controller 
+- Flight using RC Controller. Hint: disable brakes with "B" key. 
 
 
 # Development
