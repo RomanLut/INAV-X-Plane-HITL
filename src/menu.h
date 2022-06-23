@@ -1,6 +1,7 @@
 #pragma once
 
 #include "XPLMMenus.h"
+#include "msp.h"
 
 //=======================================================
 //=======================================================
@@ -20,6 +21,17 @@ public:
 	XPLMMenuID gps_fix_menu_id;
 	int gps_fix_0_id;
 	int gps_fix_12_id;
+
+  XPLMMenuID osd_menu_id;
+  int osd_id;
+  int osd_none_id;
+  int osd_auto_id;
+  int osd_pal_id;
+  int osd_ntsc_id;
+
+  int osd_nearest_id;
+  int osd_linear_id;
+
 	int gps_spoofing_1_id;
 	int gps_spoofing_2_id;
 	int gps_spoofing_3_id;
@@ -30,8 +42,9 @@ public:
   void menu_handler(void * in_menu_ref, void * in_item_ref);
   void createMenu();
   void destroyMenu();
-  void _cbConnect(bool connected);
+  void _cbConnect(TCBConnectParm state);
   void updateGPSMenu();
+  void updateOSDMenu();
 };
 
 extern TMenu g_menu;

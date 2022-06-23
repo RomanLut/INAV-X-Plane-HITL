@@ -8,7 +8,7 @@ TSimData g_simData;
 //==============================================================
 void TSimData::init()
 {
-  gps_fix = 2;
+  gps_fix = GPS_FIX_3D;
   gps_numSat = 12;
   gps_spoofing = 0;
 
@@ -108,6 +108,8 @@ void TSimData::updateFromINAV(const TMSPSimulatorFromINAV* data)
 void TSimData::sendToINAV()
 {
   TMSPSimulatorToINAV data;
+
+  data.version = 1;
 
   data.flags = 1; 
 

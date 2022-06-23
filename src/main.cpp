@@ -21,7 +21,8 @@
 #include "simData.h"
 #include "msp.h"
 #include "stats.h"
-#include "playsound.h"
+#include "util.h"
+#include "osd.h"
 
 uint32_t lastUpdateTime;
 bool wait;
@@ -30,21 +31,25 @@ XPLMFlightLoopID loopId;
 
 //==============================================================
 //==============================================================
-void cbConnect( bool connected)
+void cbConnect(TCBConnectParm state)
 {
-  g_menu._cbConnect(connected);
+  g_menu._cbConnect(state);
+  g_osd.cbConnect(state);
   lastUpdateTime = GetTickCount();
   wait = false;
 }
 
 //==============================================================
 //==============================================================
-void cbMessage(int code, const uint8_t* messageBuffer)
+void cbMessage(int code, const uint8_t* messageBuffer, int length)
 {
   if (code == MSP_SIMULATOR)
   {
     g_simData.updateFromINAV((const TMSPSimulatorFromINAV*)messageBuffer);
     g_simData.sendToXPlane();
+
+    g_osd.updateFromINAV((const TMSPSimulatorFromINAV*)messageBuffer);
+
     wait = false;
   }
 }
@@ -83,6 +88,8 @@ PLUGIN_API int XPluginStart(
 	strcpy(outSig, "https://github.com/iNavFlight");
 	strcpy(outDesc, "INAV Hardware in the loop");
 
+  g_osd.init();
+
 	return 1;
 }
 
@@ -90,6 +97,7 @@ PLUGIN_API int XPluginStart(
 //==============================================================
 PLUGIN_API void	XPluginStop(void)
 {
+  g_osd.destroy();
 }
 
 //==============================================================

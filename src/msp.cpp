@@ -336,7 +336,12 @@ void MSP::disconnect()
     delete this->serial;
     this->serial = NULL;
   }
-  this->state = STATE_DISCONNECTED;
+
+  if (this->state != STATE_DISCONNECTED)
+  {
+    this->state = STATE_DISCONNECTED;
+    this->cbConnect(CBC_DISCONNECTED);
+  }
 }
 
 //======================================================
@@ -347,11 +352,11 @@ void MSP::processMessage()
   {
   case STATE_ENUMERATE_WAIT:
     this->state = STATE_CONNECTED;
-    this->cbConnect(true);
+    this->cbConnect(CBC_CONNECTED);
     break;
 
   case STATE_CONNECTED:
-    this->cbMessage(this->code, this->message_buffer);
+    this->cbMessage(this->code, this->message_buffer, this->message_length_received);
     break;
   }
 }
@@ -380,7 +385,7 @@ void MSP::loop()
     if (!this->probeNextPort())
     {
       this->state = STATE_DISCONNECTED;
-      this->cbConnect(false);
+      this->cbConnect(CBC_CONNECTION_FAILED);
     }
     break;
 

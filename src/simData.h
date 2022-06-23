@@ -3,6 +3,10 @@
 #include "XPLMDataAccess.h"
 #include "msp.h"
 
+#define GPS_NO_FIX  0
+#define GPS_FIX_2D  1
+#define GPS_FIX_3D  2
+
 //======================================================
 //======================================================
 class TSimData

@@ -1,28 +1,31 @@
 #include "menu.h"
 
 #include "msp.h"
-#include "playSound.h"
+#include "util.h"
 #include "simData.h"
+#include "osd.h"
 
 TMenu g_menu;
 
-extern void cbConnect(bool connected);
-extern void cbMessage(int code, const uint8_t* messageBuffer);
+extern void cbConnect(TCBConnectParm state);
+extern void cbMessage(int code, const uint8_t* messageBuffer, int length);
 
 //==============================================================
 //==============================================================
-void TMenu::_cbConnect(bool connected)
+void TMenu::_cbConnect(TCBConnectParm state)
 {
-  if (connected)
+  if (state == CBC_CONNECTED)
   {
     XPLMSetMenuItemName(this->connect_menu_id, this->connect_disconnect_id, "Disconnect from Flight Controller", 0);
     playSound("assets\\connected.wav");
   }
-  else
+  else 
   {
-    //todo: messagebox fail
     XPLMSetMenuItemName(this->connect_menu_id, this->connect_disconnect_id, "Connect to Flight Controller", 0);
-    playSound("assets\\connection_failed.wav");
+    if (state == CBC_CONNECTION_FAILED)
+    {
+      playSound("assets\\connection_failed.wav");
+    }
   }
 }
 
@@ -32,6 +35,19 @@ void TMenu::updateGPSMenu()
 {
   XPLMCheckMenuItem(this->gps_fix_menu_id, this->gps_fix_0_id, g_simData.gps_numSat == 0 ? xplm_Menu_Checked : xplm_Menu_Unchecked);
   XPLMCheckMenuItem(this->gps_fix_menu_id, this->gps_fix_12_id, g_simData.gps_numSat == 12 ? xplm_Menu_Checked : xplm_Menu_Unchecked);
+}
+
+//==============================================================
+//==============================================================
+void TMenu::updateOSDMenu()
+{
+  XPLMCheckMenuItem(this->osd_menu_id, this->osd_none_id, g_osd.osd_type == OSD_NONE ? xplm_Menu_Checked : xplm_Menu_Unchecked);
+  XPLMCheckMenuItem(this->osd_menu_id, this->osd_auto_id, g_osd.osd_type == OSD_AUTO ? xplm_Menu_Checked : xplm_Menu_Unchecked);
+  XPLMCheckMenuItem(this->osd_menu_id, this->osd_pal_id, g_osd.osd_type == OSD_PAL ? xplm_Menu_Checked : xplm_Menu_Unchecked);
+  XPLMCheckMenuItem(this->osd_menu_id, this->osd_ntsc_id, g_osd.osd_type == OSD_NTSC ? xplm_Menu_Checked : xplm_Menu_Unchecked);
+
+  XPLMCheckMenuItem(this->osd_menu_id, this->osd_nearest_id, g_osd.smoothed == false ? xplm_Menu_Checked : xplm_Menu_Unchecked);
+  XPLMCheckMenuItem(this->osd_menu_id, this->osd_linear_id, g_osd.smoothed == true ? xplm_Menu_Checked : xplm_Menu_Unchecked);
 }
 
 //==============================================================
@@ -73,7 +89,7 @@ void TMenu::menu_handler(void * in_menu_ref, void * in_item_ref)
   }
   else if (!strcmp((const char *)in_item_ref, "gps_fix_0"))
   {
-    g_simData.gps_numSat = 0;
+    g_simData.gps_numSat = GPS_NO_FIX;
     g_simData.gps_fix = 0;
     g_simData.gps_spoofing = 0;
     this->updateGPSMenu();
@@ -81,9 +97,39 @@ void TMenu::menu_handler(void * in_menu_ref, void * in_item_ref)
   else if (!strcmp((const char *)in_item_ref, "gps_fix_12"))
   {
     g_simData.gps_numSat = 12;
-    g_simData.gps_fix = 2;
+    g_simData.gps_fix = GPS_FIX_3D;
     g_simData.gps_spoofing = 0;
     this->updateGPSMenu();
+  }
+  else if (!strcmp((const char *)in_item_ref, "osd_none"))
+  {
+    g_osd.osd_type = OSD_NONE;
+    this->updateOSDMenu();
+  }
+  else if (!strcmp((const char *)in_item_ref, "osd_auto"))
+  {
+    g_osd.osd_type = OSD_AUTO;
+    this->updateOSDMenu();
+  }
+  else if (!strcmp((const char *)in_item_ref, "osd_pal"))
+  {
+    g_osd.osd_type = OSD_PAL;
+    this->updateOSDMenu();
+  }
+  else if (!strcmp((const char *)in_item_ref, "osd_ntsc"))
+  {
+    g_osd.osd_type = OSD_NTSC;
+    this->updateOSDMenu();
+  }
+  else if (!strcmp((const char *)in_item_ref, "osd_nearest"))
+  {
+    g_osd.smoothed = false;
+    this->updateOSDMenu();
+  }
+  else if (!strcmp((const char *)in_item_ref, "osd_linear"))
+  {
+    g_osd.smoothed = true;
+    this->updateOSDMenu();
   }
 
 }
@@ -105,6 +151,19 @@ void TMenu::createMenu()
 	this->gps_fix_menu_id = XPLMCreateMenu("GPS Fix", this->menu_id, this->gps_fix_id, static_menu_handler, NULL);
 	this->gps_fix_0_id = XPLMAppendMenuItem(this->gps_fix_menu_id, "0 satellites (No fix)", (void *)"gps_fix_0", 1);
 	this->gps_fix_12_id = XPLMAppendMenuItem(this->gps_fix_menu_id, "12 satellites (3D fix)", (void *)"gps_fix_12", 1);
+
+  this->osd_id = XPLMAppendMenuItem(this->menu_id, "OSD", (void *)"OSD", 1);
+  this->osd_menu_id = XPLMCreateMenu("OSD", this->menu_id, this->osd_id, static_menu_handler, NULL);
+  this->osd_none_id = XPLMAppendMenuItem(this->osd_menu_id, "None", (void *)"osd_none", 1);
+  this->osd_auto_id = XPLMAppendMenuItem(this->osd_menu_id, "Auto", (void *)"osd_auto", 1);
+  this->osd_pal_id = XPLMAppendMenuItem(this->osd_menu_id, "PAL", (void *)"osd_pal", 1);
+  this->osd_ntsc_id = XPLMAppendMenuItem(this->osd_menu_id, "NTSC", (void *)"osd_ntsc", 1);
+
+  XPLMAppendMenuSeparator(this->osd_menu_id);
+
+  this->osd_nearest_id = XPLMAppendMenuItem(this->osd_menu_id, "Smoothing: Nearest", (void *)"osd_nearest", 1);
+  this->osd_linear_id = XPLMAppendMenuItem(this->osd_menu_id, "Smoothing: Linear", (void *)"osd_linear", 1);
+
 /*                               
 	this->gps_spoofing_1_id = XPLMAppendMenuItem(this->gps_fix_menu_id, "Spoofing: Freeze", (void *)"gps_spoofing_1", 1);
 	this->gps_spoofing_2_id = XPLMAppendMenuItem(this->gps_fix_menu_id, "Spoofing: Linear 1m/s", (void *)"gps_spoofing_2", 1);
@@ -113,6 +172,7 @@ void TMenu::createMenu()
 	this->gps_spoofing_5_id = XPLMAppendMenuItem(this->gps_fix_menu_id, "Spoofing: Circle 500m 1m/s", (void *)"gps_spoofing_5", 1);
 */
   this->updateGPSMenu();
+  this->updateOSDMenu();
 }
 
 //==============================================================

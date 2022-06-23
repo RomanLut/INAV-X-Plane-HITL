@@ -33,6 +33,30 @@
     <ClCompile Include="*.cpp" />
     <ClCompile Include="*.cpp" />
     <ClCompile Include="*.cpp" />
+    <ClCompile Include="*.cpp" />
+    <ClCompile Include="*.cpp" />
+    <ClCompile Include="*.cpp" />
+    <ClCompile Include="*.cpp" />
+    <ClCompile Include="*.cpp" />
+    <ClCompile Include="*.cpp" />
+    <ClCompile Include="*.cpp" />
+    <ClCompile Include="*.cpp" />
+    <ClCompile Include="*.cpp" />
+    <ClCompile Include="*.cpp" />
+    <ClCompile Include="*.cpp" />
+    <ClCompile Include="*.cpp" />
+    <ClCompile Include="*.cpp" />
+    <ClCompile Include="*.cpp" />
+    <ClCompile Include="*.cpp" />
+    <ClCompile Include="*.cpp" />
+    <ClCompile Include="*.cpp" />
+    <ClCompile Include="*.cpp" />
+    <ClCompile Include="*.cpp" />
+    <ClCompile Include="*.cpp" />
+    <ClCompile Include="*.cpp" />
+    <ClCompile Include="*.cpp" />
+    <ClCompile Include="*.cpp" />
+    <ClCompile Include="*.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="*.h" />
@@ -66,6 +90,42 @@
     <ClInclude Include="*.h" />
     <ClInclude Include="*.h" />
     <ClInclude Include="*.h" />
+    <ClInclude Include="*.h" />
+    <ClInclude Include="*.h" />
+    <ClInclude Include="*.h" />
+    <ClInclude Include="*.h" />
+    <ClInclude Include="*.h" />
+    <ClInclude Include="*.h" />
+    <ClInclude Include="*.h" />
+    <ClInclude Include="*.h" />
+    <ClInclude Include="*.h" />
+    <ClInclude Include="*.h" />
+    <ClInclude Include="*.h" />
+    <ClInclude Include="*.h" />
+    <ClInclude Include="*.h" />
+    <ClInclude Include="*.h" />
+    <ClInclude Include="*.h" />
+    <ClInclude Include="*.h" />
+    <ClInclude Include="menu.h" />
+    <ClInclude Include="msp.h" />
+    <ClInclude Include="osd.h" />
+    <ClInclude Include="playSound.h" />
+    <ClInclude Include="resource.h" />
+    <ClInclude Include="resource1.h" />
+    <ClInclude Include="resource2.h" />
+    <ClInclude Include="serial.h" />
+    <ClInclude Include="simData.h" />
+    <ClInclude Include="stats.h" />
+    <ClInclude Include="menu.h" />
+    <ClInclude Include="msp.h" />
+    <ClInclude Include="osd.h" />
+    <ClInclude Include="playSound.h" />
+    <ClInclude Include="resource.h" />
+    <ClInclude Include="resource1.h" />
+    <ClInclude Include="resource2.h" />
+    <ClInclude Include="serial.h" />
+    <ClInclude Include="simData.h" />
+    <ClInclude Include="stats.h" />
     <ClInclude Include="*.h" />
     <ClInclude Include="*.h" />
     <ClInclude Include="*.h" />
@@ -93,6 +153,9 @@
       <Filter>assets</Filter>
     </Media>
     <Media Include="assets\ready_to_connect.wav">
+      <Filter>assets</Filter>
+    </Media>
+    <Media Include="assets\osd_font.png">
       <Filter>assets</Filter>
     </Media>
   </ItemGroup>

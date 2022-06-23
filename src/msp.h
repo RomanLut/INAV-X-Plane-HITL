@@ -29,6 +29,8 @@ struct TMSPAPIVersion
 #pragma pack(1)
 struct TMSPSimulatorToINAV
 {
+  uint8_t version; //1
+
   uint8_t flags;  //1 - simulator enable
 
   uint8_t fix;
@@ -64,8 +66,19 @@ struct TMSPSimulatorFromINAV
   int16_t pitch;
   int16_t yaw;
   int16_t throttle;
+
+  uint8_t osdRow;  //255 - not osd data. |128 - 16 rows, otherwise 13 rows.
+  uint8_t osdCol;
+  uint8_t osdRowData[200];
 };
 #pragma pack()
+
+typedef enum
+{
+  CBC_CONNECTED,
+  CBC_CONNECTION_FAILED,
+  CBC_DISCONNECTED,
+} TCBConnectParm;
 
 //======================================================
 //======================================================
@@ -75,8 +88,8 @@ public:
 	MSP();
   ~MSP();
 
-  typedef void (*TCBConnect)(bool connected);
-  typedef void(*TCBMessage)(int code, const uint8_t* messageBuffer);
+  typedef void (*TCBConnect)(TCBConnectParm state);
+  typedef void(*TCBMessage)(int code, const uint8_t* messageBuffer, int length);
 
   void connect(TCBConnect cbConnect, TCBMessage cbMessage);
   void disconnect();

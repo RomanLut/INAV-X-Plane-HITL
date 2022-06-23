@@ -37,6 +37,11 @@ public:
   int serialBytesReceivedPerSecond = 0;
   int serialBytesReceivedLast = 0;
 
+  XPLMDataRef df_OSDUpdatesPerSecond;
+  int OSDUpdates = 0;
+  int OSDUpdatesLast = 0;
+  int OSDUpdatesPerSecond = 0;
+
   XPLMDataRef df_fDebug0;
   float fDebug0 = 0;
 

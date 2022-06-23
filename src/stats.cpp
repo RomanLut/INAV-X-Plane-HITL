@@ -109,6 +109,11 @@ void TStats::init()
     [](void* inRefcon, int inValue) { g_stats.cyclesPerSecond = inValue;  }
   );
 
+  this->df_cyclesPerSecond = this->registerIntDataRef("inav_hitl/debug/OSDUpdatesPerSecond",
+    [](void* inRefcon) {return g_stats.OSDUpdatesPerSecond; },
+    [](void* inRefcon, int inValue) { g_stats.OSDUpdatesPerSecond = inValue;  }
+  );
+
 }
 
 //==============================================================
@@ -133,6 +138,9 @@ void TStats::loop()
     this->cyclesPerSecond = this->cycles - this->cyclesLast;
     this->cyclesLast = this->cycles;
 
+    this->OSDUpdatesPerSecond = this->OSDUpdates - this->OSDUpdatesLast;
+    this->OSDUpdatesLast = this->OSDUpdates;
+
     this->lastUpdate = GetTickCount();
   }
 }
@@ -149,6 +157,7 @@ void TStats::close()
   XPLMUnregisterDataAccessor(this->df_serialPacketsReceivedPerSecond);
   XPLMUnregisterDataAccessor(this->df_serialBytesReceived);
   XPLMUnregisterDataAccessor(this->df_serialBytesReceivedPerSecond);
+  XPLMUnregisterDataAccessor(this->df_OSDUpdatesPerSecond);
   XPLMUnregisterDataAccessor(this->df_fDebug0);
 }
 
