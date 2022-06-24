@@ -14,9 +14,9 @@ For now, plugin supports Aircarft type "Aircraft with tail" only
 
 ## Timing
 
-INAV can handle 100 MSP commands per second.
+INAV can handle 100 MSP commands per second. By the way, this is the reason why whole symulation communication should be done using single MSP command.
 
-X-Plane does 60 flight loops ( physics and rendering ) per second.
+X-Plane does 60 flight loops ( physics and rendering ) per second. 
 
 Theoretically it should be possible to send updates with X-Plane flight loop frequency (60Hz) and get INAV response on the next loop.
 
