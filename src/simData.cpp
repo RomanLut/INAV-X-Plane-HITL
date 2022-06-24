@@ -89,8 +89,8 @@ void TSimData::sendToXPlane()
 {
 	XPLMSetDataf(df_out_throttle, out_throttle / 1000);
 	XPLMSetDataf(df_out_roll, out_roll / 500 - 1);
-	XPLMSetDataf(df_out_pitch, (out_pitch / 500 - 1)*-1);
-	XPLMSetDataf(df_out_yaw, out_yaw*10*0);
+	XPLMSetDataf(df_out_pitch, -( out_pitch / 500 - 1));
+	XPLMSetDataf(df_out_yaw, -( out_yaw / 500 - 1));
 }
 
 //==============================================================
@@ -122,7 +122,7 @@ void TSimData::sendToINAV()
   data.course = (int32_t)(this->yaw + 0.5f);
 
   data.roll = (int16_t)((this->roll + 180) * 10 + 0.5f);
-  data.pitch = (int16_t)((this->pitch*-1 + 180) * 10 + 0.5f);
+  data.pitch = (int16_t)((-this->pitch + 180) * 10 + 0.5f);
   data.yaw = (int16_t)(this->yaw * 10 + 0.5f);
 
   data.accel_x = (int16_t)((this->accel_x * -320) * 100 + 0.5f);
