@@ -100,6 +100,11 @@ void TOSD::drawCallback()
   float marginX = sx * OSD_MARGIN_HOR_PERCENT / 100.0f;
   float marginY = sy * OSD_MARGIN_VERT_PERCENT / 100.0f;
 
+  if (rowsCount == 13)
+  {
+    marginY += (sy - marginY * 2) / rowsCount;
+  }
+
   float x0 = marginX;
   float y0 = marginY;
 
