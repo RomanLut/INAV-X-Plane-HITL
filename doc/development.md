@@ -24,7 +24,9 @@ In practice, packets rate is ~30-40Hz due to desyncronization of both loops.
 
 ## Datarefs
 
-Some datarefs are available under **inavhitl/** node for debugging.
+8 debug variables from INAV are reflected as debugN datarefs in X-plane (Update rate is 1/8 of MSG_SIMULATOR rate).
+
+Some other datarefs are available under **inav_hitl/** node for debugging.
 
 ![](datarefs.png)
 
