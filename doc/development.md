@@ -24,16 +24,19 @@ In practice, packets rate is ~30-40Hz due to desyncronization of both loops.
 
 ## Debugging
 
+### Plugin->Data Ref Editor->Show Datarefs
+
 8 debug variables from INAV (debug[]) are reflected as debug[N] datarefs in X-Plane as *signed integers*. Update rate is 1/8 of MSG_SIMULATOR rate.
 
-Some other datarefs are available under **inav_hitl/** node for debugging (Plugin->Data Ref Editor->Show Datarefs).
+Some other datarefs are available under **inav_hitl/** node.
 
-To enable Darafer editor, download plugin from https://developer.x-plane.com/tools/datarefeditor/
+To enable Dataref editor, download plugin from https://developer.x-plane.com/tools/datarefeditor/
 
 ![](datarefs.png)
 
+### Developer->Show dev console
 
-INAV serial loogging ( see https://github.com/iNavFlight/inav/blob/master/docs/development/serial_printf_debugging.md ) messages are output to Developer console (Developer->Show dev console) with "INAV: " prefix:
+INAV serial loogging ( see https://github.com/iNavFlight/inav/blob/master/docs/development/serial_printf_debugging.md ) messages are output to Developer console with "INAV: " prefix:
 
 ![](devconsole.png)
 
