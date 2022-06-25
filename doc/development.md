@@ -22,11 +22,18 @@ Theoretically it should be possible to send updates with X-Plane flight loop fre
 
 In practice, packets rate is ~30-40Hz due to desyncronization of both loops.
 
-## Datarefs
+## Debugging
 
 8 debug variables from INAV are reflected as debugN datarefs in X-plane (Update rate is 1/8 of MSG_SIMULATOR rate).
 
 Some other datarefs are available under **inav_hitl/** node for debugging.
 
 ![](datarefs.png)
+
+
+INAV serial loogging ( see https://github.com/iNavFlight/inav/blob/master/docs/development/serial_printf_debugging.md ) messages are output to Developer console (Developer->Show dev console) with "INAV: " prefix:
+
+![](devconsole.png)
+
+
 
