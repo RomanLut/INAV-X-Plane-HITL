@@ -36,7 +36,7 @@ To enable Dataref editor, download plugin from https://developer.x-plane.com/too
 
 ### Developer->Show dev console
 
-INAV serial loogging ( see https://github.com/iNavFlight/inav/blob/master/docs/development/serial_printf_debugging.md ) messages are output to Developer console with "INAV: " prefix:
+INAV serial logging ( see https://github.com/iNavFlight/inav/blob/master/docs/development/serial_printf_debugging.md ) messages are output to Developer console with "INAV: " prefix:
 
 ![](devconsole.png)
 
