@@ -24,7 +24,7 @@ In practice, packets rate is ~30-40Hz due to desyncronization of both loops.
 
 ## Debugging
 
-8 debug variables from INAV (debug[]) are reflected as debugN datarefs in X-Plane as *signed integers*. Update rate is 1/8 of MSG_SIMULATOR rate.
+8 debug variables from INAV (debug[]) are reflected as debug[N] datarefs in X-Plane as *signed integers*. Update rate is 1/8 of MSG_SIMULATOR rate.
 
 Some other datarefs are available under **inav_hitl/** node for debugging (Plugin->Data Ref Editor->Show Datarefs).
 
