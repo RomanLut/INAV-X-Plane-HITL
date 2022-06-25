@@ -1,6 +1,7 @@
 #pragma once
 
-#include "XPLMMenus.h"
+#include "config.h"
+
 #include "msp.h"
 
 //=======================================================
@@ -32,6 +33,16 @@ public:
   int osd_nearest_id;
   int osd_linear_id;
 
+  XPLMMenuID battery_menu_id;
+  int battery_id;
+  int battery_default_id;
+  int battery_emulate_id;
+
+  XPLMMenuID beeper_menu_id;
+  int beeper_id;
+  int beeper_default_id;
+  int beeper_mute_id;
+
 	int gps_spoofing_1_id;
 	int gps_spoofing_2_id;
 	int gps_spoofing_3_id;
@@ -45,6 +56,8 @@ public:
   void _cbConnect(TCBConnectParm state);
   void updateGPSMenu();
   void updateOSDMenu();
+  void updateBatteryMenu();
+  void updateBeeperMenu();
 };
 
 extern TMenu g_menu;

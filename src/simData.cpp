@@ -1,4 +1,5 @@
 #include "simData.h"
+#include "stats.h"
 
 #include <math.h>
 
@@ -51,6 +52,9 @@ void TSimData::init()
 	//static XPLMDataRef wrt = XPLMFindDataRef("sim/graphics/view/world_render_type");
 
 	//---- output ----
+  this->emulateBattery = true;
+  this->muteBeeper = true;
+
 	df_out_throttle = XPLMFindDataRef("sim/cockpit2/engine/actuators/throttle_ratio_all");
 	df_out_roll = XPLMFindDataRef("sim/joystick/yoke_roll_ratio");
 	df_out_pitch = XPLMFindDataRef("sim/joystick/yoke_pitch_ratio");
@@ -101,6 +105,8 @@ void TSimData::updateFromINAV(const TMSPSimulatorFromINAV* data)
   this->out_roll = data->roll;
   this->out_pitch = data->pitch;
   this->out_yaw = data->yaw;
+
+  g_stats.debug[data->debugIndex] = data->debugValue;
 }
 
 //==============================================================
@@ -111,7 +117,7 @@ void TSimData::sendToINAV()
 
   data.version = 1;
 
-  data.flags = 1; 
+  data.flags = 1 | (this->emulateBattery? 2 : 0) | (this->muteBeeper ? 4 : 0);
 
   data.fix = this->gps_fix;
   data.numSat = (uint8_t)this->gps_numSat;
@@ -136,5 +142,22 @@ void TSimData::sendToINAV()
   data.baro = (int32_t)(this->baro * 3386.39f + 0.5f);
 
   g_msp.sendCommand(MSP_SIMULATOR, &data, sizeof(data));
+}
+
+//==============================================================
+//==============================================================
+void TSimData::disconnect()
+{
+  TMSPSimulatorToINAV data;
+  data.version = 1;
+  data.flags = 0;
+  g_msp.sendCommand(MSP_SIMULATOR, &data, sizeof(data));
+
+  this->out_throttle = 0;
+  this->out_roll = 500;
+  this->out_pitch = 500;
+  this->out_yaw = 500;
+
+  this->sendToXPlane();
 }
 

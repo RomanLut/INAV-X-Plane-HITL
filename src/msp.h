@@ -1,17 +1,14 @@
 #pragma once 
 
-#include <windows.h>
-#include <stdio.h>
-#include <stdlib.h>
-#include <stdint.h>
+#include "config.h"
 
 #include "serial.h"
 
 #define MSP_API_VERSION   1
-#define MSP_SIMULATOR     256
+#define MSP_SIMULATOR     0x201F
+#define MSP_DEBUGMSG      253
 
 #define MAX_MSP_MESSAGE 1024
-
 
 //======================================================
 //======================================================
@@ -67,6 +64,9 @@ struct TMSPSimulatorFromINAV
   int16_t yaw;
   int16_t throttle;
 
+  uint8_t debugIndex;
+  uint32_t debugValue;
+
   uint8_t osdRow;  //255 - not osd data. |128 - 16 rows, otherwise 13 rows.
   uint8_t osdCol;
   uint8_t osdRowData[200];
@@ -78,6 +78,7 @@ typedef enum
   CBC_CONNECTED,
   CBC_CONNECTION_FAILED,
   CBC_DISCONNECTED,
+  CBC_TIMEOUT_DISCONNECTED,
 } TCBConnectParm;
 
 //======================================================
@@ -107,6 +108,7 @@ private:
     STATE_ENUMERATE,
     STATE_ENUMERATE_WAIT,
     STATE_CONNECTED,
+    STATE_TIMEOUT,
   } TState;
 
   TState state = STATE_DISCONNECTED;
@@ -135,12 +137,14 @@ private:
 
   TDecoderState decoderState = DS_IDLE;
 
+  uint32_t lastUpdate;
+
   uint8_t crc8_dvb_s2(uint8_t crc, unsigned char a);
   bool probeNextPort();
 
   Serial* serial;
   int portId;
-  unsigned long time;
+  unsigned long probeTime;
   TCBConnect cbConnect;
   TCBMessage cbMessage;
 

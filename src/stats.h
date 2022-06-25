@@ -1,7 +1,7 @@
 #pragma once
-#include <stdint.h>
 
-#include "XPLMDataAccess.h"
+#include "config.h"
+#include "simData.h"
 
 //======================================================
 //======================================================
@@ -42,8 +42,9 @@ public:
   int OSDUpdatesLast = 0;
   int OSDUpdatesPerSecond = 0;
 
-  XPLMDataRef df_fDebug0;
-  float fDebug0 = 0;
+  XPLMDataRef df_debug[DEBUG_U32_COUNT];
+  char debugName[DEBUG_U32_COUNT][32];
+  int debug[DEBUG_U32_COUNT];
 
   XPLMDataRef df_cyclesPerSecond;
   int cyclesPerSecond = 0;
@@ -58,8 +59,8 @@ public:
 
 private:
 
-  XPLMDataRef registerIntDataRef( const char* pName, int(*GetCounterDataRefCB)(void* inRefcon), void(*SetCounterDataRefCB)(void* inRefcon, int inValue));
-  XPLMDataRef registerFloatDataRef(const char* pName, float(*GetCounterDataRefCB)(void* inRefcon), void(*SetCounterDataRefCB)(void* inRefcon, float inValue));
+  XPLMDataRef registerIntDataRef( const char* pName, int *pValue);
+  XPLMDataRef registerFloatDataRef(const char* pName, float *pValue);
 };
 
 extern TStats g_stats;

@@ -1,6 +1,4 @@
-#include <stdint.h>
-
-#include "Serial.h"
+#include "serial.h"
 
 #include "stats.h"
 
@@ -143,8 +141,6 @@ void Serial::flushOut()
       ClearCommError(this->hSerial, &this->errors, &this->status);
       return;
     }
-
-    g_stats.fDebug0 += GetTickCount() - t;
 
     g_stats.serialBytesSent += this->writeBufferCount;
     g_stats.serialPacketsSent += 1;

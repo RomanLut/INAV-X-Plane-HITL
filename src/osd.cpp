@@ -1,9 +1,8 @@
-#include "osd.h"
 
 #include "lodepng.h"
 
+#include "osd.h"
 #include "util.h"
-
 #include "stats.h"
 
 TOSD g_osd;

@@ -1,5 +1,3 @@
-#include "XPLMPlugin.h"
-
 #include "stats.h"
 
 #define MSG_ADD_DATAREF 0x01000000           //  Add dataref to DRE message
@@ -8,18 +6,20 @@ TStats g_stats;
 
 //==============================================================
 //==============================================================
-XPLMDataRef TStats::registerIntDataRef(const char* pName, int(*GetCounterDataRefCB)(void* inRefcon), void(*SetCounterDataRefCB)(void* inRefcon, int inValue))
+XPLMDataRef TStats::registerIntDataRef(const char* pName, int* pValue)
 {
   XPLMDataRef res = XPLMRegisterDataAccessor(pName,
     xplmType_Int,                                  // The types we support
     1,                                             // Writable
-    GetCounterDataRefCB, SetCounterDataRefCB,      // Integer accessors
+    [](void* inRefcon) {return *((int*)inRefcon); },
+    [](void* inRefcon, int inValue) { *((int*)inRefcon) = inValue; },
+    // Integer accessors
     NULL, NULL,                                    // Float accessors
     NULL, NULL,                                    // Doubles accessors
     NULL, NULL,                                    // Int array accessors
     NULL, NULL,                                    // Float array accessors
     NULL, NULL,                                    // Raw data accessors
-    NULL, NULL);
+    pValue, pValue);
 
   XPLMPluginID PluginID = XPLMFindPluginBySignature("xplanesdk.examples.DataRefEditor");
   if (PluginID != XPLM_NO_PLUGIN_ID)
@@ -31,18 +31,20 @@ XPLMDataRef TStats::registerIntDataRef(const char* pName, int(*GetCounterDataRef
 
 //==============================================================
 //==============================================================
-XPLMDataRef TStats::registerFloatDataRef(const char* pName, float(*GetCounterDataRefCB)(void* inRefcon), void(*SetCounterDataRefCB)(void* inRefcon, float inValue))
+XPLMDataRef TStats::registerFloatDataRef(const char* pName, float *pValue)
 {
   XPLMDataRef res = XPLMRegisterDataAccessor(pName,
     xplmType_Float,                                  // The types we support
     1,                                             // Writable
     NULL, NULL,                                    // Integer accessors
-    GetCounterDataRefCB, SetCounterDataRefCB,      // Float accessors
+    [](void* inRefcon) {return *((float*)inRefcon); },
+    [](void* inRefcon, float inValue) { *((float*)inRefcon) = inValue; },
+    // Float accessors
     NULL, NULL,                                    // Doubles accessors
     NULL, NULL,                                    // Int array accessors
     NULL, NULL,                                    // Float array accessors
     NULL, NULL,                                    // Raw data accessors
-    NULL, NULL);
+    pValue, pValue);
 
   XPLMPluginID PluginID = XPLMFindPluginBySignature("xplanesdk.examples.DataRefEditor");
   if (PluginID != XPLM_NO_PLUGIN_ID)
@@ -59,60 +61,23 @@ void TStats::init()
 {
   this->lastUpdate = GetTickCount();
 
-  this->df_serialPacketsSent = this->registerIntDataRef("inav_hitl/serial/packetsSent",
-    [] (void* inRefcon) {return g_stats.serialPacketsSent; },
-    [](void* inRefcon, int inValue) { g_stats.serialPacketsSent = inValue;  }
-  );
+  this->df_serialPacketsSent = this->registerIntDataRef("inav_hitl/serial/packetsSent", &g_stats.serialPacketsSent);
+  this->df_serialPacketsSentPerSecond = this->registerIntDataRef("inav_hitl/serial/packetsSentPerSecond", &g_stats.serialPacketsSentPerSecond);
+  this->df_serialBytesSent = this->registerIntDataRef("inav_hitl/serial/bytesSent", &g_stats.serialBytesSent );
+  this->df_serialBytesSentPerSecond = this->registerIntDataRef("inav_hitl/serial/bytesSentPerSecond", &g_stats.serialBytesSentPerSecond );
+  this->df_serialPacketsReceived = this->registerIntDataRef("inav_hitl/serial/packetsReceived", &g_stats.serialPacketsReceived);
+  this->df_serialPacketsReceivedPerSecond = this->registerIntDataRef("inav_hitl/serial/packetsReceivedPerSecond", &g_stats.serialPacketsReceivedPerSecond);
+  this->df_serialBytesReceived = this->registerIntDataRef("inav_hitl/serial/bytesReceived", &g_stats.serialBytesReceived);
+  this->df_serialBytesReceivedPerSecond = this->registerIntDataRef("inav_hitl/serial/bytesReceivedPerSecond", &g_stats.serialBytesReceivedPerSecond);
+  this->df_cyclesPerSecond = this->registerIntDataRef("inav_hitl/debug/cyclesPerSecond", &g_stats.cyclesPerSecond);
+  this->df_cyclesPerSecond = this->registerIntDataRef("inav_hitl/debug/OSDUpdatesPerSecond", &g_stats.OSDUpdatesPerSecond);
 
-  this->df_serialPacketsSentPerSecond = this->registerIntDataRef("inav_hitl/serial/packetsSentPerSecond",
-    [](void* inRefcon) {return g_stats.serialPacketsSentPerSecond; },
-    [](void* inRefcon, int inValue) { g_stats.serialPacketsSentPerSecond = inValue;  }
-  );
-
-  this->df_serialBytesSent = this->registerIntDataRef("inav_hitl/serial/bytesSent",
-    [](void* inRefcon) {return g_stats.serialBytesSent; },
-    [](void* inRefcon, int inValue) { g_stats.serialBytesSent = inValue;  }
-    );
-
-  this->df_serialBytesSentPerSecond = this->registerIntDataRef("inav_hitl/serial/bytesSentPerSecond",
-    [](void* inRefcon) {return g_stats.serialBytesSentPerSecond; },
-    [](void* inRefcon, int inValue) { g_stats.serialBytesSentPerSecond = inValue;  }
-  );
-
-  this->df_serialPacketsReceived = this->registerIntDataRef("inav_hitl/serial/packetsReceived",
-    [](void* inRefcon) {return g_stats.serialPacketsReceived; },
-    [](void* inRefcon, int inValue) { g_stats.serialPacketsReceived = inValue;  }
-  );
-
-  this->df_serialPacketsReceivedPerSecond = this->registerIntDataRef("inav_hitl/serial/packetsReceivedPerSecond",
-    [](void* inRefcon) {return g_stats.serialPacketsReceivedPerSecond; },
-    [](void* inRefcon, int inValue) { g_stats.serialPacketsReceivedPerSecond = inValue;  }
-  );
-
-  this->df_serialBytesReceived = this->registerIntDataRef("inav_hitl/serial/bytesReceived",
-    [](void* inRefcon) {return g_stats.serialBytesReceived; },
-    [](void* inRefcon, int inValue) { g_stats.serialBytesReceived = inValue;  }
-    );
-
-  this->df_serialBytesReceivedPerSecond = this->registerIntDataRef("inav_hitl/serial/bytesReceivedPerSecond",
-    [](void* inRefcon) {return g_stats.serialBytesReceivedPerSecond; },
-    [](void* inRefcon, int inValue) { g_stats.serialBytesReceivedPerSecond = inValue;  }
-  );
-
-  this->df_fDebug0 = this->registerFloatDataRef("inav_hitl/debug/fDebug0",
-    [](void* inRefcon) {return g_stats.fDebug0; },
-    [](void* inRefcon, float inValue) { g_stats.fDebug0 = inValue;  }
-  );
-
-  this->df_cyclesPerSecond = this->registerIntDataRef("inav_hitl/debug/cyclesPerSecond",
-    [](void* inRefcon) {return g_stats.cyclesPerSecond; },
-    [](void* inRefcon, int inValue) { g_stats.cyclesPerSecond = inValue;  }
-  );
-
-  this->df_cyclesPerSecond = this->registerIntDataRef("inav_hitl/debug/OSDUpdatesPerSecond",
-    [](void* inRefcon) {return g_stats.OSDUpdatesPerSecond; },
-    [](void* inRefcon, int inValue) { g_stats.OSDUpdatesPerSecond = inValue;  }
-  );
+  for (int i = 0; i < DEBUG_U32_COUNT; i++)
+  {
+    this->debug[i] = 0;
+    sprintf(this->debugName[i], "inav_hitl/debug/debug[%d]", i);
+    this->df_debug[i] = this->registerIntDataRef(this->debugName[i], &this->debug[i]);
+  }
 
 }
 
@@ -158,6 +123,11 @@ void TStats::close()
   XPLMUnregisterDataAccessor(this->df_serialBytesReceived);
   XPLMUnregisterDataAccessor(this->df_serialBytesReceivedPerSecond);
   XPLMUnregisterDataAccessor(this->df_OSDUpdatesPerSecond);
-  XPLMUnregisterDataAccessor(this->df_fDebug0);
+
+  for (int i = 0; i < DEBUG_U32_COUNT; i++)
+  {
+    XPLMUnregisterDataAccessor(this->df_debug[i]);
+  }
+
 }
 

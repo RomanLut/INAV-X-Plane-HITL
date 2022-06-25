@@ -150,7 +150,15 @@
     <ClCompile Include="*.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="*.h" />
+    <ClInclude Include="config.h" />
+    <ClInclude Include="lodepng.h" />
+    <ClInclude Include="menu.h" />
+    <ClInclude Include="msp.h" />
+    <ClInclude Include="osd.h" />
+    <ClInclude Include="serial.h" />
+    <ClInclude Include="simData.h" />
+    <ClInclude Include="stats.h" />
+    <ClInclude Include="util.h" />
   </ItemGroup>
   <ItemGroup>
     <Media Include="assets\connected.wav" />
@@ -161,6 +169,12 @@
   <ItemGroup>
     <Media Include="assets\connection_failed.wav" />
     <Content Include="assets\connection_failed.wav">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+  </ItemGroup>
+  <ItemGroup>
+    <Media Include="assets\connection_lost.wav" />
+    <Content Include="assets\connection_lost.wav">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
   </ItemGroup>

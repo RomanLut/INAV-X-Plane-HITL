@@ -26,6 +26,10 @@ void TMenu::_cbConnect(TCBConnectParm state)
     {
       playSound("assets\\connection_failed.wav");
     }
+    else if (state == CBC_TIMEOUT_DISCONNECTED)
+    {
+      playSound("assets\\connection_lost.wav");
+    }
   }
 }
 
@@ -48,6 +52,22 @@ void TMenu::updateOSDMenu()
 
   XPLMCheckMenuItem(this->osd_menu_id, this->osd_nearest_id, g_osd.smoothed == false ? xplm_Menu_Checked : xplm_Menu_Unchecked);
   XPLMCheckMenuItem(this->osd_menu_id, this->osd_linear_id, g_osd.smoothed == true ? xplm_Menu_Checked : xplm_Menu_Unchecked);
+}
+
+//==============================================================
+//==============================================================
+void TMenu::updateBatteryMenu()
+{
+  XPLMCheckMenuItem(this->battery_menu_id, this->battery_default_id, g_simData.emulateBattery == false ? xplm_Menu_Checked : xplm_Menu_Unchecked);
+  XPLMCheckMenuItem(this->battery_menu_id, this->battery_emulate_id, g_simData.emulateBattery == true ? xplm_Menu_Checked : xplm_Menu_Unchecked);
+}
+
+//==============================================================
+//==============================================================
+void TMenu::updateBeeperMenu()
+{
+  XPLMCheckMenuItem(this->beeper_menu_id, this->beeper_default_id, g_simData.muteBeeper == false ? xplm_Menu_Checked : xplm_Menu_Unchecked);
+  XPLMCheckMenuItem(this->beeper_menu_id, this->beeper_mute_id, g_simData.muteBeeper == true ? xplm_Menu_Checked : xplm_Menu_Unchecked);
 }
 
 //==============================================================
@@ -79,6 +99,7 @@ void TMenu::menu_handler(void * in_menu_ref, void * in_item_ref)
       if (g_msp.isConnected())
       {
         XPLMSetMenuItemName(this->connect_menu_id, this->connect_disconnect_id, "Connect to Flight Controller", 0);
+        g_simData.disconnect();
         g_msp.disconnect();
       }
       else
@@ -131,6 +152,26 @@ void TMenu::menu_handler(void * in_menu_ref, void * in_item_ref)
     g_osd.smoothed = true;
     this->updateOSDMenu();
   }
+  else if (!strcmp((const char *)in_item_ref, "battery_default"))
+  {
+    g_simData.emulateBattery = false;
+    this->updateBatteryMenu();
+  }
+  else if (!strcmp((const char *)in_item_ref, "battery_emulate"))
+  {
+    g_simData.emulateBattery = true;
+    this->updateBatteryMenu();
+  }
+  else if (!strcmp((const char *)in_item_ref, "beeper_default"))
+  {
+    g_simData.muteBeeper = false;
+    this->updateBeeperMenu();
+  }
+  else if (!strcmp((const char *)in_item_ref, "beeper_mute"))
+  {
+    g_simData.muteBeeper = true;
+    this->updateBeeperMenu();
+  }
 
 }
 
@@ -159,6 +200,16 @@ void TMenu::createMenu()
   this->osd_pal_id = XPLMAppendMenuItem(this->osd_menu_id, "PAL", (void *)"osd_pal", 1);
   this->osd_ntsc_id = XPLMAppendMenuItem(this->osd_menu_id, "NTSC", (void *)"osd_ntsc", 1);
 
+  this->battery_id = XPLMAppendMenuItem(this->menu_id, "Battery", (void *)"Battery", 1);
+  this->battery_menu_id = XPLMCreateMenu("Battery", this->menu_id, this->battery_id, static_menu_handler, NULL);
+  this->battery_default_id = XPLMAppendMenuItem(this->battery_menu_id, "Default", (void *)"battery_default", 1);
+  this->battery_emulate_id = XPLMAppendMenuItem(this->battery_menu_id, "Emulate 3s", (void *)"battery_emulate", 1);
+
+  this->beeper_id = XPLMAppendMenuItem(this->menu_id, "Beeper", (void *)"Beeper", 1);
+  this->beeper_menu_id = XPLMCreateMenu("Battery", this->menu_id, this->beeper_id, static_menu_handler, NULL);
+  this->beeper_default_id = XPLMAppendMenuItem(this->beeper_menu_id, "Default", (void *)"beeper_default", 1);
+  this->beeper_mute_id = XPLMAppendMenuItem(this->beeper_menu_id, "Mute", (void *)"beeper_mute", 1);
+
   XPLMAppendMenuSeparator(this->osd_menu_id);
 
   this->osd_nearest_id = XPLMAppendMenuItem(this->osd_menu_id, "Smoothing: Nearest", (void *)"osd_nearest", 1);
@@ -173,6 +224,8 @@ void TMenu::createMenu()
 */
   this->updateGPSMenu();
   this->updateOSDMenu();
+  this->updateBatteryMenu();
+  this->updateBeeperMenu();
 }
 
 //==============================================================

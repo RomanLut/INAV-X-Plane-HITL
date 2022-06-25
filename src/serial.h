@@ -1,9 +1,6 @@
 #pragma once 
 
-#include <windows.h>
-#include <stdio.h>
-#include <stdlib.h>
-#include <stdint.h>
+#include "config.h"
 
 #define SERIAL_BUFFER_SIZE 512
 

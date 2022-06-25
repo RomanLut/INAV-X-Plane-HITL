@@ -1,15 +1,6 @@
 #pragma once
 
-#include <windows.h>
-#include <stdint.h>
-
-#include <GL/gl.h>
-#include <GL/glu.h>
-
-#include <XPLMGraphics.h>
-#include <XPLMDisplay.h>
-
-#include <stdint.h>
+#include "config.h"
 
 #include "msp.h"
 

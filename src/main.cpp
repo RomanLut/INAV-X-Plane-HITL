@@ -1,18 +1,4 @@
-#include "XPLMMenus.h"
-
-#include "XPLMProcessing.h"
-//#include "XPLMDataAccess.h"
-//#include "XPLMUtilities.h"
-//#include "XPLMPlugin.h"
-
-#include <string.h>
-#if IBM
-#include <windows.h>
-#endif
-
-#ifndef XPLM300
-#error This is made to be compiled against the XPLM300 SDK
-#endif
+#include "config.h"
 
 #define MSP_TIMEOUT_MS  1000u
 #define MSP_PERIOD_MS  10u
@@ -23,6 +9,8 @@
 #include "stats.h"
 #include "util.h"
 #include "osd.h"
+
+#include "config.h"
 
 uint32_t lastUpdateTime;
 bool wait;
@@ -52,6 +40,11 @@ void cbMessage(int code, const uint8_t* messageBuffer, int length)
 
     wait = false;
   }
+  else if (code == MSP_DEBUGMSG)
+  {
+    LOG("INAV: %s", (const char*)messageBuffer);
+  }
+
 }
 
 //==============================================================
@@ -84,6 +77,8 @@ PLUGIN_API int XPluginStart(
 	char *		outSig,
 	char *		outDesc)
 {
+  LOG("Plugin start\n");
+
 	strcpy(outName, "INAV HITL");
 	strcpy(outSig, "https://github.com/iNavFlight");
 	strcpy(outDesc, "INAV Hardware in the loop");
@@ -97,6 +92,8 @@ PLUGIN_API int XPluginStart(
 //==============================================================
 PLUGIN_API void	XPluginStop(void)
 {
+  LOG("Plugin stop\n");
+
   g_osd.destroy();
 }
 
@@ -105,6 +102,8 @@ PLUGIN_API void	XPluginStop(void)
 
 PLUGIN_API int XPluginEnable(void) 
 { 
+  LOG("Plugin enable\n");
+
   g_stats.init();
   g_simData.init(); //initialize before memu
   g_simData.updateFromXPlane();
@@ -128,6 +127,8 @@ PLUGIN_API int XPluginEnable(void)
 //==============================================================
 PLUGIN_API void XPluginDisable(void)
 {
+  LOG("Plugin disable\n");
+
   g_stats.close();
   g_msp.disconnect();
   g_menu.destroyMenu();

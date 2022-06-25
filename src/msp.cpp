@@ -1,6 +1,9 @@
 #include "msp.h"
+#include "util.h"
 
-#define MSP_DETECT_TIMEOUT_MS 300
+#define MSP_DETECT_TIMEOUT_MS         300
+#define MSP_COMM_TIMEOUT_MS           3000
+#define MSP_COMM_DEBUG_TIMEOUT_MS     60000
 
 #define JUMBO_FRAME_MIN_SIZE  255
 
@@ -52,6 +55,17 @@ void MSP::decode()
 {
   unsigned char data[1024];
   int len = this->serial->ReadData(data, 1024);
+
+  if (len > 0)
+  {
+    this->lastUpdate = GetTickCount();
+  }
+  else if (GetTickCount() > this->lastUpdate + (IsDebuggerPresent()? MSP_COMM_DEBUG_TIMEOUT_MS : MSP_COMM_TIMEOUT_MS))
+  {
+    this->state = STATE_TIMEOUT;
+    this->disconnect();
+    return;
+  }
 
   for (int i = 0; i < len; i++)
   {
@@ -299,17 +313,24 @@ bool MSP::probeNextPort()
 
     char portName[16];
     sprintf(portName, "\\\\.\\COM%d", portId );
+
+    LOG("Probing port %s\n", portName);
+
     this->serial = new Serial(portName);
     if (this->serial->IsConnected())
     {
+      LOG("Connected\n");
       if (this->sendCommand(MSP_API_VERSION, NULL, 0))
       {
+        LOG("MSP_VERSION sent\n");
         this->state = STATE_ENUMERATE_WAIT;
-        this->time = GetTickCount();
+        this->probeTime = GetTickCount();
+        this->lastUpdate = GetTickCount();
         this->decoderState = DS_IDLE;
         return true;
       }
     }
+    LOG("Unable to connect\n");
     delete this->serial;
     this->serial = NULL;
   }
@@ -331,16 +352,19 @@ void MSP::connect(TCBConnect cbConnect, TCBMessage cbMessage)
 //======================================================
 void MSP::disconnect()
 {
+  LOG("Disconnect\n");
   if (this->serial)
   {
+    this->serial->flushOut();
     delete this->serial;
     this->serial = NULL;
   }
 
   if (this->state != STATE_DISCONNECTED)
   {
+    bool timeout = this->state == STATE_TIMEOUT;
     this->state = STATE_DISCONNECTED;
-    this->cbConnect(CBC_DISCONNECTED);
+    this->cbConnect( timeout? CBC_TIMEOUT_DISCONNECTED : CBC_DISCONNECTED);
   }
 }
 
@@ -351,6 +375,7 @@ void MSP::processMessage()
   switch (state)
   {
   case STATE_ENUMERATE_WAIT:
+    LOG("Connected\n");
     this->state = STATE_CONNECTED;
     this->cbConnect(CBC_CONNECTED);
     break;
@@ -390,8 +415,9 @@ void MSP::loop()
     break;
 
   case STATE_ENUMERATE_WAIT:
-    if (GetTickCount() - this->time > MSP_DETECT_TIMEOUT_MS)
+    if (GetTickCount() - this->probeTime > MSP_DETECT_TIMEOUT_MS)
     {
+      LOG("Probe Timeout\n");
       delete this->serial;
       this->serial = NULL;
       this->state = STATE_ENUMERATE;
