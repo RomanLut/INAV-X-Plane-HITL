@@ -110,6 +110,10 @@ void TOSD::drawCallback()
   float cw = ( sx - marginX * 2 ) / OSD_COLS;
   float ch = ( sy - marginY * 2 ) / rowsCount;
 
+  //a cross on 30 cols osd does not aling ok to the center of the screen
+  //shift half charwidth to the left to aling crosss to screen center
+  x0 -= cw / 2; 
+
   glBegin(GL_QUADS);
 
   for (int y = 0; y < rowsCount; y++)
