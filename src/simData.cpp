@@ -55,10 +55,10 @@ void TSimData::init()
   this->emulateBattery = true;
   this->muteBeeper = true;
 
-  this->df_out_throttle = XPLMFindDataRef("sim/cockpit2/engine/actuators/throttle_ratio_all");
-  this->df_out_roll = XPLMFindDataRef("sim/joystick/yoke_roll_ratio");
-  this->df_out_pitch = XPLMFindDataRef("sim/joystick/yoke_pitch_ratio");
-  this->df_out_yaw = XPLMFindDataRef("sim/joystick/yoke_heading_ratio");
+  this->df_control_throttle = XPLMFindDataRef("sim/cockpit2/engine/actuators/throttle_ratio_all");
+  this->df_control_roll = XPLMFindDataRef("sim/joystick/yoke_roll_ratio");
+  this->df_control_pitch = XPLMFindDataRef("sim/joystick/yoke_pitch_ratio");
+  this->df_control_yaw = XPLMFindDataRef("sim/joystick/yoke_heading_ratio");
 }
 
 //==============================================================
@@ -91,20 +91,20 @@ void TSimData::updateFromXPlane()
 //==============================================================
 void TSimData::sendToXPlane()
 {
-	XPLMSetDataf(this->df_out_throttle, this->out_throttle / 1000);
-	XPLMSetDataf(this->df_out_roll, this->out_roll / 500 - 1);
-	XPLMSetDataf(this->df_out_pitch, -(this->out_pitch / 500 - 1));
-	XPLMSetDataf(this->df_out_yaw, -(this->out_yaw / 500 - 1));
+	XPLMSetDataf(this->df_control_throttle, (this->control_throttle + 500.0f )/ 1000.0f);
+	XPLMSetDataf(this->df_control_roll, this->control_roll / 500.0f);
+	XPLMSetDataf(this->df_control_pitch, -(this->control_pitch / 500.0f ));
+	XPLMSetDataf(this->df_control_yaw, -(this->control_yaw / 500.0f ));
 }
 
 //==============================================================
 //==============================================================
 void TSimData::updateFromINAV(const TMSPSimulatorFromINAV* data)
 {
-  this->out_throttle = data->throttle;
-  this->out_roll = data->roll;
-  this->out_pitch = data->pitch;
-  this->out_yaw = data->yaw;
+  this->control_throttle = data->throttle;
+  this->control_roll = data->roll;
+  this->control_pitch = data->pitch;
+  this->control_yaw = data->yaw;
 
   g_stats.debug[data->debugIndex] = data->debugValue;
 }
@@ -139,17 +139,17 @@ void TSimData::sendToINAV()
   data.accel_y = (int16_t)round( this->accel_y * 1000);  //expected by inav: right - negative
   data.accel_z = (int16_t)round( this->accel_z * 1000);  //expected by inav: 1.0f in stable position (1G)
 
-  g_stats.dbg_acc_x = data.accel_x;
-  g_stats.dbg_acc_y = data.accel_y;
-  g_stats.dbg_acc_z = data.accel_z;
+  g_stats.dbg_acc_x = data.accel_x / 1000.0f;
+  g_stats.dbg_acc_y = data.accel_y / 1000.0f;
+  g_stats.dbg_acc_z = data.accel_z / 1000.0f;
 
   data.gyro_x = (int16_t)round( this->gyro_x * 16);  //expected by inav: roll left wing down rotation -> negative
   data.gyro_y = (int16_t)round(-this->gyro_y * 16);  //expected by inav: pitch up rotation -> negative, 1 deerees per second
   data.gyro_z = (int16_t)round(-this->gyro_z * 16);  //expected by inav: yaw clockwise rotation (top view) ->negative
 
-  g_stats.dbg_gyro_x = data.gyro_x;
-  g_stats.dbg_gyro_y = data.gyro_y;
-  g_stats.dbg_gyro_z = data.gyro_z;
+  g_stats.dbg_gyro_x = data.gyro_x / 16.0f;
+  g_stats.dbg_gyro_y = data.gyro_y / 16.0f;
+  g_stats.dbg_gyro_z = data.gyro_z / 16.0f;
 
   data.baro = (int32_t)round(this->baro * 3386.39f);
 
@@ -165,10 +165,10 @@ void TSimData::disconnect()
   data.flags = 0;
   g_msp.sendCommand(MSP_SIMULATOR, &data, sizeof(data));
 
-  this->out_throttle = 0;
-  this->out_roll = 500;
-  this->out_pitch = 500;
-  this->out_yaw = 500;
+  this->control_throttle = 0;
+  this->control_roll = 500;
+  this->control_pitch = 500;
+  this->control_yaw = 500;
 
   this->sendToXPlane();
 }

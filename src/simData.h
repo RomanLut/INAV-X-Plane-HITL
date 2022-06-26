@@ -93,14 +93,14 @@ public:
 
 	//---- output --------  SIM_INPUTS
 
-	XPLMDataRef df_out_throttle;
-	float out_throttle;
-	XPLMDataRef df_out_roll;
-	float out_roll;
-	XPLMDataRef df_out_pitch;
-	float out_pitch;
-	XPLMDataRef df_out_yaw;
-	float out_yaw;
+	XPLMDataRef df_control_throttle;
+	int16_t control_throttle;
+	XPLMDataRef df_control_roll;
+  int16_t control_roll;
+	XPLMDataRef df_control_pitch;
+  int16_t control_pitch;
+	XPLMDataRef df_control_yaw;
+  int16_t control_yaw;
 
   //-- state --
   bool emulateBattery;
