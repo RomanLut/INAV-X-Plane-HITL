@@ -42,6 +42,27 @@ public:
   int OSDUpdatesLast = 0;
   int OSDUpdatesPerSecond = 0;
 
+  XPLMDataRef df_yaw;
+  int dbg_yaw = 0;
+  XPLMDataRef df_pitch;
+  int dbg_pitch = 0;
+  XPLMDataRef df_roll;
+  int dbg_roll = 0;
+
+  XPLMDataRef df_acc_x;
+  float dbg_acc_x= 0;
+  XPLMDataRef df_acc_y;
+  float dbg_acc_y = 0;
+  XPLMDataRef df_acc_z;
+  float dbg_acc_z = 0;
+
+  XPLMDataRef df_gyro_x;
+  float dbg_gyro_x = 0;
+  XPLMDataRef df_gyro_y;
+  float dbg_gyro_y = 0;
+  XPLMDataRef df_gyro_z;
+  float dbg_gyro_z = 0;
+
   XPLMDataRef df_debug[DEBUG_U32_COUNT];
   char debugName[DEBUG_U32_COUNT][32];
   int debug[DEBUG_U32_COUNT];

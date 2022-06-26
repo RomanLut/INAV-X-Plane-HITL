@@ -72,6 +72,18 @@ void TStats::init()
   this->df_cyclesPerSecond = this->registerIntDataRef("inav_hitl/debug/cyclesPerSecond", &g_stats.cyclesPerSecond);
   this->df_cyclesPerSecond = this->registerIntDataRef("inav_hitl/debug/OSDUpdatesPerSecond", &g_stats.OSDUpdatesPerSecond);
 
+  this->df_yaw = this->registerIntDataRef("inav_hitl/inav/attitude.values.yaw", &g_stats.dbg_yaw);
+  this->df_roll = this->registerIntDataRef("inav_hitl/inav/attitude.values.roll", &g_stats.dbg_roll);
+  this->df_pitch = this->registerIntDataRef("inav_hitl/inav/attitude.values.pitch", &g_stats.dbg_pitch);
+
+  this->df_acc_x = this->registerFloatDataRef("inav_hitl/inav/acc.accADCf[X]", &g_stats.dbg_acc_x);
+  this->df_acc_y = this->registerFloatDataRef("inav_hitl/inav/acc.accADCf[Y]", &g_stats.dbg_acc_y);
+  this->df_acc_z = this->registerFloatDataRef("inav_hitl/inav/acc.accADCf[Z]", &g_stats.dbg_acc_z);
+
+  this->df_gyro_x = this->registerFloatDataRef("inav_hitl/inav/gyro.gyroADCf[X]", &g_stats.dbg_gyro_x);
+  this->df_gyro_y = this->registerFloatDataRef("inav_hitl/inav/gyro.gyroADCf[Y]", &g_stats.dbg_gyro_y);
+  this->df_gyro_z = this->registerFloatDataRef("inav_hitl/inav/gyro.gyroADCf[Z]", &g_stats.dbg_gyro_z);
+
   for (int i = 0; i < DEBUG_U32_COUNT; i++)
   {
     this->debug[i] = 0;
@@ -123,6 +135,18 @@ void TStats::close()
   XPLMUnregisterDataAccessor(this->df_serialBytesReceived);
   XPLMUnregisterDataAccessor(this->df_serialBytesReceivedPerSecond);
   XPLMUnregisterDataAccessor(this->df_OSDUpdatesPerSecond);
+
+  XPLMUnregisterDataAccessor(this->df_yaw);
+  XPLMUnregisterDataAccessor(this->df_roll);
+  XPLMUnregisterDataAccessor(this->df_pitch);
+
+  XPLMUnregisterDataAccessor(this->df_acc_x);
+  XPLMUnregisterDataAccessor(this->df_acc_y);
+  XPLMUnregisterDataAccessor(this->df_acc_z);
+
+  XPLMUnregisterDataAccessor(this->df_gyro_x);
+  XPLMUnregisterDataAccessor(this->df_gyro_y);
+  XPLMUnregisterDataAccessor(this->df_gyro_z);
 
   for (int i = 0; i < DEBUG_U32_COUNT; i++)
   {

@@ -53,11 +53,11 @@ public:
 	float yaw; // heading
 
 	// accel
-  //Gs, total g-forces on the plane as a multiple, along the plane
+  //Gs, total g-forces on the plane as a multiple, along the plane, forward - negative
 	XPLMDataRef df_accel_x;
 	float accel_x;
 
-  //Gs, total g-forces on the plane as a multiple, sideways
+  //Gs, total g-forces on the plane as a multiple, sideways, right - negative
 	XPLMDataRef df_accel_y;
 	float accel_y;
 
@@ -68,9 +68,9 @@ public:
 	// gyro
   //degrees, the roll of the aircraft in degrees - OpenGL coordinates
 	XPLMDataRef df_gyro_x;
+  float gyro_x;
 
   //deg/sec, the pitch rotation rates (relative to the flight)
-	float gyro_x;
 	XPLMDataRef df_gyro_y;
 	float gyro_y;
 
