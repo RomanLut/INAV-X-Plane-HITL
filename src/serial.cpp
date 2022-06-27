@@ -146,7 +146,5 @@ void Serial::flushOut()
     g_stats.serialPacketsSent += 1;
 
     this->writeBufferCount = 0;
-
-    //return bytesSend == nbChar;
   }
 }
