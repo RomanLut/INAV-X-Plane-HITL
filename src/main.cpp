@@ -39,6 +39,13 @@ void cbMessage(int code, const uint8_t* messageBuffer, int length)
     g_osd.updateFromINAV((const TMSPSimulatorFromINAV*)messageBuffer);
 
     wait = false;
+
+    if (!g_simData.isAircraft)
+    {
+      g_menu.actionDisconnect();
+      playSound("assets\\unsupported.wav");
+      LOG("Unsupported aircraft type");
+    }
   }
   else if (code == MSP_DEBUGMSG)
   {
@@ -130,8 +137,14 @@ PLUGIN_API void XPluginDisable(void)
   LOG("Plugin disable\n");
 
   g_stats.close();
-  g_msp.disconnect();
+
+  if (g_msp.isConnected())
+  {
+    g_simData.disconnect();
+    g_msp.disconnect();
+  }
   g_menu.destroyMenu();
+
   XPLMDestroyFlightLoop(loopId);
 }
 

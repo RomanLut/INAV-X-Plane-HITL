@@ -91,7 +91,7 @@ public:
 	//XPLMDataRef df_velocity_z;
 	//float velocity_z;
 
-	//---- output --------  SIM_INPUTS
+	//---- from inav --------  
 
 	XPLMDataRef df_control_throttle;
 	int16_t control_throttle;
@@ -102,9 +102,13 @@ public:
 	XPLMDataRef df_control_yaw;
   int16_t control_yaw;
 
+  bool isAircraft;
+
   //-- state --
   bool emulateBattery;
   bool muteBeeper;
+  bool attitude_use_sensors;
+   
 
 	void init();
 

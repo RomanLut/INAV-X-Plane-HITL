@@ -33,6 +33,11 @@ public:
   int osd_nearest_id;
   int osd_linear_id;
 
+  XPLMMenuID attitude_menu_id;
+  int attitude_id;
+  int attitude_force_id;
+  int attitude_sensors_id;
+
   XPLMMenuID battery_menu_id;
   int battery_id;
   int battery_default_id;
@@ -58,6 +63,9 @@ public:
   void updateOSDMenu();
   void updateBatteryMenu();
   void updateBeeperMenu();
+  void updateAttitudeMenu();
+
+  void actionDisconnect();
 };
 
 extern TMenu g_menu;

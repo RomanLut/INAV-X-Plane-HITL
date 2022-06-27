@@ -54,6 +54,7 @@ void TSimData::init()
 	//---- output ----
   this->emulateBattery = true;
   this->muteBeeper = true;
+  this->attitude_use_sensors = false;
 
   this->df_control_throttle = XPLMFindDataRef("sim/cockpit2/engine/actuators/throttle_ratio_all");
   this->df_control_roll = XPLMFindDataRef("sim/joystick/yoke_roll_ratio");
@@ -106,7 +107,9 @@ void TSimData::updateFromINAV(const TMSPSimulatorFromINAV* data)
   this->control_pitch = data->pitch;
   this->control_yaw = data->yaw;
 
-  g_stats.debug[data->debugIndex] = data->debugValue;
+  g_stats.debug[data->debugIndex & 7] = data->debugValue;
+
+  this->isAircraft = (data->debugIndex & 128) != 0;
 }
 
 //==============================================================
@@ -117,7 +120,7 @@ void TSimData::sendToINAV()
 
   data.version = 1;
 
-  data.flags = 1 | (this->emulateBattery? 2 : 0) | (this->muteBeeper ? 4 : 0);
+  data.flags = 1 | (this->emulateBattery? 2 : 0) | (this->muteBeeper ? 4 : 0) | (this->attitude_use_sensors ? 8 : 0);
 
   data.fix = this->gps_fix;
   data.numSat = (uint8_t)this->gps_numSat;
@@ -165,10 +168,10 @@ void TSimData::disconnect()
   data.flags = 0;
   g_msp.sendCommand(MSP_SIMULATOR, &data, sizeof(data));
 
-  this->control_throttle = 0;
-  this->control_roll = 500;
-  this->control_pitch = 500;
-  this->control_yaw = 500;
+  this->control_throttle = -500;
+  this->control_roll = 0;
+  this->control_pitch = 0;
+  this->control_yaw = 0;
 
   this->sendToXPlane();
 }

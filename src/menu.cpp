@@ -43,6 +43,14 @@ void TMenu::updateGPSMenu()
 
 //==============================================================
 //==============================================================
+void TMenu::updateAttitudeMenu()
+{
+  XPLMCheckMenuItem(this->attitude_menu_id, this->attitude_force_id, g_simData.attitude_use_sensors == false ? xplm_Menu_Checked : xplm_Menu_Unchecked);
+  XPLMCheckMenuItem(this->attitude_menu_id, this->attitude_sensors_id, g_simData.attitude_use_sensors == true ? xplm_Menu_Checked : xplm_Menu_Unchecked);
+}
+
+//==============================================================
+//==============================================================
 void TMenu::updateOSDMenu()
 {
   XPLMCheckMenuItem(this->osd_menu_id, this->osd_none_id, g_osd.osd_type == OSD_NONE ? xplm_Menu_Checked : xplm_Menu_Unchecked);
@@ -79,6 +87,15 @@ void TMenu::static_menu_handler(void * in_menu_ref, void * in_item_ref)
 
 //==============================================================
 //==============================================================
+void TMenu::actionDisconnect()
+{
+  XPLMSetMenuItemName(this->connect_menu_id, this->connect_disconnect_id, "Connect to Flight Controller", 0);
+  g_simData.disconnect();
+  g_msp.disconnect();
+}
+
+//==============================================================
+//==============================================================
 void TMenu::menu_handler(void * in_menu_ref, void * in_item_ref)
 {
   /*
@@ -98,9 +115,7 @@ void TMenu::menu_handler(void * in_menu_ref, void * in_item_ref)
     {
       if (g_msp.isConnected())
       {
-        XPLMSetMenuItemName(this->connect_menu_id, this->connect_disconnect_id, "Connect to Flight Controller", 0);
-        g_simData.disconnect();
-        g_msp.disconnect();
+        this->actionDisconnect();
       }
       else
       {
@@ -172,6 +187,16 @@ void TMenu::menu_handler(void * in_menu_ref, void * in_item_ref)
     g_simData.muteBeeper = true;
     this->updateBeeperMenu();
   }
+  else if (!strcmp((const char *)in_item_ref, "attitude_force"))
+  {
+    g_simData.attitude_use_sensors = false;
+    this->updateAttitudeMenu();
+  }
+  else if (!strcmp((const char *)in_item_ref, "attitude_sensors"))
+  {
+    g_simData.attitude_use_sensors = true;
+    this->updateAttitudeMenu();
+  }
 
 }
 
@@ -192,6 +217,11 @@ void TMenu::createMenu()
 	this->gps_fix_menu_id = XPLMCreateMenu("GPS Fix", this->menu_id, this->gps_fix_id, static_menu_handler, NULL);
 	this->gps_fix_0_id = XPLMAppendMenuItem(this->gps_fix_menu_id, "0 satellites (No fix)", (void *)"gps_fix_0", 1);
 	this->gps_fix_12_id = XPLMAppendMenuItem(this->gps_fix_menu_id, "12 satellites (3D fix)", (void *)"gps_fix_12", 1);
+
+  this->attitude_id = XPLMAppendMenuItem(this->menu_id, "Attitude", (void *)"attitude", 1);
+  this->attitude_menu_id = XPLMCreateMenu("Attitude", this->menu_id, this->attitude_id, static_menu_handler, NULL);
+  this->attitude_force_id = XPLMAppendMenuItem(this->attitude_menu_id, "Copy from X-Plane", (void *)"attitude_force", 1);
+  this->attitude_sensors_id = XPLMAppendMenuItem(this->attitude_menu_id, "Estimate from sensors", (void *)"attitude_sensors", 1);
 
   this->osd_id = XPLMAppendMenuItem(this->menu_id, "OSD", (void *)"OSD", 1);
   this->osd_menu_id = XPLMCreateMenu("OSD", this->menu_id, this->osd_id, static_menu_handler, NULL);
@@ -226,6 +256,7 @@ void TMenu::createMenu()
   this->updateOSDMenu();
   this->updateBatteryMenu();
   this->updateBeeperMenu();
+  this->updateAttitudeMenu();
 }
 
 //==============================================================
@@ -234,4 +265,5 @@ void TMenu::destroyMenu()
 {
   XPLMDestroyMenu(g_menu.menu_id);
 }
+
 
