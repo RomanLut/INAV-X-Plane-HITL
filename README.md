@@ -23,7 +23,7 @@ While not a been a main purpose, plugin can be used to improve pilot skils or ge
 
 Plugin is Aircraft plugin.
 
-The contents of **release\Aircraft** directory should be placed in the Aircraft directory of X-Plane:  **X-Plane11\Aircraft\**.
+The contents of `release\Aircraft` folder should be placed in the Aircraft folder of X-Plane: `X-Plane11\Aircraft\`.
 
 This will add plugin to the **Aerolite** airplane and install additional **NK_Surfwing** flying wing models with plugin.
 
@@ -34,7 +34,7 @@ You have to build and flash Simulator-enabled INAV firmware from branch: https:/
 ## Installation steps
 
 - Install X-Plane 11 demo version https://www.x-plane.com/desktop/try-it/
-- Copy **release\Aircraft** directory to **X-Plane 11\Aircraft** installation directory. 
+- Copy `release\Aircraft` folder to `X-Plane 11\Aircraft` forder in X-plane installation location. 
 - Connect FC to PC using USB Cable
 - Configure FC (see **Flight Controller configuration** below)
 - Start X-Plane 11
@@ -48,7 +48,7 @@ Use **"Internal View/Forward with No Display"** for full immersion FPV flights:
 
 # Setup (Linux)
 
- Sorry Linux in not supported currently *(assistance needed to build plugin for Linux)*.
+ Sorry Linux in not supported currently *(assistance needed to build plugin for Linux see [development.md](doc/development.md))*.
  
 # Flight controller configuration
 
@@ -62,7 +62,7 @@ Platforms other then "Airplane" are not supported.
 
 *Note: There is no need to connect battery, if receiver is powered from USB connection.*
 
-# Pids and rates
+## Pids and rates
 
 See recommended starting pids for **Aerolite** (Aircraft with tail ) [doc/aerolite.md](doc/aerolite.md)
 
@@ -80,7 +80,7 @@ There are two modes of emulation:
 - full emulation: attitude is estimated from sensors data
 - simplified emulation: attitude is passed from X-Plane.
 
-Due to slow update rate (update rate can not be larger then X-Plane FPS) and no synchronization on beetween INAV cycles and X-Plane FPS, full emulation mode will show noticable problems with estimation ( hickups, drifting horizon ). Simplified emulation is recommended for debugging code not related to IMU.
+Due to slow update rate (update rate can not be larger then X-Plane FPS) and no synchronization on beetween INAV cycles and X-Plane FPS, full emulation mode will show noticable problems with estimation ( hickups, drifting horizon ). **Simplified emulation is recommended for debugging code not related to IMU**.
 
 ## Accelerometer and gyroscope
 
@@ -88,25 +88,35 @@ Physical acceleromerer should be calibrated in INAV configurator.
 
 ## Barometer
 
-Barometer will be emulated if enabled in INAV configurator. If physical baromenter is not present, select "Fake" type.
+Barometer will be emulated if enabled in INAV configurator. If physical barometer is not present, select **"Fake"** type.
+
+![](doc/fakebaro.png)
 
 ## GPS
 
 GPS functionality will be emulated if enabled in INAV configurator. Is is not required to have phisical GPS sensor connected.
 
+X-Plane simulated work is build on real world data. GPS coordinates in game correspond to real locations. 
+
+Emulatet GPS Fix can be switched in menu:
+
+![](doc/gpsfix.png)
+
 ## Magnetometer
 
-Magnetometer is not supported currently ( assistance needed to implement magnetometer supports, see [development.md](doc/development.md) ).
+Magnetometer is not supported currently *(assistance needed to implement magnetometer support, see [development.md](doc/development.md))*.
 
 Magnetometer will be disabled in simulation.
 
 ## Battery sensor
 
-For convience, it is possible to emulate 3S battery presense.
+For convience, it is possible to emulate 3S battery presense:
+
+![](doc/battery.png)
 
 # OSD 
 
-Plugin will show OSD as configured in INAV configurator. 
+Plugin will show OSD exactly as configured in INAV Configurator. 
 
 It is highly recommended to use Flight Controller with OSD to see system messages on screen.
 
@@ -116,9 +126,27 @@ The following requirements should be met to have OSD in emulator:
 - physical OSD chip should be present on FC (MAX7456). OSD will not work without physical MAX7456 compatible chip. OSD will not work with HD Zero, DJI or Pixel OSD.
 - X-Plane is *NOT* using Vulkan drivers. Please uncheck the following option:
 
-# Buzzer
+![](doc/vulkan.png)
 
-For coonvience, it is possible to mute buzzer in simulation mode.
+The following options present in menu:
+
+![](doc/osdoptions.png)
+
+- **None:** disable OSD rendering
+- **AUTO:** number of lines provided by FC
+- **PAL:** force render 16 lines
+- **NTSC:** force render 13 lines
+- **Smoothing: Nearest:** Use linear smoothing for rendering
+- **Smoothing: Linear:** Use nearest pixels for rendering
+
+OSD is using **Bold** font from INAV configuraton. It is possibleto replace font `(\plugins\INAV-X-Plane-HITL\64\assets\osd_font.png)` with other font from INAV Configurator https://github.com/iNavFlight/inav-configurator/tree/master/resources/osd
+
+# Beeper
+
+For coonvience, it is possible to mute beeper in simulation mode:
+
+![](doc/beeper.png)
+
 
 # Development
 
