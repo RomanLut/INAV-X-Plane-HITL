@@ -1,36 +1,135 @@
 # INAV X-Plane HITL plugin
 
-Hardware-in-the-loop plugin for X-Plane for INAV flight controller firmware
+Hardware-in-the-loop plugin for X-Plane 11 for INAV flight controller firmware: https://github.com/iNavFlight/inav
+
+![](https://camo.githubusercontent.com/5af6d6c7784c1a41290dfa06755dae56ca95a62800495121766f40e597b3cc43/687474703a2f2f7374617469632e726367726f7570732e6e65742f666f72756d732f6174746163686d656e74732f362f312f302f332f372f362f61393038383835382d3130322d696e61762e706e67)
 
 # Motivation
 
 I believe that good testing and debugging tools are key points to achieve software stability.
 
-It is not Ok when people debug autopilot by running with a plane on the field :)
+It is not Ok when people debug autopilot by running with a plane on the field :smiley:
+
+I hope this plugin can help improve INAV firmware.
+
+While not a been a main purpose, plugin can be used to improve pilot skils or getting familiar with INAV options.
+
+# How it works
+
+![](x-plane-logo.png)
+ **X-Plane** 11 https://www.x-plane.com/ is flight simulaor with accurate physics simulation. X-Plane is extendable with plugins. This plugin connects for Flight Controller throught USB cable and passes gyroscope, accelerometer, barometer and GPS data, which replace data from physical sensors. FC sends back yaw/pitch/roll controls which are passed to X-Plane.
 
 # Setup (Windows)
 
 Plugin is Aircraft plugin.
 
-Plugin should be placed in the Aircraft directory:  **X-Plane11\Aircraft\Laminar Research\Aerolite 103\plugins\INAV-X-Plane-HITL\**
+The contents of **release\Aircraft** directory should be placed in the Aircraft directory of X-Plane:  **X-Plane11\Aircraft\**.
 
-You have to build and flash Simulator-enabled INAV firmware from: https://github.com/RomanLut/inav/tree/master-simulator-xplane
+This will add plugin to the **Aerolite** airplane and install additional **NK_Surfwing** flying wing models with plugin.
+
+You have to build and flash Simulator-enabled INAV firmware from branch: https://github.com/RomanLut/inav/tree/master-simulator-xplane 
 
 ![](doc/menu.png)
+
+## Installation steps
 
 - Install X-Plane 11 demo version https://www.x-plane.com/desktop/try-it/
 - Copy **release\Aircraft** directory to **X-Plane 11\Aircraft** installation directory. 
 - Connect FC to PC using USB Cable
+- Configure FC (see **Flight Controller configuration** below)
 - Start X-Plane 11
-- Select Aircraft **Aerolite 103**
+- Select Aircraft **Aerolite 103** or **NK Surfwing**
 - Start flight
 - Select **Plugins->INAV HITL->Link->Connect to flight controller**. Plugin should automatically detect COM port.
-- Flight using RC Controller. Hint: disable brakes with "B" key. 
+- Flight using RC Controller, setup PIDs etc. Hint: disable brakes with "B" key. 
+
+Use **"Internal View/Forward with No Display"** for full immersion FPV flights:
+![](doc/internalview.png)
 
 # Setup (Linux)
 
- Sorry Linux in not supported currently ( assistance needed ).
+ Sorry Linux in not supported currently *(assistance needed to build plugin for Linux)*.
+ 
+# Flight controller configuration
+
+Flight controller should be fully configured as for real flight. There is no need to calibrate mixer and motors output.
+
+Configure **Aircraft with tail** for **Aerolite** and **Fixed wing** for **NK Sufwing**. It possible to use plugin with any other models (copy plugin to corresponding Aircraft subdirectory).
+
+Platforms other then "Airplane" are not supported.
+
+*Note: If FC is mouted on model, you can use profiles to have different PIDs for simulated aircraft. Motor and Servo outputs are disabled in simulation mode.*
+
+*Note: There is no need to connect battery, if receiver is powered from USB connection.*
+
+# Pids and rates
+
+See recommended starting pids for **Aerolite** (Aircraft with tail ) [doc/aerolite.md](doc/aerolite.md)
+
+See recommended starting pids for **NK SurfWing** (flying wing) [doc/nksurfwing.md](doc/nksurfwing.md)
+
+# Sensors emulation
+
+Plugin will emulate sensors, enabled in FC's configuration.
+
+In minimal case, you need FC with some kind of receiver attached. No barometer and GPS senssors required. OSD is highly recommended.
+
+![](doc/attitude.png)
+
+There are two modes of emulation:
+- full emulation: attitude is estimated from sensors data
+- simplified emulation: attitude is passed from X-Plane.
+
+Due to slow update rate (update rate can not be larger then X-Plane FPS) and no synchronization on beetween INAV cycles and X-Plane FPS, full emulation mode will show noticable problems with estimation ( hickups, drifting horizon ). Simplified emulation is recommended for debugging code not related to IMU.
+
+## Accelerometer and gyroscope
+
+Physical acceleromerer should be calibrated in INAV configurator.
+
+## Barometer
+
+Barometer will be emulated if enabled in INAV configurator. If physical baromenter is not present, select "Fake" type.
+
+## GPS
+
+GPS functionality will be emulated if enabled in INAV configurator. Is is not required to have phisical GPS sensor connected.
+
+## Magnetometer
+
+Magnetometer is not supported currently ( assistance needed to implement magnetometer supports, see [development.md](doc/development.md) ).
+
+Magnetometer will be disabled in simulation.
+
+## Battery sensor
+
+For convience, it is possible to emulate 3S battery presense.
+
+# OSD 
+
+Plugin will show OSD as configured in INAV configurator. 
+
+It is highly recommended to use Flight Controller with OSD to see system messages on screen.
+
+The following requirements should be met to have OSD in emulator:
+
+- OSD should be configured and enabled in INAV configurator ( AUTO, PAL or NTSC type )
+- physical OSD chip should be present on FC (MAX7456). OSD will not work without physical MAX7456 compatible chip. OSD will not work with HD Zero, DJI or Pixel OSD.
+- X-Plane is *NOT* using Vulkan drivers. Please uncheck the following option:
+
+# Buzzer
+
+For coonvience, it is possible to mute buzzer in simulation mode.
 
 # Development
 
 See [development.md](doc/development.md)
+
+# Links
+
+- X-Plane INAV HITL prototype has been implemented by Sergey Sevrugin: https://github.com/sevrugin/inav/tree/master-simulator-xplane, https://github.com/sevrugin/inav-configurator/tree/master-simulator-xplane
+
+- NK_FPV Surfwing V2 | RC Plane 2.2.0 https://forums.x-plane.org/index.php?/files/file/43974-nk_fpv-surfwing-v2-rc-plane/
+
+- X PLANE TUTORIAL: MaxiSwift installation with X Plane v9.70 for HIL simulations https://github.com/jlnaudin/x-drone/wiki/X-PLANE-TUTORIAL:-MaxiSwift-installation-with-X-Plane-v9.70-for-HIL-simulations
+
+- Quadrotor UAV simulation modelling using X-Plane simulation software http://www.iraj.in/journal/journal_file/journal_pdf/2-448-152361879882-85.pdf
