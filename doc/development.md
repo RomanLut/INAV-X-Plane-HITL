@@ -2,7 +2,7 @@
 
 Plugin is compiled using Microsoft Visual Studio 2017.
 
-## Concerns
+# Concerns
 
 Existing MSP commands should not be changed.
 
@@ -12,7 +12,7 @@ If ARM_SIMULATION flag is not set, behaviour of INAV should not change at all.
 
 For now, plugin supports Aircarft type "Aircraft with tail" only
 
-## Timing
+# Timing
 
 INAV can handle 100 MSP commands per second. By the way, this is the reason why whole symulation communication should be done using single MSP command.
 
@@ -20,9 +20,9 @@ X-Plane renders 40-100 FPS ( physics and rendering ) per second.
 
 We send new MSP_SIMULATOR command every frame, but not earlier than 10us from last command. This allows to have update rate similar to FPS.
 
-## Debugging
+# Debugging
 
-### Plugin->Data Ref Editor->Show Datarefs
+## Plugin->Data Ref Editor->Show Datarefs
 
 Some other datarefs are available under **inav_hitl/** node.
 
@@ -56,11 +56,14 @@ save
 Check `main\build\debug.h', 'debugType_e` for more modes.
 
 
-### Developer->Show dev console
+## Developer->Show dev console
 
 INAV serial logging ( see https://github.com/iNavFlight/inav/blob/master/docs/development/serial_printf_debugging.md ) messages are output to Developer console with "INAV: " prefix:
 
 ![](devconsole.png)
 
 
+# Assitance
+
+Assistance required to implement some tasks. Pelase check **Issues** tab. Please leave a note in issue if you are working on this task to avoid collisions. Please provide timing.
 
