@@ -50,7 +50,7 @@
     <TargetName>win</TargetName>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
-    <OutDir>D:\Games\X-Plane11\X-Plane 11\Aircraft\Laminar Research\Aerolite 103\plugins\INAV-X-Plane-HITL\64\</OutDir>
+    <OutDir>..\..\..\..\..\Games\X-Plane11\X-Plane 11\Aircraft\Extra Aircraft\NK_FPVSurfwing\plugins\INAV-X-Plane-HITL\64</OutDir>
     <IntDir>.\Debug\64\</IntDir>
     <LinkIncremental>true</LinkIncremental>
     <TargetExt>.xpl</TargetExt>

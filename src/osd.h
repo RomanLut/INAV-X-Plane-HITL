@@ -26,6 +26,8 @@ public:
   int auto_rows = 16;
   bool smoothed = true;
 
+  bool firstRender = true;
+
   void init();
   void destroy();
 

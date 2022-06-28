@@ -19,6 +19,17 @@ XPLMFlightLoopID loopId;
 
 //==============================================================
 //==============================================================
+void setView()
+{
+  XPLMCommandRef command_ref = XPLMFindCommand("sim/view/forward_with_nothing");
+  if (NULL != command_ref)
+  {
+    XPLMCommandOnce(command_ref);
+  }
+}
+
+//==============================================================
+//==============================================================
 void cbConnect(TCBConnectParm state)
 {
   g_menu._cbConnect(state);
@@ -68,7 +79,7 @@ float floop_cb(float elapsed1, float elapsed2, int ctr, void* refcon)
       g_simData.updateFromXPlane();
       g_simData.sendToINAV();
       lastUpdateTime = GetTickCount();
-      wait = true;
+      //wait = true; do not wait for answer, send next state after 10us passed
     }
   }
 

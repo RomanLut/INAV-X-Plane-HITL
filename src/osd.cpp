@@ -42,10 +42,17 @@ int	TOSD::drawCallbackStatic(
   return 1;
 }
 
+
 //==============================================================
 //==============================================================
 void TOSD::drawCallback()
 {
+  if (this->firstRender)
+  {
+    setView();
+    this->firstRender = false;
+  }
+
   if (this->osd_type == OSD_NONE) return;
 
   int sx, sy;
