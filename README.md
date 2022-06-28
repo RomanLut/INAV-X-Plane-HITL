@@ -73,7 +73,7 @@ Platforms other than "Airplane" are not supported.
 
 See recommended starting pids for **Aerolite** (Aircraft with tail ) [aerolite.md](doc/aerolite/aerolite.md)
 
-See recommended starting pids for **NK SurfWing** (flying wing) [nkfpvsurfwing.md](doc/nkfpvsurfwing/nkfpvsurfwing.md)
+See recommended starting pids for **NK SurfWing** (flying wing) [nkfpvsurfwing.md](doc/nkfpvsufrwing/nkfpvsurfwing.md)
 
 # Sensors simulation
 
