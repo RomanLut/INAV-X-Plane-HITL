@@ -16,8 +16,13 @@ While not been a main purpose, plugin can be used to improve pilot skils or gett
 
 # How it works
 
-![](x-plane-logo.png)
- **X-Plane** 11 https://www.x-plane.com/ is flight simulator with accurate physics simulation. X-Plane is extendable with plugins. This plugin connects to Flight Controller through USB cable and passes gyroscope, accelerometer, barometer and GPS data, which replace data from physical sensors. FC sends back yaw/pitch/roll controls which are passed to X-Plane.
+![](doc/x-plane-logo.png)
+
+**X-Plane** 11 https://www.x-plane.com/ is flight simulator with accurate physics simulation. 
+ 
+X-Plane is extendable with plugins. This plugin connects to Flight Controller through USB cable and passes gyroscope, accelerometer, barometer and GPS data, which replace data from physical sensors. 
+
+FC sends back **yaw/pitch/roll** controls which are passed to X-Plane.
 
 # Setup (Windows)
 
@@ -58,9 +63,9 @@ Flight controller should be fully configured like for the real flight. There is 
 
 Configure **Aircraft with tail** for **Aerolite** and **Fixed wing** for **NK Sufwing**. It possible to use plugin with any other models (copy plugin to corresponding Aircraft subfolder).
 
-Platforms other then "Airplane" are not supported.
+Platforms other than "Airplane" are not supported.
 
-*Note: If FC is mouted on model, you can use profiles to have different PIDs for simulated aircraft. Motor and Servo outputs are disabled in simulation mode.*
+*Note: If FC is mouted on UAV, you can use profiles to have different PIDs for simulated airplane. Motor and Servo outputs are disabled in simulation mode.*
 
 *Note: There is no need to connect battery, if receiver is powered from USB connection.*
 
@@ -70,11 +75,11 @@ See recommended starting pids for **Aerolite** (Aircraft with tail ) [doc/aeroli
 
 See recommended starting pids for **NK SurfWing** (flying wing) [doc/nksurfwing.md](doc/nksurfwing.md)
 
-# Sensors emulation
+# Sensors simulation
 
-Plugin will emulate sensors, enabled in FC's configuration.
+Plugin will simulate sensors, enabled in FC's configuration.
 
-In minimal case, you need FC with some kind of receiver attached. No barometer and GPS senssors required. OSD is highly recommended.
+In minimal case, you need FC with some kind of receiver attached. No real barometer and GPS sensors are required. FC with OSD is highly recommended.
 
 ![](doc/attitude.png)
 
@@ -82,25 +87,27 @@ There are two modes of simulation:
 - **full simulation:** attitude is estimated from sensors data
 - **simplified simulation:** attitude is passed from X-Plane.
 
-Due to slow update rate (update rate can not be larger then X-Plane FPS) and no synchronization on beetween INAV cycles and X-Plane FPS, full emulation mode will show noticable problems with estimation ( hickups, drifting horizon ). **Simplified emulation is recommended for debugging code not related to IMU**.
+Due to slow update rate (update rate can not be larger then X-Plane FPS) and no synchronization beetween INAV cycles and **X-Plane** FPS, full emulation mode will show noticeable problems with estimation ( hickups, drifting horizon ). **Simplified emulation is recommended for debugging code not related to IMU**.
+
+Sensors not listed below are not simulated. Please disable in INAV configuration.
 
 ## Accelerometer and gyroscope
 
-Physical acceleromerer should be calibrated in INAV configurator.
+Real acceleromerer should be calibrated in **INAV Configurator**.
 
 ## Barometer
 
-Barometer will be emulated if enabled in INAV configurator. If physical barometer is not present, select **"Fake"** type.
+Barometer will be simulatod if enabled in **INAV Configurator**. If real barometer is not present, select **"FAKE"** type.
 
 ![](doc/fakebaro.png)
 
 ## GPS
 
-GPS functionality will be emulated if enabled in INAV configurator. Is is not required to have phisical GPS sensor connected.
+GPS functionality will be emulated if enabled in **INAV Configurator**. It is not required to have real GPS sensor connected.
 
-X-Plane simulated work is build on real world data. GPS coordinates in game correspond to real locations. 
+X-Plane simulated world is build based on real world map data. GPS coordinates in game correspond to real locations. 
 
-Emulatet GPS Fix can be switched in menu:
+Simulated GPS Fix can be switched in menu:
 
 ![](doc/gpsfix.png)
 
@@ -112,7 +119,7 @@ Magnetometer will be disabled in simulation.
 
 ## Battery sensor
 
-For convience, it is possible to emulate 3S battery presense:
+For convience, it is possible to simulate 3S battery presense:
 
 ![](doc/battery.png)
 
@@ -122,11 +129,11 @@ Plugin will show OSD exactly as configured in INAV Configurator.
 
 It is highly recommended to use Flight Controller with OSD to see system messages on screen.
 
-The following requirements should be met to have OSD in emulator:
+The following requirements should be met to have OSD drawn in **X-Plane**:
 
-- OSD should be configured and enabled in INAV configurator ( AUTO, PAL or NTSC type )
-- physical OSD chip should be present on FC (MAX7456). OSD will not work without physical MAX7456 compatible chip. OSD will not work with HD Zero, DJI or Pixel OSD.
-- X-Plane is *NOT* using Vulkan drivers. Please uncheck the following option:
+- OSD should be configured and enabled in **INAV Configurator** ( `AUTO`, `PAL` or `NTSC` type ).
+- OSD chip should be present on Flight Controller (MAX7456). OSD will not work without MAX7456 compatible chip. OSD will not work with HD Zero, DJI or Pixel OSD selected in configuration.
+- **X-Plane** should **NOT** use **Vulkan** drivers. Please uncheck the following option:
 
 ![](doc/vulkan.png)
 
@@ -135,13 +142,13 @@ The following options present in menu:
 ![](doc/osdoptions.png)
 
 - **None:** disable OSD rendering
-- **AUTO:** number of lines provided by FC
-- **PAL:** force render 16 lines
-- **NTSC:** force render 13 lines
-- **Smoothing: Nearest:** Use linear smoothing for rendering
-- **Smoothing: Linear:** Use nearest pixels for rendering
+- **AUTO:** number of OSD lines is provided by FC
+- **PAL:** force rendering of 16 OSD lines
+- **NTSC:** force rendering of 13 OSD lines
+- **Smoothing: Nearest:** Use nearest pixels for charactes rendering
+- **Smoothing: Linear:** Use linear smoothing for charactes rendering
 
-OSD is using **Bold** font from INAV configuraton. It is possibleto replace font `(\plugins\INAV-X-Plane-HITL\64\assets\osd_font.png)` with other font from INAV Configurator https://github.com/iNavFlight/inav-configurator/tree/master/resources/osd
+OSD is using **Bold** font from **INAV Configurator**. It is possible to replace font `(\plugins\INAV-X-Plane-HITL\64\assets\osd_font.png)` with other font from **INAV Configurator** https://github.com/iNavFlight/inav-configurator/tree/master/resources/osd
 
 # Beeper
 
