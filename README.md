@@ -125,9 +125,9 @@ For convience, it is possible to simulate 3S battery presense:
 
 # OSD 
 
-![](doc/internalview.png)
-
 OSD is shown in **X-Plane** exactly as configured in **INAV Configurator**. 
+
+![](doc/osd.jpg)
 
 It is highly recommended to use Flight Controller with OSD to see system messages on screen.
 
