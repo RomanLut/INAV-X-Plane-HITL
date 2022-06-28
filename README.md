@@ -1,6 +1,8 @@
 # INAV X-Plane HITL plugin
 
-Hardware-in-the-loop plugin for X-Plane for INAV flight controller firmware.
+Hardware-in-the-loop plugin for X-Plane 11 for INAV flight controller firmware: https://github.com/iNavFlight/inav
+
+![](https://camo.githubusercontent.com/5af6d6c7784c1a41290dfa06755dae56ca95a62800495121766f40e597b3cc43/687474703a2f2f7374617469632e726367726f7570732e6e65742f666f72756d732f6174746163686d656e74732f362f312f302f332f372f362f61393038383835382d3130322d696e61762e706e67)
 
 # Motivation
 
@@ -14,13 +16,14 @@ While not a been a main purpose, plugin can be used to improve pilot skils or ge
 
 # How it works
 
- X-Plane is airplane simulation game. X-Plane is extendable with plugins. This plugin connects for Flight Controller and passes gyroscope, accelerometer, baromener and GPS data, which replace data prom physical sensors. FC sends back yaw/pitch/roll controls which are passed to X-Plane.
+![](x-plane-logo.png)
+ X-Plane 11 https://www.x-plane.com/ is airplane simulation game. X-Plane is extendable with plugins. This plugin connects for Flight Controller throught USB cable and passes gyroscope, accelerometer, barometer and GPS data, which replace data from physical sensors. FC sends back yaw/pitch/roll controls which are passed to X-Plane.
 
 # Setup (Windows)
 
 Plugin is Aircraft plugin.
 
-The contents of **release\Aircraft** should be placed in the Aircraft directory of X-Plane:  **X-Plane11\Aircraft\**.
+The contents of **release\Aircraft** directory should be placed in the Aircraft directory of X-Plane:  **X-Plane11\Aircraft\**.
 
 This will add plugin to the **Aerolite** airplane and install additional **NK_Surfwing** flying wing models with plugin.
 
@@ -111,3 +114,13 @@ For coonvience, it is possible to mute buzzer in simulation mode.
 # Development
 
 See [development.md](doc/development.md)
+
+# Links
+
+-X-Plane INAV HITL prototype has been implemented by Sergey Sevrugin: https://github.com/sevrugin/inav/tree/master-simulator-xplane, https://github.com/sevrugin/inav-configurator/tree/master-simulator-xplane
+
+- NK_FPV Surfwing V2 | RC Plane 2.2.0 https://forums.x-plane.org/index.php?/files/file/43974-nk_fpv-surfwing-v2-rc-plane/
+
+- X PLANE TUTORIAL: MaxiSwift installation with X Plane v9.70 for HIL simulations https://github.com/jlnaudin/x-drone/wiki/X-PLANE-TUTORIAL:-MaxiSwift-installation-with-X-Plane-v9.70-for-HIL-simulations
+
+- Quadrotor UAV simulation modelling using X-Plane simulation software http://www.iraj.in/journal/journal_file/journal_pdf/2-448-152361879882-85.pdf
