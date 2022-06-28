@@ -1,6 +1,6 @@
 # INAV X-Plane HITL plugin
 
-Hardware-in-the-loop plugin for X-Plane 11 for INAV flight controller firmware: https://github.com/iNavFlight/inav
+**Hardware-in-the-loop** plugin for **X-Plane 11** for **INAV Flight Controller firmware**: https://github.com/iNavFlight/inav
 
 ![](https://camo.githubusercontent.com/5af6d6c7784c1a41290dfa06755dae56ca95a62800495121766f40e597b3cc43/687474703a2f2f7374617469632e726367726f7570732e6e65742f666f72756d732f6174746163686d656e74732f362f312f302f332f372f362f61393038383835382d3130322d696e61762e706e67)
 
@@ -12,49 +12,51 @@ It is not Ok when people debug autopilot by running with a plane on the field :s
 
 I hope this plugin can help improve INAV firmware.
 
-While not a been a main purpose, plugin can be used to improve pilot skils or getting familiar with INAV options.
+While not been a main purpose, plugin can be used to improve pilot skils or getting familiar with INAV options.
 
 # How it works
 
 ![](x-plane-logo.png)
- **X-Plane** 11 https://www.x-plane.com/ is flight simulaor with accurate physics simulation. X-Plane is extendable with plugins. This plugin connects for Flight Controller throught USB cable and passes gyroscope, accelerometer, barometer and GPS data, which replace data from physical sensors. FC sends back yaw/pitch/roll controls which are passed to X-Plane.
+ **X-Plane** 11 https://www.x-plane.com/ is flight simulator with accurate physics simulation. X-Plane is extendable with plugins. This plugin connects to Flight Controller through USB cable and passes gyroscope, accelerometer, barometer and GPS data, which replace data from physical sensors. FC sends back yaw/pitch/roll controls which are passed to X-Plane.
 
 # Setup (Windows)
 
-Plugin is Aircraft plugin.
+Plugin is **Aircraft** plugin.
 
 The contents of `release\Aircraft` folder should be placed in the Aircraft folder of X-Plane: `X-Plane11\Aircraft\`.
 
-This will add plugin to the **Aerolite** airplane and install additional **NK_Surfwing** flying wing models with plugin.
+This will add plugin to the **Aerolite** airplane and install additional **NK_Surfwing** flying wing model with this plugin.
 
-You have to build and flash Simulator-enabled INAV firmware from branch: https://github.com/RomanLut/inav/tree/master-simulator-xplane 
+You have to build and flash Simulator-enabled INAV firmware from branch: https://github.com/RomanLut/inav/tree/master-simulator-xplane . Simulator mode is not included in main INAV repository currently.
 
 ![](doc/menu.png)
 
 ## Installation steps
 
-- Install X-Plane 11 demo version https://www.x-plane.com/desktop/try-it/
-- Copy `release\Aircraft` folder to `X-Plane 11\Aircraft` forder in X-plane installation location. 
-- Connect FC to PC using USB Cable
+- Install **X-Plane 11 demo** from: https://www.x-plane.com/desktop/try-it/
+- Copy `release\Aircraft` folder to `X-Plane 11\Aircraft` folder in **X-Plane** installation location. 
+- Connect Flight Controller to PC using USB Cable
 - Configure FC (see **Flight Controller configuration** below)
-- Start X-Plane 11
+- Start **X-Plane 11**
 - Select Aircraft **Aerolite 103** or **NK Surfwing**
 - Start flight
 - Select **Plugins->INAV HITL->Link->Connect to flight controller**. Plugin should automatically detect COM port.
 - Flight using RC Controller, setup PIDs etc. Hint: disable brakes with "B" key. 
 
-Use **"Internal View/Forward with No Display"** for full immersion FPV flights:
+
+*Note:Use **"Internal View/Forward with No Display"** for full immersion FPV flights:*
+
 ![](doc/internalview.png)
 
 # Setup (Linux)
 
- Sorry Linux in not supported currently *(assistance needed to build plugin for Linux see [development.md](doc/development.md))*.
+ Sorry, Linux in not supported currently *(assistance needed to build plugin for Linux, see [development.md](doc/development.md))*.
  
 # Flight controller configuration
 
-Flight controller should be fully configured as for real flight. There is no need to calibrate mixer and motors output.
+Flight controller should be fully configured like for the real flight. There is no need to calibrate mixer and motors output.
 
-Configure **Aircraft with tail** for **Aerolite** and **Fixed wing** for **NK Sufwing**. It possible to use plugin with any other models (copy plugin to corresponding Aircraft subdirectory).
+Configure **Aircraft with tail** for **Aerolite** and **Fixed wing** for **NK Sufwing**. It possible to use plugin with any other models (copy plugin to corresponding Aircraft subfolder).
 
 Platforms other then "Airplane" are not supported.
 
@@ -76,9 +78,9 @@ In minimal case, you need FC with some kind of receiver attached. No barometer a
 
 ![](doc/attitude.png)
 
-There are two modes of emulation:
-- full emulation: attitude is estimated from sensors data
-- simplified emulation: attitude is passed from X-Plane.
+There are two modes of simulation:
+- **full simulation:** attitude is estimated from sensors data
+- **simplified simulation:** attitude is passed from X-Plane.
 
 Due to slow update rate (update rate can not be larger then X-Plane FPS) and no synchronization on beetween INAV cycles and X-Plane FPS, full emulation mode will show noticable problems with estimation ( hickups, drifting horizon ). **Simplified emulation is recommended for debugging code not related to IMU**.
 
