@@ -10,6 +10,8 @@ It is not Ok when people debug autopilot by running with a plane on the field :)
 
 I hope this plugin can help improve INAV firmware.
 
+While not a been a main purpose, plugin can be used to improve pilot skils or getting familiar with INAV options.
+
 # How it works
 
  X-Plane is airplane simulation game. X-Plane is extendable with plugins. This plugin connects for Flight Controller and passes gyroscope, accelerometer, baromener and GPS data, which replace data prom physical sensors. FC sends back yaw/pitch/roll controls which are passed to X-Plane.
@@ -30,20 +32,21 @@ You have to build and flash Simulator-enabled INAV firmware from branch: https:/
 
 - Install X-Plane 11 demo version https://www.x-plane.com/desktop/try-it/
 - Copy **release\Aircraft** directory to **X-Plane 11\Aircraft** installation directory. 
-- Configure FC ( see **sensors** below ).
 - Connect FC to PC using USB Cable
+- Configure FC (see **Flight controller configuration** below)
 - Start X-Plane 11
-- Select Aircraft **Aerolite 103**
+- Select Aircraft **Aerolite 103** or ** NK Surfwing**
 - Start flight
 - Select **Plugins->INAV HITL->Link->Connect to flight controller**. Plugin should automatically detect COM port.
 - Flight using RC Controller, setup PIDs etc. Hint: disable brakes with "B" key. 
+
+Use **Internal View/Forward with No Display** for full immersion FPV flights:
+![](doc/internalview.png)
 
 # Setup (Linux)
 
  Sorry Linux in not supported currently ( assistance needed to build plugin for the linux).
  
-# Sensors emulation
-
 Plugin will emulate sensors, enabled in FC's configuration.
 
 There are two modes of emulation:
@@ -52,11 +55,26 @@ There are two modes of emulation:
 
 Due to slow update rate (can not be larger then X-Plan FPS) and no syncronization on beetween INAV cycles and X-Plane FPS, full emulation mode will show noticable problems with estimation ( hickups, drifting horizon ). Simplified emulation is recommended for debugging code not related to IMU.
 
-In minimal case, you need FC with some kind of receiver attached. No barometer and GPS senssors required. OSD is higly recommended.
+In minimal case, you need FC with some kind of receiver attached. No barometer and GPS senssors required. OSD is highly recommended.
+
+# Flight controller configuration
+
+Flight controller should be fully configured as for real flight. There is no need to calibrate mixer and motors output.
+
+*Note: If FC is mouted on model, you can use another profiles to have different PIDs for simulated aircraft. Motor and Sersos output is disabled in simulation mode. *
+
+*Note: There is no need to connect battery, if receiver is powered from USB connection.*
+
+# Pids and rates
+
+See recommended starting pids for Aerolite (Aircraft with tail ) [development.md](doc/aerolite.md)
+See recommended starting pids for NK SurfWing (flying wing) [development.md](doc/aerolite.md)
+
+# Sensors emulation
 
 ## Accelerometer and gyroscope
 
-Physical acceleromerer should be calibrated if INAV configurator.
+Physical acceleromerer should be calibrated in INAV configurator.
 
 ## Barometer
 
@@ -72,6 +90,10 @@ Magnetometer is not supported currently ( assistance needed to implement magneto
 
 Magnetometer will be disabled in simulation.
 
+## Battery sensor
+
+For convience, it is possible to emulate 3S battery presense.
+
 # OSD 
 
 Plugin will show OSD as configured in INAV configurator. 
@@ -81,6 +103,10 @@ Thw following requirements should be met to have OSD in emulator:
 - OSD should be configured and enabled in INAV configurator ( AUTO, PAL or NTSC type )
 - physical OSD chip should be present on FC (MAX7456). OSD will not work without physical chip.
 - X-Plane is *NOT* using Vulkan drivers. Please uncheck the following option:
+
+# Buzzer
+
+For coonvience, it is possible to mute buzzer in simulation mode.
 
 # Development
 
