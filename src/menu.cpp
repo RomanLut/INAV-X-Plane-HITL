@@ -4,6 +4,7 @@
 #include "util.h"
 #include "simData.h"
 #include "osd.h"
+#include "graph.h"
 
 TMenu g_menu;
 
@@ -76,6 +77,17 @@ void TMenu::updateBeeperMenu()
 {
   XPLMCheckMenuItem(this->beeper_menu_id, this->beeper_default_id, g_simData.muteBeeper == false ? xplm_Menu_Checked : xplm_Menu_Unchecked);
   XPLMCheckMenuItem(this->beeper_menu_id, this->beeper_mute_id, g_simData.muteBeeper == true ? xplm_Menu_Checked : xplm_Menu_Unchecked);
+}
+
+//==============================================================
+//==============================================================
+void TMenu::updateGraphMenu()
+{
+  XPLMCheckMenuItem(this->graph_menu_id, this->graph_none_id, g_graph.getGraphType() == GRAPH_NONE ? xplm_Menu_Checked : xplm_Menu_Unchecked);
+  XPLMCheckMenuItem(this->graph_menu_id, this->graph_attitude_id, g_graph.getGraphType() == GRAPH_ATTITUDE_RPY ? xplm_Menu_Checked : xplm_Menu_Unchecked);
+  XPLMCheckMenuItem(this->graph_menu_id, this->graph_acc_id, g_graph.getGraphType() == GRAPH_ACC ? xplm_Menu_Checked : xplm_Menu_Unchecked);
+  XPLMCheckMenuItem(this->graph_menu_id, this->graph_gyro_id, g_graph.getGraphType() == GRAPH_GYRO ? xplm_Menu_Checked : xplm_Menu_Unchecked);
+  XPLMCheckMenuItem(this->graph_menu_id, this->graph_debug_altitude_id, g_graph.getGraphType() == GRAPH_DEBUG_ALTITUDE ? xplm_Menu_Checked : xplm_Menu_Unchecked);
 }
 
 //==============================================================
@@ -197,6 +209,31 @@ void TMenu::menu_handler(void * in_menu_ref, void * in_item_ref)
     g_simData.attitude_use_sensors = true;
     this->updateAttitudeMenu();
   }
+  else if (!strcmp((const char *)in_item_ref, "graph_none"))
+  {
+    g_graph.setGraphType(GRAPH_NONE);
+    this->updateGraphMenu();
+  }
+  else if (!strcmp((const char *)in_item_ref, "graph_attitude_rpy"))
+  {
+    g_graph.setGraphType(GRAPH_ATTITUDE_RPY);
+    this->updateGraphMenu();
+  }
+  else if (!strcmp((const char *)in_item_ref, "graph_accelerometer"))
+  {
+    g_graph.setGraphType(GRAPH_ACC);
+    this->updateGraphMenu();
+  }
+  else if (!strcmp((const char *)in_item_ref, "graph_gyroscope"))
+  {
+    g_graph.setGraphType(GRAPH_GYRO);
+    this->updateGraphMenu();
+  }
+  else if (!strcmp((const char *)in_item_ref, "graph_debug_altitude"))
+  {
+  g_graph.setGraphType(GRAPH_DEBUG_ALTITUDE);
+  this->updateGraphMenu();
+  }
 
 }
 
@@ -245,6 +282,16 @@ void TMenu::createMenu()
   this->osd_nearest_id = XPLMAppendMenuItem(this->osd_menu_id, "Smoothing: Nearest", (void *)"osd_nearest", 1);
   this->osd_linear_id = XPLMAppendMenuItem(this->osd_menu_id, "Smoothing: Linear", (void *)"osd_linear", 1);
 
+  XPLMAppendMenuSeparator(this->osd_menu_id);
+
+  this->graph_id = XPLMAppendMenuItem(this->menu_id, "Graph", (void *)"Graph", 1);
+  this->graph_menu_id = XPLMCreateMenu("Graph", this->menu_id, this->graph_id, static_menu_handler, NULL);
+  this->graph_none_id = XPLMAppendMenuItem(this->graph_menu_id, "None", (void *)"graph_none", 1);
+  this->graph_attitude_id = XPLMAppendMenuItem(this->graph_menu_id, "Attitude Roll/Pitch/Yaw", (void *)"graph_attitude_rpy", 1);
+  this->graph_acc_id = XPLMAppendMenuItem(this->graph_menu_id, "Accelerometer", (void *)"graph_accelerometer", 1);
+  this->graph_gyro_id = XPLMAppendMenuItem(this->graph_menu_id, "Gyroscope", (void *)"graph_gyroscope", 1);
+  this->graph_debug_altitude_id = XPLMAppendMenuItem(this->graph_menu_id, "debug_mode = altitude", (void *)"graph_debug_altitude", 1);
+
 /*                               
 	this->gps_spoofing_1_id = XPLMAppendMenuItem(this->gps_fix_menu_id, "Spoofing: Freeze", (void *)"gps_spoofing_1", 1);
 	this->gps_spoofing_2_id = XPLMAppendMenuItem(this->gps_fix_menu_id, "Spoofing: Linear 1m/s", (void *)"gps_spoofing_2", 1);
@@ -257,6 +304,7 @@ void TMenu::createMenu()
   this->updateBatteryMenu();
   this->updateBeeperMenu();
   this->updateAttitudeMenu();
+  this->updateGraphMenu();
 }
 
 //==============================================================

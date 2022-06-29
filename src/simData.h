@@ -102,7 +102,7 @@ public:
 	XPLMDataRef df_control_yaw;
   int16_t control_yaw;
 
-  bool isAircraft;
+  bool isAirplane;
 
   //-- state --
   bool emulateBattery;

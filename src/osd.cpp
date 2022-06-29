@@ -33,26 +33,8 @@ TOSD g_osd;
 
 //==============================================================
 //==============================================================
-int	TOSD::drawCallbackStatic(
-  XPLMDrawingPhase     inPhase,
-  int                  inIsBefore,
-  void *               inRefcon)
-{
-  g_osd.drawCallback();
-  return 1;
-}
-
-
-//==============================================================
-//==============================================================
 void TOSD::drawCallback()
 {
-  if (this->firstRender)
-  {
-    setView();
-    this->firstRender = false;
-  }
-
   if (this->osd_type == OSD_NONE) return;
 
   int sx, sy;
@@ -240,15 +222,12 @@ void TOSD::init()
   this->loadFont();
 
   this->cbConnect(CBC_DISCONNECTED);
-
-  XPLMRegisterDrawCallback(&TOSD::drawCallbackStatic, xplm_Phase_FirstCockpit, 0, NULL);
 }
 
 //==============================================================
 //==============================================================
 void TOSD::destroy()
 {
-  XPLMUnregisterDrawCallback(TOSD::drawCallbackStatic, xplm_Phase_FirstCockpit, 0, NULL);
   XPLMBindTexture2d(this->textureId, 0);
   GLuint t = this->textureId;
   glDeleteTextures(1, &t);

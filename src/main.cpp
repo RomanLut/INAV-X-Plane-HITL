@@ -9,24 +9,15 @@
 #include "stats.h"
 #include "util.h"
 #include "osd.h"
+#include "graph.h"
 
 #include "config.h"
 
 uint32_t lastUpdateTime;
 bool wait;
+bool firstRender = true;
 
 XPLMFlightLoopID loopId;
-
-//==============================================================
-//==============================================================
-void setView()
-{
-  XPLMCommandRef command_ref = XPLMFindCommand("sim/view/forward_with_nothing");
-  if (NULL != command_ref)
-  {
-    XPLMCommandOnce(command_ref);
-  }
-}
 
 //==============================================================
 //==============================================================
@@ -51,7 +42,7 @@ void cbMessage(int code, const uint8_t* messageBuffer, int length)
 
     wait = false;
 
-    if (!g_simData.isAircraft)
+    if (!g_simData.isAirplane)
     {
       g_menu.actionDisconnect();
       playSound("assets\\unsupported.wav");
@@ -90,6 +81,35 @@ float floop_cb(float elapsed1, float elapsed2, int ctr, void* refcon)
 
 //==============================================================
 //==============================================================
+void setView()
+{
+  XPLMCommandRef command_ref = XPLMFindCommand("sim/view/forward_with_nothing");
+  if (NULL != command_ref)
+  {
+    XPLMCommandOnce(command_ref);
+  }
+}
+
+//==============================================================
+//==============================================================
+int	drawCallback(
+  XPLMDrawingPhase     inPhase,
+  int                  inIsBefore,
+  void *               inRefcon)
+{
+  if (firstRender)
+  {
+    setView();
+    firstRender = false;
+  }
+
+  g_osd.drawCallback();
+  g_graph.drawCallback();
+  return 1;
+}
+
+//==============================================================
+//==============================================================
 PLUGIN_API int XPluginStart(
 	char *		outName,
 	char *		outSig,
@@ -103,6 +123,8 @@ PLUGIN_API int XPluginStart(
 
   g_osd.init();
 
+  XPLMRegisterDrawCallback(&drawCallback, xplm_Phase_FirstCockpit, 0, NULL);
+
 	return 1;
 }
 
@@ -111,6 +133,8 @@ PLUGIN_API int XPluginStart(
 PLUGIN_API void	XPluginStop(void)
 {
   LOG("Plugin stop\n");
+
+  XPLMUnregisterDrawCallback(&drawCallback, xplm_Phase_FirstCockpit, 0, NULL);
 
   g_osd.destroy();
 }
@@ -162,6 +186,11 @@ PLUGIN_API void XPluginDisable(void)
 //==============================================================
 //==============================================================
 PLUGIN_API void XPluginReceiveMessage(XPLMPluginID inFrom, int inMsg, void * inParam) 
-{ 
+{
+  if (inMsg == XPLM_MSG_AIRPORT_LOADED)
+  {
+    firstRender = true;
+  }
 }
+
 

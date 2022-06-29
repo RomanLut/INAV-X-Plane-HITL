@@ -26,8 +26,6 @@ public:
   int auto_rows = 16;
   bool smoothed = true;
 
-  bool firstRender = true;
-
   void init();
   void destroy();
 
@@ -49,8 +47,6 @@ private:
   void clear();
 
   void drawString(int row, int col, const char* str);
-
-  static int	drawCallbackStatic(XPLMDrawingPhase inPhase, int inIsBefore, void* inRefcon);
 
 };
 

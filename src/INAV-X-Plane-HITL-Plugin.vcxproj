@@ -50,7 +50,7 @@
     <TargetName>win</TargetName>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
-    <OutDir>..\..\..\..\..\Games\X-Plane11\X-Plane 11\Aircraft\Extra Aircraft\NK_FPVSurfwing\plugins\INAV-X-Plane-HITL\64</OutDir>
+    <OutDir>..\..\..\..\..\Games\X-Plane11\X-Plane 11\Aircraft\Extra Aircraft\NK_FPVSurfwing\plugins\INAV-X-Plane-HITL\64\</OutDir>
     <IntDir>.\Debug\64\</IntDir>
     <LinkIncremental>true</LinkIncremental>
     <TargetExt>.xpl</TargetExt>
@@ -147,20 +147,6 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="*.cpp" />
-  </ItemGroup>
-  <ItemGroup>
-    <ClInclude Include="config.h" />
-    <ClInclude Include="lodepng.h" />
-    <ClInclude Include="menu.h" />
-    <ClInclude Include="msp.h" />
-    <ClInclude Include="osd.h" />
-    <ClInclude Include="serial.h" />
-    <ClInclude Include="simData.h" />
-    <ClInclude Include="stats.h" />
-    <ClInclude Include="util.h" />
-  </ItemGroup>
-  <ItemGroup>
     <Media Include="assets\connected.wav" />
     <Content Include="assets\connected.wav">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
@@ -195,6 +181,30 @@
     <Content Include="assets\unsupported.wav">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="config.h" />
+    <ClInclude Include="graph.h" />
+    <ClInclude Include="lodepng.h" />
+    <ClInclude Include="menu.h" />
+    <ClInclude Include="msp.h" />
+    <ClInclude Include="osd.h" />
+    <ClInclude Include="serial.h" />
+    <ClInclude Include="simData.h" />
+    <ClInclude Include="stats.h" />
+    <ClInclude Include="util.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="graph.cpp" />
+    <ClCompile Include="lodepng.cpp" />
+    <ClCompile Include="main.cpp" />
+    <ClCompile Include="menu.cpp" />
+    <ClCompile Include="msp.cpp" />
+    <ClCompile Include="osd.cpp" />
+    <ClCompile Include="serial.cpp" />
+    <ClCompile Include="simData.cpp" />
+    <ClCompile Include="stats.cpp" />
+    <ClCompile Include="util.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

@@ -1,10 +1,46 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
-    <ClCompile Include="*.cpp" />
+    <ClCompile Include="lodepng.cpp" />
+    <ClCompile Include="main.cpp" />
+    <ClCompile Include="menu.cpp" />
+    <ClCompile Include="msp.cpp" />
+    <ClCompile Include="osd.cpp" />
+    <ClCompile Include="serial.cpp" />
+    <ClCompile Include="simData.cpp" />
+    <ClCompile Include="stats.cpp" />
+    <ClCompile Include="util.cpp" />
+    <ClCompile Include="graph.cpp" />
+    <ClCompile Include="lodepng.cpp" />
+    <ClCompile Include="main.cpp" />
+    <ClCompile Include="menu.cpp" />
+    <ClCompile Include="msp.cpp" />
+    <ClCompile Include="osd.cpp" />
+    <ClCompile Include="serial.cpp" />
+    <ClCompile Include="simData.cpp" />
+    <ClCompile Include="stats.cpp" />
+    <ClCompile Include="util.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="*.h" />
+    <ClInclude Include="graph.h" />
+    <ClInclude Include="lodepng.h" />
+    <ClInclude Include="menu.h" />
+    <ClInclude Include="msp.h" />
+    <ClInclude Include="osd.h" />
+    <ClInclude Include="serial.h" />
+    <ClInclude Include="simData.h" />
+    <ClInclude Include="stats.h" />
+    <ClInclude Include="util.h" />
+    <ClInclude Include="config.h" />
+    <ClInclude Include="graph.h" />
+    <ClInclude Include="lodepng.h" />
+    <ClInclude Include="menu.h" />
+    <ClInclude Include="msp.h" />
+    <ClInclude Include="osd.h" />
+    <ClInclude Include="serial.h" />
+    <ClInclude Include="simData.h" />
+    <ClInclude Include="stats.h" />
+    <ClInclude Include="util.h" />
   </ItemGroup>
   <ItemGroup>
     <Filter Include="assets">
@@ -27,6 +63,8 @@
     <Media Include="assets\connection_lost.wav">
       <Filter>assets</Filter>
     </Media>
-    <Media Include="assets\unsupported.wav" />
+    <Media Include="assets\unsupported.wav">
+      <Filter>assets</Filter>
+    </Media>
   </ItemGroup>
 </Project>

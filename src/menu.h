@@ -48,6 +48,14 @@ public:
   int beeper_default_id;
   int beeper_mute_id;
 
+  XPLMMenuID graph_menu_id;
+  int graph_id;
+  int graph_none_id;
+  int graph_attitude_id;
+  int graph_acc_id;
+  int graph_gyro_id;
+  int graph_debug_altitude_id;
+
 	int gps_spoofing_1_id;
 	int gps_spoofing_2_id;
 	int gps_spoofing_3_id;
@@ -64,6 +72,7 @@ public:
   void updateBatteryMenu();
   void updateBeeperMenu();
   void updateAttitudeMenu();
+  void updateGraphMenu();
 
   void actionDisconnect();
 };

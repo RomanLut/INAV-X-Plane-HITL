@@ -1,5 +1,6 @@
 #include "simData.h"
 #include "stats.h"
+#include "graph.h"
 
 #include <math.h>
 
@@ -107,9 +108,12 @@ void TSimData::updateFromINAV(const TMSPSimulatorFromINAV* data)
   this->control_pitch = data->pitch;
   this->control_yaw = data->yaw;
 
+  this->isAirplane = (data->debugIndex & 128) != 0;
+
   g_stats.debug[data->debugIndex & 7] = data->debugValue;
 
-  this->isAircraft = (data->debugIndex & 128) != 0;
+  g_graph.addDebug(data->debugIndex & 7, data->debugValue);
+  g_graph.addOutputYPR(this->control_yaw, this->control_pitch, this->control_roll);
 }
 
 //==============================================================
@@ -133,14 +137,19 @@ void TSimData::sendToINAV()
   data.roll =  (int16_t)round( this->roll * 10);  //expected by inav: left wing down - negative roll, 1 degree = 10, values range: -1800...1800
   data.pitch = (int16_t)round(-this->pitch * 10);  //expected by inav: nose up - negative pitch, 1 degree = 10 , values range: -1800...1800
   data.yaw =   (int16_t)round( this->yaw * 10);  //expected by inav: rotate clockwise( top view) - positive yaw+, 1 degreee = 10 , values range: 0...3600
+  if (data.yaw < 0) data.yaw += 3600;
 
   g_stats.dbg_roll = data.roll;
   g_stats.dbg_pitch = data.pitch;
   g_stats.dbg_yaw = data.yaw;
 
+  g_graph.addAttitudeYPR(data.yaw, data.pitch, data.roll);
+
   data.accel_x = (int16_t)round(-this->accel_x * 1000);  //expected by inav: forward - positive
   data.accel_y = (int16_t)round( this->accel_y * 1000);  //expected by inav: right - negative
   data.accel_z = (int16_t)round( this->accel_z * 1000);  //expected by inav: 1.0f in stable position (1G)
+
+  g_graph.addACC(data.accel_x / 1000.0f, data.accel_y / 1000.0f, data.accel_z / 1000.0f);
 
   g_stats.dbg_acc_x = data.accel_x / 1000.0f;
   g_stats.dbg_acc_y = data.accel_y / 1000.0f;
@@ -149,6 +158,8 @@ void TSimData::sendToINAV()
   data.gyro_x = (int16_t)round( this->gyro_x * 16);  //expected by inav: roll left wing down rotation -> negative
   data.gyro_y = (int16_t)round(-this->gyro_y * 16);  //expected by inav: pitch up rotation -> negative, 1 deerees per second
   data.gyro_z = (int16_t)round(-this->gyro_z * 16);  //expected by inav: yaw clockwise rotation (top view) ->negative
+
+  g_graph.addGyro(data.gyro_x / 16.0f, data.gyro_y / 16.0f, data.gyro_z / 16.0f);
 
   g_stats.dbg_gyro_x = data.gyro_x / 16.0f;
   g_stats.dbg_gyro_y = data.gyro_y / 16.0f;

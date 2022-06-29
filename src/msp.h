@@ -64,8 +64,8 @@ struct TMSPSimulatorFromINAV
   int16_t yaw;
   int16_t throttle;
 
-  uint8_t debugIndex;
-  uint32_t debugValue;
+  uint8_t debugIndex;  //|128 - is Ariplane
+  int32_t debugValue;
 
   uint8_t osdRow;  //255 - not osd data. |128 - 16 rows, otherwise 13 rows.
   uint8_t osdCol;
