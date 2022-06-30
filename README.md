@@ -158,6 +158,9 @@ For coonvience, it is possible to mute beeper in simulation mode:
 
 ![](doc/beeper.png)
 
+# Servo autotrim
+
+Autotrim and servo autotrim have no effect in simulation (TODO).
 
 # Development
 
