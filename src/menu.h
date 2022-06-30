@@ -56,6 +56,14 @@ public:
   int graph_gyro_id;
   int graph_debug_altitude_id;
 
+  XPLMMenuID noise_menu_id;
+  int noise_id;
+  int noise_none_id;
+  int noise_800M_id;
+  int noise_2KM_id;
+  int noise_10KM_id;
+  int noise_50KM_id;
+
 	int gps_spoofing_1_id;
 	int gps_spoofing_2_id;
 	int gps_spoofing_3_id;
@@ -73,6 +81,7 @@ public:
   void updateBeeperMenu();
   void updateAttitudeMenu();
   void updateGraphMenu();
+  void updateNoiseMenu();
 
   void actionDisconnect();
 };

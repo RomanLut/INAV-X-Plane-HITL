@@ -16,6 +16,14 @@ typedef enum
   OSD_NTSC
 } TOSDType;
 
+typedef enum
+{
+  VS_NONE,
+  VS_2KM,
+  VS_10KM,
+  VS_50KM
+} TVideoLinkSimulation;
+
 //=======================================================
 //=======================================================
 class TOSD
@@ -25,6 +33,8 @@ public:
   TOSDType osd_type = OSD_AUTO;
   int auto_rows = 16;
   bool smoothed = true;
+
+  TVideoLinkSimulation videoLink = VS_10KM;
 
   void init();
   void destroy();
@@ -36,17 +46,32 @@ public:
   void cbConnect(TCBConnectParm state);
 
 private:
-  int textureId = 0;
+  int fontTextureId = 0;
+  int noiseTextureId = 0;
+  int interferenceTextureId = 0;
+
+  double home_lattitude;
+  double home_longitude;
+  double home_elevation;
+  float roll;
 
   uint16_t osdData[OSD_ROWS*OSD_COLS];
 
   void loadFont();
+  int loadTexture(const char* pFileName);
 
   void drawChar(uint16_t code, float x1, float y1, float width, float height);
 
   void clear();
 
   void drawString(int row, int col, const char* str);
+
+  void destroyTexture(int textureId);
+  void drawOSD();
+  void drawNoise( float amount);
+  void drawInterference( float amount );
+
+  float getNoiseAmount();
 
 };
 

@@ -171,14 +171,26 @@
     </Content>
   </ItemGroup>
   <ItemGroup>
+    <Media Include="assets\unsupported.wav" />
+    <Content Include="assets\unsupported.wav">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+  </ItemGroup>
+  <ItemGroup>
     <Media Include="assets\osd_font.png" />
     <Content Include="assets\osd_font.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
   </ItemGroup>
   <ItemGroup>
-    <Media Include="assets\unsupported.wav" />
-    <Content Include="assets\unsupported.wav">
+    <Media Include="assets\noise.png" />
+    <Content Include="assets\noise.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+  </ItemGroup>
+  <ItemGroup>
+    <Media Include="assets\interference.png" />
+    <Content Include="assets\interference.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
   </ItemGroup>

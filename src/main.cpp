@@ -27,6 +27,16 @@ void cbConnect(TCBConnectParm state)
   g_osd.cbConnect(state);
   lastUpdateTime = GetTickCount();
   wait = false;
+
+  if (state == CBC_CONNECTED)
+  {
+    //disable parking brakes
+    XPLMDataRef df_parkBrake = XPLMFindDataRef("sim/flightmodel/controls/parkbrake");
+    if (df_parkBrake != NULL)
+    {
+      XPLMSetDataf(df_parkBrake, 0);
+    }
+  }
 }
 
 //==============================================================
@@ -87,6 +97,20 @@ void setView()
   if (NULL != command_ref)
   {
     XPLMCommandOnce(command_ref);
+  }
+
+  //set FOV = 115
+  XPLMDataRef df_fov = XPLMFindDataRef("sim/graphics/view/field_of_view_deg");
+  if (df_fov != NULL)
+  {
+    XPLMSetDataf(df_fov, 110.0f);
+  }
+
+  //disable g load effects
+  XPLMDataRef df_gload = XPLMFindDataRef("sim/graphics/settings/dim_gload");
+  if (df_gload != NULL)
+  {
+    XPLMSetDatai(df_gload, 0);
   }
 }
 

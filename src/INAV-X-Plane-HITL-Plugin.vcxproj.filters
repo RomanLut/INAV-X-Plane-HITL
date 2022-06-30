@@ -66,5 +66,11 @@
     <Media Include="assets\unsupported.wav">
       <Filter>assets</Filter>
     </Media>
+    <Media Include="assets\noise.png">
+      <Filter>assets</Filter>
+    </Media>
+    <Media Include="assets\interference.png">
+      <Filter>assets</Filter>
+    </Media>
   </ItemGroup>
 </Project>

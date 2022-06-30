@@ -1,4 +1,5 @@
 #include "util.h"
+#include <math.h>
 
 //==============================================================
 //==============================================================
@@ -36,7 +37,7 @@ void playSound(const char* pFileName)
 
 //==============================================================
 //==============================================================
-extern void LOG(const char* fmt, ...)
+void LOG(const char* fmt, ...)
 {
  #ifdef ENABLE_LOG
   va_list args;
@@ -53,4 +54,26 @@ extern void LOG(const char* fmt, ...)
   XPLMDebugString(msg);
   OutputDebugString(msg);
 #endif
+}
+
+//==============================================================
+//==============================================================
+double toRad(double degree)
+{
+  return degree / 180 * 3.14159265358979323846;
+}
+
+//==============================================================
+//==============================================================
+float latDistanceM(double lat1, double lon1, double elev1, double lat2, double lon2, double elev2)
+{
+  double dist;
+  dist = sin(toRad(lat1)) * sin(toRad(lat2)) + cos(toRad(lat1)) * cos(toRad(lat2)) * cos(toRad(lon1 - lon2));
+  dist = acos(dist);
+  //        dist = (6371 * pi * dist) / 180;
+  //got dist in radian, no need to change back to degree and convert to rad again.
+  dist = 6371000 * dist;
+  double dh = elev1 - elev2;
+  dist = sqrt(dist*dist + dh * dh);
+  return (float)dist;
 }

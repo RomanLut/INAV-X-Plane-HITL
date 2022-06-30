@@ -92,6 +92,16 @@ void TMenu::updateGraphMenu()
 
 //==============================================================
 //==============================================================
+void TMenu::updateNoiseMenu()
+{
+  XPLMCheckMenuItem(this->noise_menu_id, this->noise_none_id, g_osd.videoLink == VS_NONE ? xplm_Menu_Checked : xplm_Menu_Unchecked);
+  XPLMCheckMenuItem(this->noise_menu_id, this->noise_2KM_id, g_osd.videoLink == VS_2KM ? xplm_Menu_Checked : xplm_Menu_Unchecked);
+  XPLMCheckMenuItem(this->noise_menu_id, this->noise_10KM_id, g_osd.videoLink == VS_10KM ? xplm_Menu_Checked : xplm_Menu_Unchecked);
+  XPLMCheckMenuItem(this->noise_menu_id, this->noise_50KM_id, g_osd.videoLink == VS_50KM ? xplm_Menu_Checked : xplm_Menu_Unchecked);
+}
+
+//==============================================================
+//==============================================================
 void TMenu::static_menu_handler(void * in_menu_ref, void * in_item_ref)
 {
   g_menu.menu_handler(in_menu_ref, in_item_ref);
@@ -231,10 +241,29 @@ void TMenu::menu_handler(void * in_menu_ref, void * in_item_ref)
   }
   else if (!strcmp((const char *)in_item_ref, "graph_debug_altitude"))
   {
-  g_graph.setGraphType(GRAPH_DEBUG_ALTITUDE);
-  this->updateGraphMenu();
+    g_graph.setGraphType(GRAPH_DEBUG_ALTITUDE);
+    this->updateGraphMenu();
   }
-
+  else if (!strcmp((const char *)in_item_ref, "noise_none"))
+  {
+    g_osd.videoLink = VS_NONE;
+    this->updateNoiseMenu();
+  }
+  else if (!strcmp((const char *)in_item_ref, "noise_2km"))
+  {
+    g_osd.videoLink = VS_2KM;
+    this->updateNoiseMenu();
+  }
+  else if (!strcmp((const char *)in_item_ref, "noise_10km"))
+  {
+    g_osd.videoLink = VS_10KM;
+    this->updateNoiseMenu();
+  }
+  else if (!strcmp((const char *)in_item_ref, "noise_50km"))
+  {
+    g_osd.videoLink = VS_50KM;
+    this->updateNoiseMenu();
+  }
 }
 
 //==============================================================
@@ -282,6 +311,14 @@ void TMenu::createMenu()
   this->osd_nearest_id = XPLMAppendMenuItem(this->osd_menu_id, "Smoothing: Nearest", (void *)"osd_nearest", 1);
   this->osd_linear_id = XPLMAppendMenuItem(this->osd_menu_id, "Smoothing: Linear", (void *)"osd_linear", 1);
 
+  this->noise_id = XPLMAppendMenuItem(this->menu_id, "Video", (void *)"Video", 1);
+  this->noise_menu_id = XPLMCreateMenu("Video", this->menu_id, this->noise_id, static_menu_handler, NULL);
+  this->noise_none_id = XPLMAppendMenuItem(this->noise_menu_id, "No simulation", (void *)"noise_none", 1);
+  this->noise_800M_id = XPLMAppendMenuItem(this->noise_menu_id, "Link up to 800m", (void *)"noise_800m", 1);
+  this->noise_2KM_id = XPLMAppendMenuItem(this->noise_menu_id, "Link up to 2km", (void *)"noise_2km", 1);
+  this->noise_10KM_id = XPLMAppendMenuItem(this->noise_menu_id, "Link up to 10km", (void *)"noise_10km", 1);
+  this->noise_50KM_id = XPLMAppendMenuItem(this->noise_menu_id, "Link up to 50km", (void *)"noise_50km", 1);
+
   XPLMAppendMenuSeparator(this->osd_menu_id);
 
   this->graph_id = XPLMAppendMenuItem(this->menu_id, "Graph", (void *)"Graph", 1);
@@ -304,6 +341,7 @@ void TMenu::createMenu()
   this->updateBatteryMenu();
   this->updateBeeperMenu();
   this->updateAttitudeMenu();
+  this->updateNoiseMenu();
   this->updateGraphMenu();
 }
 
