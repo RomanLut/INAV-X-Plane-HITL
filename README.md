@@ -39,14 +39,17 @@ You have to build and flash Simulator-enabled INAV firmware from branch: https:/
 ## Installation steps
 
 - Install **X-Plane 11 demo** from: https://www.x-plane.com/desktop/try-it/
+- download last release 
 - Copy `release\Aircraft` folder to `X-Plane 11\Aircraft` folder in **X-Plane** installation location. 
 - Connect Flight Controller to PC using USB Cable
 - Configure FC (see **Flight Controller configuration** below)
 - Start **X-Plane 11**
-- Select Aircraft **Aerolite 103** or **NK Surfwing**
+- Select "Show extra aircraft from older versions" to see NK_FPVSurfwing
+![](doc/show_extra_aircraft.jpg)
+- Select Aircraft **NK Surfwing** or **Aerolite 103**
 - Start flight
 - Select **Plugins->INAV HITL->Link->Connect to flight controller**. Plugin should automatically detect COM port.
-- Flight using RC Controller, setup PIDs etc. Hint: disable brakes with "B" key. 
+- Flight using RC Controller, setup PIDs etc. **Hint: disable parking brakes with "B" key on takeoff if necessary.** 
 
 
 *Note:Use **"Internal View/Forward with No Display"** for full immersion FPV flights:*
