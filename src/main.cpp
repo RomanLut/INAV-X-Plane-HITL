@@ -27,16 +27,6 @@ void cbConnect(TCBConnectParm state)
   g_osd.cbConnect(state);
   lastUpdateTime = GetTickCount();
   wait = false;
-
-  if (state == CBC_CONNECTED)
-  {
-    //disable parking brakes
-    XPLMDataRef df_parkBrake = XPLMFindDataRef("sim/flightmodel/controls/parkbrake");
-    if (df_parkBrake != NULL)
-    {
-      XPLMSetDataf(df_parkBrake, 0);
-    }
-  }
 }
 
 //==============================================================
@@ -91,31 +81,6 @@ float floop_cb(float elapsed1, float elapsed2, int ctr, void* refcon)
 
 //==============================================================
 //==============================================================
-void setView()
-{
-  XPLMCommandRef command_ref = XPLMFindCommand("sim/view/forward_with_nothing");
-  if (NULL != command_ref)
-  {
-    XPLMCommandOnce(command_ref);
-  }
-
-  //set FOV = 115
-  XPLMDataRef df_fov = XPLMFindDataRef("sim/graphics/view/field_of_view_deg");
-  if (df_fov != NULL)
-  {
-    XPLMSetDataf(df_fov, 110.0f);
-  }
-
-  //disable g load effects
-  XPLMDataRef df_gload = XPLMFindDataRef("sim/graphics/settings/dim_gload");
-  if (df_gload != NULL)
-  {
-    XPLMSetDatai(df_gload, 0);
-  }
-}
-
-//==============================================================
-//==============================================================
 int	drawCallback(
   XPLMDrawingPhase     inPhase,
   int                  inIsBefore,
@@ -142,12 +107,12 @@ PLUGIN_API int XPluginStart(
   LOG("Plugin start\n");
 
 	strcpy(outName, "INAV HITL");
-	strcpy(outSig, "https://github.com/iNavFlight");
-	strcpy(outDesc, "INAV Hardware in the loop");
+	strcpy(outSig, "https://github.com/RomanLut/INAV-X-Plane-HITL");
+	strcpy(outDesc, "INAV Hardware In The Loop");
 
   g_osd.init();
 
-  XPLMRegisterDrawCallback(&drawCallback, xplm_Phase_FirstCockpit, 0, NULL);
+  XPLMRegisterDrawCallback(&drawCallback, xplm_Phase_LastCockpit, 0, NULL);
 
 	return 1;
 }

@@ -12,6 +12,14 @@
 
 //======================================================
 //======================================================
+typedef enum
+{
+  FIF_ARMED       = 64,
+  FIF_IS_AIRPLANE = 128
+} TFromINAVFlags;
+
+//======================================================
+//======================================================
 #pragma pack(1)
 struct TMSPAPIVersion
 {
@@ -28,7 +36,11 @@ struct TMSPSimulatorToINAV
 {
   uint8_t version; //1
 
-  uint8_t flags;  //1 - simulator enable
+  // SIMU_ENABLE				    = (1 << 0),
+  // SIMU_SIMULATE_BATTERY  = (1 << 1),
+  // SIMU_MUTE_BEEPER       = (1 << 2),
+  // SIMU_USE_SENSORS       = (1 << 3)
+  uint8_t flags;  
 
   uint8_t fix;
   uint8_t numSat;
@@ -37,6 +49,7 @@ struct TMSPSimulatorToINAV
   int32_t alt;
   int16_t speed;
   int16_t course;
+  int16_t velNED[3];
 
   int16_t roll;
   int16_t pitch;
@@ -64,7 +77,7 @@ struct TMSPSimulatorFromINAV
   int16_t yaw;
   int16_t throttle;
 
-  uint8_t debugIndex;  //|128 - is Ariplane
+  uint8_t debugIndex;  // | TFromINAVFlags
   int32_t debugValue;
 
   uint8_t osdRow;  //255 - not osd data. |128 - 16 rows, otherwise 13 rows.

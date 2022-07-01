@@ -43,7 +43,7 @@ void LOG(const char* fmt, ...)
   va_list args;
   char msg[1024];
 
-  snprintf(msg, 256, "INAVHILT[%ul]: ", GetTickCount());
+  snprintf(msg, 256, "INAVHITL[%ul]: ", GetTickCount());
   size_t hl = strlen(msg);
 
   va_start(args, fmt);
@@ -76,4 +76,58 @@ float latDistanceM(double lat1, double lon1, double elev1, double lat2, double l
   double dh = elev1 - elev2;
   dist = sqrt(dist*dist + dh * dh);
   return (float)dist;
+}
+
+//==============================================================
+//==============================================================
+void disableBrakes()
+{
+  //disable parking brakes
+  XPLMDataRef df_parkBrake = XPLMFindDataRef("sim/flightmodel/controls/parkbrake");
+  if (df_parkBrake != NULL)
+  {
+    XPLMSetDataf(df_parkBrake, 0);
+  }
+}
+
+
+//==============================================================
+//==============================================================
+void setView()
+{
+  XPLMCommandRef command_ref = XPLMFindCommand("sim/view/forward_with_nothing");
+  if (NULL != command_ref)
+  {
+    XPLMCommandOnce(command_ref);
+  }
+
+  //set FOV = 115
+  XPLMDataRef df_fov = XPLMFindDataRef("sim/graphics/view/field_of_view_deg");
+  if (df_fov != NULL)
+  {
+    XPLMSetDataf(df_fov, 110.0f);
+  }
+
+  //disable g load effects
+  XPLMDataRef df_gload = XPLMFindDataRef("sim/graphics/settings/dim_gload");
+  if (df_gload != NULL)
+  {
+    XPLMSetDatai(df_gload, 0);
+  }
+}
+
+//==============================================================
+//==============================================================
+float clampf(float value, float minValue, float maxValue)
+{
+  if (value < minValue) value = minValue;
+  if (value > maxValue) value = maxValue;
+  return value;
+}
+
+//==============================================================
+//==============================================================
+int16_t clampToInt16(float value)
+{
+  return (int16_t)round(clampf(value, INT16_MIN, INT16_MAX));
 }

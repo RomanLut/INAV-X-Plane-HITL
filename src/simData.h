@@ -3,6 +3,7 @@
 #include "config.h"
 
 #include "msp.h"
+#include "util.h"
 
 #define GPS_NO_FIX  0
 #define GPS_FIX_2D  1
@@ -15,7 +16,11 @@
 class TSimData
 {
 public:
-	// gps
+  //---- gps ---
+
+  bool GPSHasNewData;
+  uint32_t gps_lastUpdate;
+
   int gps_fix;
 	int gps_numSat;
   int gps_spoofing;
@@ -32,13 +37,27 @@ public:
 	XPLMDataRef df_elevation;
 	double elevation;
 
+  //meters/s, The velocity in local OGL coordinates
+  XPLMDataRef df_local_vx;
+  float local_vx;
+
+  XPLMDataRef df_local_vy;
+  float local_vy;
+
+  XPLMDataRef df_local_vz;
+  float local_vz;
+
   //meters, altitude Above Ground Level
-	XPLMDataRef df_agl;
-	float agl; 
+	//XPLMDataRef df_agl;
+	//float agl; 
 
   //meters/sec, the ground speed of the aircraft
 	XPLMDataRef df_speed;
 	float speed;
+
+  //degrees, the true heading of the aircraft in degrees from the Z axis - OpenGL coordinates
+  float course; //== yaw with GPS update rate
+  //---- gps ---
 
   //degrees, the roll of the aircraft in degrees - OpenGL coordinates
 	XPLMDataRef df_roll;
@@ -103,6 +122,7 @@ public:
   int16_t control_yaw;
 
   bool isAirplane;
+  bool isArmed;
 
   //-- state --
   bool emulateBattery;

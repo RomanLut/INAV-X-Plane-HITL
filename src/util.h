@@ -9,4 +9,10 @@ extern void playSound(const char* pFileName);
 
 extern void LOG(const char* fmt, ...);
 
-float latDistanceM(double lat1, double lon1, double elev1, double lat2, double lon2, double elev2);
+extern float latDistanceM(double lat1, double lon1, double elev1, double lat2, double lon2, double elev2);
+
+extern void disableBrakes();
+extern void setView();
+
+extern float clampf(float value, float minValue, float maxValue);
+extern int16_t clampToInt16(float value);
