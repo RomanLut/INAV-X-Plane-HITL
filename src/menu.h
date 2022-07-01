@@ -55,6 +55,7 @@ public:
   int graph_acc_id;
   int graph_gyro_id;
   int graph_debug_altitude_id;
+  int graph_debug_custom_id;
 
   XPLMMenuID noise_menu_id;
   int noise_id;

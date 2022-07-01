@@ -8,7 +8,8 @@ typedef enum
   GRAPH_ATTITUDE_RPY,
   GRAPH_ACC,
   GRAPH_GYRO,
-  GRAPH_DEBUG_ALTITUDE
+  GRAPH_DEBUG_ALTITUDE,
+  GRAPH_DEBUG_CUSTOM
 } TGraphType;
 
 #define GRAPH_POINTS      200
@@ -72,6 +73,7 @@ private:
 
   int activeCount;
   const char* pSeriesName;
+  size_t lastLen;
 
   float debug[8];
 

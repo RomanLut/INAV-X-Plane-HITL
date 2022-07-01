@@ -176,8 +176,6 @@ void TGraph::drawCallback()
 
   XPLMDrawString(col, (int)(bx + 4.0f), (int)y, (char*)this->pSeriesName, NULL, xplmFont_Basic);
 
-  y -= 16.0f;
-                                                                                             
   float y2 = by + 4 + this->activeCount * lineHeight;
 
   for (int i = 0; i < this->activeCount; i++)
@@ -190,10 +188,19 @@ void TGraph::drawCallback()
 
     this->formatRangeNumber(msg1, this->series[i].min);
     this->formatRangeNumber(msg2, this->series[i].max);
-    sprintf(msg, "%s %s...%s", this->series[i].name, msg1, msg2);
-    XPLMDrawString(col, (int)(bx+4.0f), (int)y, msg , NULL, xplmFont_Basic);
-    y -= lineHeight;       
-    this->formatValueNumber(msg, this->series[i].points[this->series[i].head == 0 ? GRAPH_POINTS-1 : this->series[i].head-1] );
+    sprintf(msg, "%s[%s...%s]", this->series[i].name, msg1, msg2);
+
+    size_t l = strlen(msg);
+    if (this->lastLen < l) this->lastLen = l;
+
+    while (l < (this->lastLen + 2))
+    {
+      msg[l++] = '_';
+    }
+    msg[l] = 0;
+
+    this->formatValueNumber(msg1, this->series[i].points[this->series[i].head == 0 ? GRAPH_POINTS-1 : this->series[i].head-1] );
+    strcat(msg, msg1);
     XPLMDrawString(col, (int)(bx + 4.0f), (int)y2, msg, NULL, xplmFont_Basic);
     y2 -= lineHeight;
   }
@@ -229,16 +236,15 @@ void TGraph::setGraphType(TGraphType type)
     this->series[0].setRange(0, 3600);
     this->series[1].setRange(-1800, 1800);
     this->series[2].setRange(-1800, 1800);
-    this->series[0].setName("YAW   ");
-    this->series[1].setName("PITCH ");
-    this->series[2].setName("ROLL  ");
-
     this->series[3].setRange(-500, 500);
     this->series[4].setRange(-500, 500);
     this->series[5].setRange(-500, 500);
-    this->series[3].setName("Output YAW   ");
-    this->series[4].setName("Output PITCH ");
-    this->series[5].setName("Output ROLL  ");
+    this->series[0].setName("YAW__________");
+    this->series[1].setName("PITCH________");
+    this->series[2].setName("ROLL_________");
+    this->series[3].setName("Output YAW___");
+    this->series[4].setName("Output PITCH_");
+    this->series[5].setName("Output ROLL__");
     break;
 
   case GRAPH_ACC:
@@ -247,9 +253,9 @@ void TGraph::setGraphType(TGraphType type)
     this->series[0].setRange(-8, 8);
     this->series[1].setRange(-8, 8);
     this->series[2].setRange(-8, 8);
-    this->series[0].setName("X");
-    this->series[1].setName("Y");
-    this->series[2].setName("Z");
+    this->series[0].setName("X ");
+    this->series[1].setName("Y ");
+    this->series[2].setName("Z ");
     break;
 
   case GRAPH_GYRO:
@@ -258,9 +264,9 @@ void TGraph::setGraphType(TGraphType type)
     this->series[0].setRange(-64, 64);
     this->series[1].setRange(-64, 64);
     this->series[2].setRange(-64, 64);
-    this->series[0].setName("X");
-    this->series[1].setName("Y");
-    this->series[2].setName("Z");
+    this->series[0].setName("X ");
+    this->series[1].setName("Y ");
+    this->series[2].setName("Z ");
     break;
 
   case GRAPH_DEBUG_ALTITUDE:
@@ -275,26 +281,37 @@ void TGraph::setGraphType(TGraphType type)
     this->series[6].setRange(0, 0);
     this->series[7].setRange(0, 0);
 
-    this->series[0].setName("posEstimator.est.pos.z      ");
-    this->series[1].setName("posEstimator.est.vel.z      ");
+    this->series[0].setName("posEstimator.est.pos.z______");
+    this->series[1].setName("posEstimator.est.vel.z______");
     this->series[2].setName("imuMeasuredAccelBF.z        ");
-    this->series[3].setName("posEstimator.imu.accelNEU.z ");
-    this->series[4].setName("posEstimator.gps.pos.z      ");
-    this->series[5].setName("posEstimator.gps.vel.z      ");
-    this->series[6].setName("accGetVibrationLevel()      ");
-    this->series[7].setName("accGetClipCount()           ");
+    this->series[3].setName("posEstimator.imu.accelNEU.z_");
+    this->series[4].setName("posEstimator.gps.pos.z______");
+    this->series[5].setName("posEstimator.gps.vel.z______");
+    this->series[6].setName("accGetVibrationLevel()______");
+    this->series[7].setName("accGetClipCount()___________");
     break;
 
-    /*
-    DEBUG_SET(DEBUG_ALTITUDE, 0, posEstimator.est.pos.z);       // Position estimate
-    DEBUG_SET(DEBUG_ALTITUDE, 2, imuMeasuredAccelBF.z);        // Baro altitude
-    DEBUG_SET(DEBUG_ALTITUDE, 4, posEstimator.gps.pos.z);       // GPS altitude
-    DEBUG_SET(DEBUG_ALTITUDE, 6, accGetVibrationLevel());       // Vibration level
-    DEBUG_SET(DEBUG_ALTITUDE, 1, posEstimator.est.vel.z);       // Vertical speed estimate
-    DEBUG_SET(DEBUG_ALTITUDE, 3, posEstimator.imu.accelNEU.z);  // Vertical acceleration on earth frame
-    DEBUG_SET(DEBUG_ALTITUDE, 5, posEstimator.gps.vel.z);       // GPS vertical speed
-    DEBUG_SET(DEBUG_ALTITUDE, 7, accGetClipCount());            // Clip count
-      */
+  case GRAPH_DEBUG_CUSTOM:
+    this->pSeriesName = "debug[8]";
+    this->activeCount = 8;
+    this->series[0].setRange(0, 0);
+    this->series[1].setRange(0, 0);
+    this->series[2].setRange(0, 0);
+    this->series[3].setRange(0, 0);
+    this->series[4].setRange(0, 0);
+    this->series[5].setRange(0, 0);
+    this->series[6].setRange(0, 0);
+    this->series[7].setRange(0, 0);
+
+    this->series[0].setName("debug[0] ");
+    this->series[1].setName("debug[1] ");
+    this->series[2].setName("debug[2] ");
+    this->series[3].setName("debug[3] ");
+    this->series[4].setName("debug[4] ");
+    this->series[5].setName("debug[5] ");
+    this->series[6].setName("debug[6] ");
+    this->series[7].setName("debug[7] ");
+    break;
 
   }
 }
@@ -314,6 +331,7 @@ void TGraph::clear()
   {
     this->series[i].clear();
   }
+  this->lastLen = 0;
 }
 
 //==============================================================
@@ -360,7 +378,7 @@ void TGraph::addGyro(float x, float y, float z)
 //==============================================================
 void TGraph::addDebug(int index, float value)
 {
-  if (this->graph_type != GRAPH_DEBUG_ALTITUDE) return;
+  if ((this->graph_type != GRAPH_DEBUG_ALTITUDE) && (this->graph_type != GRAPH_DEBUG_CUSTOM)) return;
 
   this->debug[index] = value;
   if (index == 7)
@@ -400,18 +418,18 @@ void TGraph::formatValueNumber(char* dest, float value)
 {
   if (fabs(value) > 1000)
   {
-    sprintf(dest, "%1.0f", value);
+    sprintf(dest, "%+1.0f", value);
   }
   else if (fabs(value) > 64)
   {
-    sprintf(dest, "%1.1f", value);
+    sprintf(dest, "%+1.1f", value);
   }
   else if (fabs(value) > 8)
   {
-    sprintf(dest, "%1.2f", value);
+    sprintf(dest, "%+1.2f", value);
   }
   else
   {
-    sprintf(dest, "%1.3f", value);
+    sprintf(dest, "%+1.3f", value);
   }
 }

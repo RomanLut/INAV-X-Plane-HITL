@@ -244,6 +244,11 @@ void TMenu::menu_handler(void * in_menu_ref, void * in_item_ref)
     g_graph.setGraphType(GRAPH_DEBUG_ALTITUDE);
     this->updateGraphMenu();
   }
+  else if (!strcmp((const char *)in_item_ref, "graph_debug_custom"))
+  {
+    g_graph.setGraphType(GRAPH_DEBUG_CUSTOM);
+    this->updateGraphMenu();
+  }
   else if (!strcmp((const char *)in_item_ref, "noise_none"))
   {
     g_osd.videoLink = VS_NONE;
@@ -328,6 +333,7 @@ void TMenu::createMenu()
   this->graph_acc_id = XPLMAppendMenuItem(this->graph_menu_id, "Accelerometer", (void *)"graph_accelerometer", 1);
   this->graph_gyro_id = XPLMAppendMenuItem(this->graph_menu_id, "Gyroscope", (void *)"graph_gyroscope", 1);
   this->graph_debug_altitude_id = XPLMAppendMenuItem(this->graph_menu_id, "debug_mode = altitude", (void *)"graph_debug_altitude", 1);
+  this->graph_debug_custom_id = XPLMAppendMenuItem(this->graph_menu_id, "debug[8] array", (void *)"graph_debug_custom", 1);
 
 /*                               
 	this->gps_spoofing_1_id = XPLMAppendMenuItem(this->gps_fix_menu_id, "Spoofing: Freeze", (void *)"gps_spoofing_1", 1);
