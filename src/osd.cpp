@@ -542,5 +542,7 @@ float TOSD::getNoiseAmount()
   float s = sin(g_simData.roll / 180.0f*3.14f);
   res += s*s * 0.2f;
   if (res > 0.99f) res = 0.99f;
+
+  if (res < 0.475f) res = 0.475f;    
   return res;
 }
