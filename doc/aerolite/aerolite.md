@@ -1,6 +1,6 @@
 # Aerolite 103
 
-![](doc/aerolite.jpg)
+![](doc/aerolite/Aerolite_103_icon11_thumb.png)
 
 Airplane with tail
 
