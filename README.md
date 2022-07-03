@@ -184,7 +184,7 @@ See [development.md](doc/development.md)
 
 # Links
 
-- X-Plane INAV HITL prototype has been implemented by Sergey Sevrugin: https://github.com/sevrugin/inav/tree/master-simulator-xplane, https://github.com/sevrugin/inav-configurator/tree/master-simulator-xplane
+- X-Plane INAV HITL prototype has been implemented by Sergii Sevriugin: https://github.com/sevrugin/inav/tree/master-simulator-xplane, https://github.com/sevrugin/inav-configurator/tree/master-simulator-xplane
 
 - NK_FPV Surfwing V2 | RC Plane 2.2.0 https://forums.x-plane.org/index.php?/files/file/43974-nk_fpv-surfwing-v2-rc-plane/
 

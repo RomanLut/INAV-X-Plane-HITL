@@ -4,13 +4,15 @@ Plugin is compiled using Microsoft Visual Studio 2017.
 
 # Concerns
 
+Plugin communicates with FC using MSP protocol.
+
 Existing MSP commands should not be changed.
 
-Whole simulator communication should be done using single MSP_SIMULATOR command and ARM_SIMULATION flag.
+Whole simulator communication should be done using single ```MSP_SIMULATOR``` command.
 
-If ARM_SIMULATION flag is not set, behaviour of INAV should not change at all.
+If ```ARMING_FLAG(SIMULATOR_MODE)``` is not set, the behaviour of INAV should not change at all.
 
-For now, plugin supports Aircarft type "Aircraft with tail" only
+For now, plugin supports platforms "Airplane" only.
 
 # Timing
 
@@ -32,9 +34,9 @@ To enable Dataref editor, download plugin from https://developer.x-plane.com/too
 
 ## debug[]
 
-8 debug variables from INAV (debug[]) are reflected as debug[N] datarefs in X-Plane as *signed integers*. Update rate is 1/8 of MSG_SIMULATOR rate.
+8 debug variables from INAV (debug[]) are reflected as debug[N] datarefs in X-Plane as **int32_t**. Update rate is 1/8 of ```MSG_SIMULATOR``` command rate.
 
-Configure INAV to update debug[] array with predefined parameters, or use in your code:
+Configure INAV to update **debug[]** array with **debug_mode=...** command, or fill in your code:
 
 **cli:**
 ```
