@@ -10,7 +10,7 @@ Whole simulator communication should be done using single MSP_SIMULATOR command 
 
 If ARM_SIMULATION flag is not set, behaviour of INAV should not change at all.
 
-For now, plugin supports Aircarft type "Aircraft with tail" only
+For now, plugin supports platforms "Airplane" only.
 
 # Timing
 
