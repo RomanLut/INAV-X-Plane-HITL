@@ -1,8 +1,15 @@
 # INAV X-Plane HITL plugin
 
-**Hardware-in-the-loop** plugin for **X-Plane 11** for **INAV Flight Controller firmware**: https://github.com/iNavFlight/inav
+**Hardware-in-the-loop** plugin for **X-Plane 11** for **INAV Flight Controller firmware**: 
 
 ![](https://camo.githubusercontent.com/5af6d6c7784c1a41290dfa06755dae56ca95a62800495121766f40e597b3cc43/687474703a2f2f7374617469632e726367726f7570732e6e65742f666f72756d732f6174746163686d656e74732f362f312f302f332f372f362f61393038383835382d3130322d696e61762e706e67)
+
+Hardware-in-the-loop (HITL) simulation, is a technique that is used in the development and testing of complex real-time embedded systems. 
+
+X-Plane is a flight simulation engine series developed and published by Laminar Research https://www.x-plane.com/
+
+INAV-X-Plane-HITL is Plugin for X-Plane simulator for testing and developing flight controllers using INAV flight controller firmware https://github.com/iNavFlight/inav.
+
 
 # Motivation
 
@@ -64,7 +71,7 @@ This will add plugin to the **Aerolite** airplane and install additional **NK_Su
 
 Flight controller should be fully configured like for the real flight. There is no need to calibrate mixer and motors output.
 
-Configure **Aircraft with tail** for **Aerolite** and **Flying wing** for **NK Sufwing**. It possible to use plugin with any other models (copy plugin to corresponding Aircraft subfolder).
+Configure **Aircraft with tail** for **Aerolite** and **Flying wing** for **NK Sufwing**. It is possible to use plugin with any other airplane (copy plugin to corresponding Aircraft subfolder).
 
 Platforms other than "Airplane" are not supported.
 
@@ -87,16 +94,16 @@ In minimal case, you need FC with some kind of receiver attached. No real barome
 ![](doc/attitude.png)
 
 There are two modes of simulation:
-- **full simulation:** attitude is estimated from sensors data
 - **simplified simulation:** attitude is passed from X-Plane.
+- **full simulation:** attitude is estimated from sensors data
 
-Due to slow update rate (update rate can not be larger then X-Plane FPS) and no synchronization beetween INAV cycles and **X-Plane** FPS, full emulation mode will show noticeable problems with estimation ( hickups, drifting horizon ). **Simplified emulation is recommended for debugging code not related to IMU**.
+Due to slow update rate (update rate can not be larger then X-Plane FPS) and no synchronization beetween INAV cycles and **X-Plane** FPS, full emulation mode will show noticeable problems with estimation ( drifting horizon ). **Simplified emulation is recommended for debugging code not related to IMU**.
 
 Sensors not listed below are not simulated. Please disable in INAV configuration.
 
 ## Accelerometer and gyroscope
 
-Real acceleromerer should be calibrated in **INAV Configurator**.
+Real acceleromerer should be calibrated in **INAV Configurator**. Accelerometer orientation settings are not relevant for simulation.
 
 ## Barometer
 
