@@ -15,11 +15,11 @@
 
 I believe that good testing and debugging tools are key points to achieve software stability.
 
-It is not Ok when people debug autopilot by running with a RC Plane on the field :smiley:
+It is not Ok when people debug autopilot by running with RC Plane on the field :smiley:
 
 I hope this plugin can help improve INAV firmware.
 
-While not been a main purpose, plugin can be used to improve pilot skils or getting familiar with INAV options.
+While not been a main purpose, plugin can be used to improve pilot skils or getting familiar with INAV settings.
 
 # How it works
 
