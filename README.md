@@ -32,7 +32,7 @@ The contents of `release\Aircraft` folder should be placed in the Aircraft folde
 
 This will add plugin to the **Aerolite** airplane and install additional **NK_Surfwing** flying wing model with this plugin.
 
-You have to build and flash Simulator-enabled INAV firmware from branch: https://github.com/RomanLut/inav/tree/master-simulator-xplane . Simulator mode is not included in main INAV repository currently.
+**IMPORTANT:: You have to flash Simulator-enabled INAV firmware. Take precompiled binaries from release, or build yourself from branch: https://github.com/RomanLut/inav/tree/master-simulator-xplane . Simulator mode is not included in main INAV repository currently.**
 
 ![](doc/menu.png)
 
@@ -41,7 +41,7 @@ You have to build and flash Simulator-enabled INAV firmware from branch: https:/
 - Install **X-Plane 11 demo** from: https://www.x-plane.com/desktop/try-it/
 - download last release 
 - Copy `release\Aircraft` folder to `X-Plane 11\Aircraft` folder in **X-Plane** installation location. 
-- Connect Flight Controller to PC using USB Cable
+- Connect Flight Controller to PC using USB Cable. **Make sure FC is flashed with simulator-enabled firmware**.
 - Configure FC (see **Flight Controller configuration** below)
 - Start **X-Plane 11**
 - Select "Show extra aircraft from older versions" to see NK_FPVSurfwing
@@ -160,6 +160,12 @@ OSD is using **Bold** font from **INAV Configurator**. It is possible to replace
 For coonvience, it is possible to mute beeper in simulation mode:
 
 ![](doc/beeper.png)
+
+# Analog Video link quality simulation
+
+Plugin will simulate analog video link quality acccording to setting. Home point is independent from FC home point. Home point is set to position on ARM.
+
+![](doc/noise.jpg)
 
 # Servo autotrim
 
