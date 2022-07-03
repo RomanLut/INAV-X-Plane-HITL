@@ -4,7 +4,7 @@
 
  NK_FPV Surfwing V2 | RC Plane 2.2.0 https://forums.x-plane.org/index.php?/files/file/43974-nk_fpv-surfwing-v2-rc-plane/
 
-![](doc/nkfpvsurftwing/NK_FPVSW_icon11_thumb.png)
+![](NK_FPVSW_icon11_thumb.png)
 
 Platform: Flying wing
 
