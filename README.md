@@ -46,7 +46,7 @@ This will add plugin to the **Aerolite** airplane and install additional **NK_Su
 ## Installation steps
 
 - Install **X-Plane 11 demo** from: https://www.x-plane.com/desktop/try-it/
-- download last release 
+- download last release https://github.com/RomanLut/INAV-X-Plane-HITL/releases/
 - Copy `release\Aircraft` folder to `X-Plane 11\Aircraft` folder in **X-Plane** installation location. 
 - Connect Flight Controller to PC using USB Cable. **Make sure FC is flashed with simulator-enabled firmware**.
 - Configure FC (see **Flight Controller configuration** below)
