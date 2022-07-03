@@ -103,6 +103,7 @@ int	drawCallback(
   if (firstRender)
   {
     setView();
+    g_osd.setHome();
     firstRender = false;
   }
 
