@@ -1,11 +1,17 @@
 # Aerolite 103
 
+![](doc/aerolite.jpg)
+
 Airplane with tail
 
+Default PIDS and rates are Ok for Aerolite:
 
-![](pids.png)
+```
+Roll   5 7 0 50
+Pitch  5 7 0 50
+Yaw    6 10 0 60
 
-![](rates.png)
-
-
-
+Roll Rate  200
+Pitch Rate 200
+Yaw Rate   200
+```
