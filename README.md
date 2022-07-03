@@ -1,8 +1,15 @@
 # INAV X-Plane HITL plugin
 
-**Hardware-in-the-loop** plugin for **X-Plane 11** for **INAV Flight Controller firmware**: https://github.com/iNavFlight/inav
+**Hardware-in-the-loop** plugin for **X-Plane 11** for **INAV Flight Controller firmware**: 
 
 ![](https://camo.githubusercontent.com/5af6d6c7784c1a41290dfa06755dae56ca95a62800495121766f40e597b3cc43/687474703a2f2f7374617469632e726367726f7570732e6e65742f666f72756d732f6174746163686d656e74732f362f312f302f332f372f362f61393038383835382d3130322d696e61762e706e67)
+
+Hardware-in-the-loop (HITL) simulation, is a technique that is used in the development and testing of complex real-time embedded systems. 
+
+X-Plane is a flight simulation engine series developed and published by Laminar Research https://www.x-plane.com/
+
+INAV-X-Plane-HITL is Plugin for X-Plane simulator for testing and developing flight controllers using INAV flight controller firmware https://github.com/iNavFlight/inav.
+
 
 # Motivation
 
@@ -32,7 +39,7 @@ The contents of `release\Aircraft` folder should be placed in the Aircraft folde
 
 This will add plugin to the **Aerolite** airplane and install additional **NK_Surfwing** flying wing model with this plugin.
 
-You have to build and flash Simulator-enabled INAV firmware from branch: https://github.com/RomanLut/inav/tree/master-simulator-xplane . Simulator mode is not included in main INAV repository currently.
+**IMPORTANT:: You have to flash Simulator-enabled INAV firmware. Take precompiled binaries from release, or build yourself from branch: https://github.com/RomanLut/inav/tree/master-simulator-xplane . Simulator mode is not included in main INAV repository currently.**
 
 ![](doc/menu.png)
 
@@ -41,7 +48,7 @@ You have to build and flash Simulator-enabled INAV firmware from branch: https:/
 - Install **X-Plane 11 demo** from: https://www.x-plane.com/desktop/try-it/
 - download last release 
 - Copy `release\Aircraft` folder to `X-Plane 11\Aircraft` folder in **X-Plane** installation location. 
-- Connect Flight Controller to PC using USB Cable
+- Connect Flight Controller to PC using USB Cable. **Make sure FC is flashed with simulator-enabled firmware**.
 - Configure FC (see **Flight Controller configuration** below)
 - Start **X-Plane 11**
 - Select "Show extra aircraft from older versions" to see NK_FPVSurfwing
@@ -64,7 +71,7 @@ You have to build and flash Simulator-enabled INAV firmware from branch: https:/
 
 Flight controller should be fully configured like for the real flight. There is no need to calibrate mixer and motors output.
 
-Configure **Aircraft with tail** for **Aerolite** and **Flying wing** for **NK Sufwing**. It possible to use plugin with any other models (copy plugin to corresponding Aircraft subfolder).
+Configure **Aircraft with tail** for **Aerolite** and **Flying wing** for **NK Sufwing**. It is possible to use plugin with any other airplane (copy plugin to corresponding Aircraft subfolder).
 
 Platforms other than "Airplane" are not supported.
 
@@ -87,16 +94,16 @@ In minimal case, you need FC with some kind of receiver attached. No real barome
 ![](doc/attitude.png)
 
 There are two modes of simulation:
-- **full simulation:** attitude is estimated from sensors data
 - **simplified simulation:** attitude is passed from X-Plane.
+- **full simulation:** attitude is estimated from sensors data
 
-Due to slow update rate (update rate can not be larger then X-Plane FPS) and no synchronization beetween INAV cycles and **X-Plane** FPS, full emulation mode will show noticeable problems with estimation ( hickups, drifting horizon ). **Simplified emulation is recommended for debugging code not related to IMU**.
+Due to slow update rate (update rate can not be larger then X-Plane FPS) and no synchronization beetween INAV cycles and **X-Plane** FPS, full emulation mode will show noticeable problems with estimation ( drifting horizon ). **Simplified emulation is recommended for debugging code not related to IMU**.
 
 Sensors not listed below are not simulated. Please disable in INAV configuration.
 
 ## Accelerometer and gyroscope
 
-Real acceleromerer should be calibrated in **INAV Configurator**.
+Real acceleromerer should be calibrated in **INAV Configurator**. Accelerometer orientation settings are not relevant for simulation.
 
 ## Barometer
 
@@ -160,6 +167,12 @@ OSD is using **Bold** font from **INAV Configurator**. It is possible to replace
 For coonvience, it is possible to mute beeper in simulation mode:
 
 ![](doc/beeper.png)
+
+# Analog Video link quality simulation
+
+Plugin will simulate analog video link quality acccording to setting. Home point is independent from FC home point. Home point is set to position on ARM.
+
+![](doc/noise.jpg)
 
 # Servo autotrim
 
