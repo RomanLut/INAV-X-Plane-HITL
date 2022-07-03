@@ -151,7 +151,7 @@ The following requirements should be met to have OSD drawn in **X-Plane**:
 
 The following options present in menu:
 
-![](doc/osdoptions.png)
+![](doc/osdoptions.png) 
 
 - **None:** disable OSD rendering
 - **AUTO:** number of OSD lines is provided by FC
