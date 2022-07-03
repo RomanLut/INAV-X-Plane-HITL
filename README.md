@@ -2,7 +2,7 @@
 
 **Hardware-in-the-loop** plugin for **X-Plane 11** for **INAV Flight Controller firmware**: 
 
-![](https://camo.githubusercontent.com/5af6d6c7784c1a41290dfa06755dae56ca95a62800495121766f40e597b3cc43/687474703a2f2f7374617469632e726367726f7570732e6e65742f666f72756d732f6174746163686d656e74732f362f312f302f332f372f362f61393038383835382d3130322d696e61762e706e67)
+[![IMAGE ALT TEXT HERE](https://img.youtube.com/vi/krTDi1tXGX8/0.jpg)](https://www.youtube.com/watch?v=krTDi1tXGX8)
 
 Hardware-in-the-loop (HITL) simulation, is a technique that is used in the development and testing of complex real-time embedded systems. 
 
