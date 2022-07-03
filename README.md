@@ -23,7 +23,7 @@ While not been a main purpose, plugin can be used to improve pilot skils or gett
 
 # How it works
 
-![](doc/x-plane-logo.png)
+![](doc/x-plane-logo.png) 
 
 **X-Plane** 11 https://www.x-plane.com/ is flight simulator with accurate physics simulation. 
  
@@ -39,7 +39,7 @@ The contents of `release\Aircraft` folder should be placed in the Aircraft folde
 
 This will add plugin to the **Aerolite** airplane and install additional **NK_Surfwing** flying wing model with this plugin.
 
-**IMPORTANT:: You have to flash Simulator-enabled INAV firmware. Take precompiled binaries from release https://github.com/RomanLut/INAV-X-Plane-HITL/releases/, or build yourself from branch: https://github.com/RomanLut/INAV-X-Plane-HITL/tree/v0.1. Simulator mode is not included in main INAV repository currently.**
+**IMPORTANT:: You have to flash Simulator-enabled INAV firmware. Take precompiled binaries from release https://github.com/RomanLut/INAV-X-Plane-HITL/releases/, or build yourself from branch: https://github.com/RomanLut/inav/tree/simulator_v0.1 . Simulator mode is not included in main INAV repository currently.**
 
 ![](doc/menu.png)
 
