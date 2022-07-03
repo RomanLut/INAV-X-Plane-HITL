@@ -2,28 +2,28 @@
 
 **Hardware-in-the-loop** plugin for **X-Plane 11** for **INAV Flight Controller firmware**: 
 
-![](https://camo.githubusercontent.com/5af6d6c7784c1a41290dfa06755dae56ca95a62800495121766f40e597b3cc43/687474703a2f2f7374617469632e726367726f7570732e6e65742f666f72756d732f6174746163686d656e74732f362f312f302f332f372f362f61393038383835382d3130322d696e61762e706e67)
+[![IMAGE ALT TEXT HERE](https://img.youtube.com/vi/krTDi1tXGX8/0.jpg)](https://www.youtube.com/watch?v=krTDi1tXGX8)
 
-Hardware-in-the-loop (HITL) simulation, is a technique that is used in the development and testing of complex real-time embedded systems. 
+**Hardware-in-the-loop (HITL) simulation**, is a technique that is used in the development and testing of complex real-time embedded systems. 
 
-X-Plane is a flight simulation engine series developed and published by Laminar Research https://www.x-plane.com/
+**X-Plane** is a flight simulation engine series developed and published by Laminar Research https://www.x-plane.com/
 
-INAV-X-Plane-HITL is Plugin for X-Plane simulator for testing and developing flight controllers using INAV flight controller firmware https://github.com/iNavFlight/inav.
+**INAV-X-Plane-HITL** is plugin for **X-Plane** for testing and developing flight controllers with **INAV flight controller firmware** https://github.com/iNavFlight/inav.
 
 
 # Motivation
 
 I believe that good testing and debugging tools are key points to achieve software stability.
 
-It is not Ok when people debug autopilot by running with a plane on the field :smiley:
+It is not Ok when people debug autopilot by running with RC Plane on the field :smiley:
 
 I hope this plugin can help improve INAV firmware.
 
-While not been a main purpose, plugin can be used to improve pilot skils or getting familiar with INAV options.
+While not been a main purpose, plugin can be used to improve pilot skils or getting familiar with INAV settings.
 
 # How it works
 
-![](doc/x-plane-logo.png)
+![](doc/x-plane-logo.png) 
 
 **X-Plane** 11 https://www.x-plane.com/ is flight simulator with accurate physics simulation. 
  
@@ -39,16 +39,16 @@ The contents of `release\Aircraft` folder should be placed in the Aircraft folde
 
 This will add plugin to the **Aerolite** airplane and install additional **NK_Surfwing** flying wing model with this plugin.
 
-**IMPORTANT:: You have to flash Simulator-enabled INAV firmware. Take precompiled binaries from release, or build yourself from branch: https://github.com/RomanLut/inav/tree/master-simulator-xplane . Simulator mode is not included in main INAV repository currently.**
+**IMPORTANT:: You have to flash Simulator-enabled INAV firmware. Take precompiled binaries from release https://github.com/RomanLut/INAV-X-Plane-HITL/releases/, or build yourself from branch: https://github.com/RomanLut/inav/tree/simulator_v0.1 . Simulator mode is not included in main INAV repository currently.**
 
 ![](doc/menu.png)
 
 ## Installation steps
 
 - Install **X-Plane 11 demo** from: https://www.x-plane.com/desktop/try-it/
-- download last release 
-- Copy `release\Aircraft` folder to `X-Plane 11\Aircraft` folder in **X-Plane** installation location. 
-- Connect Flight Controller to PC using USB Cable. **Make sure FC is flashed with simulator-enabled firmware**.
+- download **Aircraft.zip** from last release https://github.com/RomanLut/INAV-X-Plane-HITL/releases/
+- Unzip, copy `Aircraft` folder to `X-Plane 11\Aircraft` folder in **X-Plane** installation location. 
+- Connect Flight Controller to PC using USB Cable. **Make sure FC is flashed with simulator-enabled firmware**  https://github.com/RomanLut/INAV-X-Plane-HITL/releases/
 - Configure FC (see **Flight Controller configuration** below)
 - Start **X-Plane 11**
 - Select "Show extra aircraft from older versions" to see NK_FPVSurfwing
@@ -151,7 +151,7 @@ The following requirements should be met to have OSD drawn in **X-Plane**:
 
 The following options present in menu:
 
-![](doc/osdoptions.png)
+![](doc/osdoptions.png) 
 
 - **None:** disable OSD rendering
 - **AUTO:** number of OSD lines is provided by FC
