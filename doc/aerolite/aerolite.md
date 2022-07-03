@@ -2,7 +2,7 @@
 
 ![](Aerolite_103_icon11_thumb.png)
 
-Airplane with tail
+Platform: Airplane with tail
 
 Default PIDS and rates are Ok for Aerolite:
 
