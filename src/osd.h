@@ -45,6 +45,8 @@ public:
 
   void cbConnect(TCBConnectParm state);
 
+  void setHome();
+
 private:
   int fontTextureId = 0;
   int noiseTextureId = 0;

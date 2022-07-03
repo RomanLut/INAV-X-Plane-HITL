@@ -2,6 +2,7 @@
 #include "stats.h"
 #include "graph.h"
 #include "util.h"
+#include "osd.h"
 
 #include <math.h>
 
@@ -138,6 +139,7 @@ void TSimData::updateFromINAV(const TMSPSimulatorFromINAV* data)
   if (this->isArmed && !prevArmed)
   {
     disableBrakes();
+    g_osd.setHome();
   }
 
   g_stats.debug[data->debugIndex & 7] = data->debugValue;

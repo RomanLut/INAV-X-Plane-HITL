@@ -60,7 +60,6 @@ public:
   XPLMMenuID noise_menu_id;
   int noise_id;
   int noise_none_id;
-  int noise_800M_id;
   int noise_2KM_id;
   int noise_10KM_id;
   int noise_50KM_id;

@@ -498,17 +498,24 @@ void TOSD::drawString( int row, int col, const char* str)
 
 //==============================================================
 //==============================================================
+void TOSD::setHome()
+{
+  g_simData.updateFromXPlane();
+  this->home_lattitude = g_simData.lattitude;;
+  this->home_longitude = g_simData.longitude;
+  this->home_elevation = g_simData.elevation;
+  this->roll = g_simData.roll;
+}
+
+//==============================================================
+//==============================================================
 void TOSD::cbConnect(TCBConnectParm state)
 {
   this->clear();
 
   if (state == CBC_CONNECTED)
   {
-    g_simData.updateFromXPlane();
-    this->home_lattitude = g_simData.lattitude;;
-    this->home_longitude = g_simData.longitude;
-    this->home_elevation = g_simData.elevation;
-    this->roll = g_simData.roll;
+    this->setHome();
   }
 
   if (state != CBC_CONNECTED)

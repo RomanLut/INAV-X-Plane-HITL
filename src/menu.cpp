@@ -319,7 +319,6 @@ void TMenu::createMenu()
   this->noise_id = XPLMAppendMenuItem(this->menu_id, "Video", (void *)"Video", 1);
   this->noise_menu_id = XPLMCreateMenu("Video", this->menu_id, this->noise_id, static_menu_handler, NULL);
   this->noise_none_id = XPLMAppendMenuItem(this->noise_menu_id, "No simulation", (void *)"noise_none", 1);
-  this->noise_800M_id = XPLMAppendMenuItem(this->noise_menu_id, "Link up to 800m", (void *)"noise_800m", 1);
   this->noise_2KM_id = XPLMAppendMenuItem(this->noise_menu_id, "Link up to 2km", (void *)"noise_2km", 1);
   this->noise_10KM_id = XPLMAppendMenuItem(this->noise_menu_id, "Link up to 10km", (void *)"noise_10km", 1);
   this->noise_50KM_id = XPLMAppendMenuItem(this->noise_menu_id, "Link up to 50km", (void *)"noise_50km", 1);
@@ -329,7 +328,7 @@ void TMenu::createMenu()
   this->graph_id = XPLMAppendMenuItem(this->menu_id, "Graph", (void *)"Graph", 1);
   this->graph_menu_id = XPLMCreateMenu("Graph", this->menu_id, this->graph_id, static_menu_handler, NULL);
   this->graph_none_id = XPLMAppendMenuItem(this->graph_menu_id, "None", (void *)"graph_none", 1);
-  this->graph_attitude_id = XPLMAppendMenuItem(this->graph_menu_id, "Attitude Roll/Pitch/Yaw", (void *)"graph_attitude_rpy", 1);
+  this->graph_attitude_id = XPLMAppendMenuItem(this->graph_menu_id, "Attitude Roll/Pitch/Yaw (X-Plane)", (void *)"graph_attitude_rpy", 1);
   this->graph_acc_id = XPLMAppendMenuItem(this->graph_menu_id, "Accelerometer", (void *)"graph_accelerometer", 1);
   this->graph_gyro_id = XPLMAppendMenuItem(this->graph_menu_id, "Gyroscope", (void *)"graph_gyroscope", 1);
   this->graph_debug_altitude_id = XPLMAppendMenuItem(this->graph_menu_id, "debug_mode = altitude", (void *)"graph_debug_altitude", 1);
