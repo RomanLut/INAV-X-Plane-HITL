@@ -27727,7 +27727,7 @@ P acf/_idle_rat/0 0.680000007
 P acf/_idle_rat/1 0.910000026
 P acf/_idle_rat/count 2
 P acf/_inlet_compression_efficiency 0.850000024
-P acf/_inverted_fuel_oil_EQ 0
+P acf/_inverted_fuel_oil_EQ 1
 P acf/_inverter_for_elec_gyros 0
 P acf/_inverter_for_ind_trq 0
 P acf/_inverter_for_otto 0
