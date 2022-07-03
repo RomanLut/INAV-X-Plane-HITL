@@ -39,16 +39,16 @@ The contents of `release\Aircraft` folder should be placed in the Aircraft folde
 
 This will add plugin to the **Aerolite** airplane and install additional **NK_Surfwing** flying wing model with this plugin.
 
-**IMPORTANT:: You have to flash Simulator-enabled INAV firmware. Take precompiled binaries from release, or build yourself from branch: https://github.com/RomanLut/inav/tree/master-simulator-xplane . Simulator mode is not included in main INAV repository currently.**
+**IMPORTANT:: You have to flash Simulator-enabled INAV firmware. Take precompiled binaries from release https://github.com/RomanLut/INAV-X-Plane-HITL/releases/, or build yourself from branch: https://github.com/RomanLut/INAV-X-Plane-HITL/tree/v0.1. Simulator mode is not included in main INAV repository currently.**
 
 ![](doc/menu.png)
 
 ## Installation steps
 
 - Install **X-Plane 11 demo** from: https://www.x-plane.com/desktop/try-it/
-- download last release https://github.com/RomanLut/INAV-X-Plane-HITL/releases/
-- Copy `release\Aircraft` folder to `X-Plane 11\Aircraft` folder in **X-Plane** installation location. 
-- Connect Flight Controller to PC using USB Cable. **Make sure FC is flashed with simulator-enabled firmware**.
+- download **Aircraft.zip** from last release https://github.com/RomanLut/INAV-X-Plane-HITL/releases/
+- Unzip, copy `Aircraft` folder to `X-Plane 11\Aircraft` folder in **X-Plane** installation location. 
+- Connect Flight Controller to PC using USB Cable. **Make sure FC is flashed with simulator-enabled firmware**  https://github.com/RomanLut/INAV-X-Plane-HITL/releases/
 - Configure FC (see **Flight Controller configuration** below)
 - Start **X-Plane 11**
 - Select "Show extra aircraft from older versions" to see NK_FPVSurfwing
