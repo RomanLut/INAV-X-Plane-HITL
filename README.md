@@ -64,7 +64,7 @@ You have to build and flash Simulator-enabled INAV firmware from branch: https:/
 
 Flight controller should be fully configured like for the real flight. There is no need to calibrate mixer and motors output.
 
-Configure **Aircraft with tail** for **Aerolite** and **Fixed wing** for **NK Sufwing**. It possible to use plugin with any other models (copy plugin to corresponding Aircraft subfolder).
+Configure **Aircraft with tail** for **Aerolite** and **Flying wing** for **NK Sufwing**. It possible to use plugin with any other models (copy plugin to corresponding Aircraft subfolder).
 
 Platforms other than "Airplane" are not supported.
 
