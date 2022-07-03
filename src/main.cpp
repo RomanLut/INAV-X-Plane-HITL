@@ -35,18 +35,32 @@ void cbMessage(int code, const uint8_t* messageBuffer, int length)
 {
   if (code == MSP_SIMULATOR)
   {
-    g_simData.updateFromINAV((const TMSPSimulatorFromINAV*)messageBuffer);
-    g_simData.sendToXPlane();
-
-    g_osd.updateFromINAV((const TMSPSimulatorFromINAV*)messageBuffer);
-
-    wait = false;
-
-    if (!g_simData.isAirplane)
+    if (length < MSP_SIMULATOR_RESPOSE_MIN_LENGTH)
     {
-      g_menu.actionDisconnect();
-      playSound("assets\\unsupported.wav");
-      LOG("Unsupported aircraft type");
+      g_menu.actionDisconnect();                          
+      playSound("assets\\unsupported_firmware.wav");
+      LOG("Unsupported firmware version, MSP_SIMULATOR response length: %d", length);
+      g_osd.showMsg("UNSUPPORTED FIRMWARE");
+    }
+    else
+    {
+      g_simData.updateFromINAV((const TMSPSimulatorFromINAV*)messageBuffer);
+
+      if (!g_simData.isAirplane)
+      {
+        g_menu.actionDisconnect();
+        playSound("assets\\unsupported.wav");
+        LOG("Unsupported aircraft type");
+        g_osd.showMsg("UNSUPPORTED AIRCRAFT TYPE");
+      }
+      else
+      {
+        g_simData.sendToXPlane();
+
+        g_osd.updateFromINAV((const TMSPSimulatorFromINAV*)messageBuffer);
+
+        wait = false;
+      }
     }
   }
   else if (code == MSP_DEBUGMSG)

@@ -47,6 +47,8 @@ public:
 
   void setHome();
 
+  void showMsg(const char* msg);
+
 private:
   int fontTextureId = 0;
   int noiseTextureId = 0;

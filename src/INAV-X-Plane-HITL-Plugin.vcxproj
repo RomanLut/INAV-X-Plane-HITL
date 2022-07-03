@@ -177,6 +177,12 @@
     </Content>
   </ItemGroup>
   <ItemGroup>
+    <Media Include="assets\unsupported_firmware.wav" />
+    <Content Include="assets\unsupported_firmware.wav">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+  </ItemGroup>
+  <ItemGroup>
     <Media Include="assets\osd_font.png" />
     <Content Include="assets\osd_font.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>

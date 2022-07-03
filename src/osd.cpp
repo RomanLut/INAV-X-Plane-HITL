@@ -518,7 +518,15 @@ void TOSD::cbConnect(TCBConnectParm state)
     this->setHome();
   }
 
-  if (state != CBC_CONNECTED)
+  if (state == CBC_CONNECTION_FAILED)
+  {
+    g_osd.showMsg("CONNECTION FAILED");
+  }
+  else if (state == CBC_TIMEOUT_DISCONNECTED)
+  {
+    g_osd.showMsg("CONNECTION LOST");
+  }
+  else  if (state != CBC_CONNECTED)
   {
     this->drawString(0, 4, "INAV HITL DISCONNECTED");
   }
@@ -552,4 +560,12 @@ float TOSD::getNoiseAmount()
 
   if (res < 0.475f) res = 0.475f;    
   return res;
+}
+
+//==============================================================
+//==============================================================
+void TOSD::showMsg(const char* msg)
+{
+  this->clear();
+  this->drawString(0, 4, msg);
 }

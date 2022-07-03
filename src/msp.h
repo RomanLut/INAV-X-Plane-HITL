@@ -86,6 +86,8 @@ struct TMSPSimulatorFromINAV
 };
 #pragma pack()
 
+#define MSP_SIMULATOR_RESPOSE_MIN_LENGTH  (2*4 + 1 + 4 + 1)
+
 typedef enum
 {
   CBC_CONNECTED,

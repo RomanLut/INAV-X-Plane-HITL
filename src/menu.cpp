@@ -15,7 +15,7 @@ extern void cbMessage(int code, const uint8_t* messageBuffer, int length);
 //==============================================================
 void TMenu::_cbConnect(TCBConnectParm state)
 {
-  if (state == CBC_CONNECTED)
+  if (state == CBC_CONNECTED)                             
   {
     XPLMSetMenuItemName(this->connect_menu_id, this->connect_disconnect_id, "Disconnect from Flight Controller", 0);
     playSound("assets\\connected.wav");
@@ -24,12 +24,14 @@ void TMenu::_cbConnect(TCBConnectParm state)
   {
     XPLMSetMenuItemName(this->connect_menu_id, this->connect_disconnect_id, "Connect to Flight Controller", 0);
     if (state == CBC_CONNECTION_FAILED)
-    {
+    {                                                  
       playSound("assets\\connection_failed.wav");
+      LOG("cbConnect(): Connection failed");
     }
     else if (state == CBC_TIMEOUT_DISCONNECTED)
     {
       playSound("assets\\connection_lost.wav");
+      LOG("cbConnect(): Connection lost");
     }
   }
 }
@@ -316,7 +318,7 @@ void TMenu::createMenu()
   this->osd_nearest_id = XPLMAppendMenuItem(this->osd_menu_id, "Smoothing: Nearest", (void *)"osd_nearest", 1);
   this->osd_linear_id = XPLMAppendMenuItem(this->osd_menu_id, "Smoothing: Linear", (void *)"osd_linear", 1);
 
-  this->noise_id = XPLMAppendMenuItem(this->menu_id, "Video", (void *)"Video", 1);
+  this->noise_id = XPLMAppendMenuItem(this->menu_id, "Analog Video", (void *)"Analog Video", 1);
   this->noise_menu_id = XPLMCreateMenu("Video", this->menu_id, this->noise_id, static_menu_handler, NULL);
   this->noise_none_id = XPLMAppendMenuItem(this->noise_menu_id, "No simulation", (void *)"noise_none", 1);
   this->noise_2KM_id = XPLMAppendMenuItem(this->noise_menu_id, "Link up to 2km", (void *)"noise_2km", 1);
