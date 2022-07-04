@@ -107,7 +107,7 @@ Real acceleromerer should be calibrated in **INAV Configurator**. Accelerometer 
 
 ## Barometer
 
-Barometer will be simulatod if enabled in **INAV Configurator**. If real barometer is not present, select **"FAKE"** type.
+Barometer will be simulated if enabled in **INAV Configurator**. If real barometer is not present, select **"FAKE"** type.
 
 ![](doc/fakebaro.png)
 
