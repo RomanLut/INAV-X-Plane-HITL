@@ -43,7 +43,7 @@ Configure INAV to update **debug[]** array with **debug_mode=...** command, or f
 set debug_mode = ALTITUDE
 save
 ```
-
+Search INAV code to find out how debug[] array is filled in selected mode:
 ```
     DEBUG_SET(DEBUG_ALTITUDE, 0, posEstimator.est.pos.z);       // Position estimate
     DEBUG_SET(DEBUG_ALTITUDE, 1, posEstimator.est.vel.z);       // Vertical speed estimate
