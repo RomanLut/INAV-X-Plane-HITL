@@ -73,7 +73,7 @@ Plugin can draw number of graphs for debugging:
 - **Accelerometer:** Simulated Accelerometer readings
 - **Gyroscope:** Simulated Gyroscope readings
 - **"debug_mode = altitude:"** Visualize debug[] array in this mode
-- **"debug[8] array:** Graph of debug[] values. Atuomatic scale. Values are shown as int32_t.
+- **"debug[8] array:** Graph of debug[] values. Automatic scale. Values are shown as int32_t.
   
   
 # Assitance
