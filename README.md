@@ -53,7 +53,7 @@ This will add plugin to the **Aerolite** airplane and install additional **NK_Su
 - Start **X-Plane 11**
 - Select "Show extra aircraft from older versions" to see NK_FPVSurfwing
 ![](doc/show_extra_aircraft.jpg)
-- Select Aircraft **NK Surfwing** or **Aerolite 103**
+- Select Airplane **NK Surfwing** or **Aerolite 103**
 - Start flight
 - Select **Plugins->INAV HITL->Link->Connect to flight controller**. Plugin should automatically detect COM port.
 - Flight using RC Controller, setup PIDs etc. **Hint: disable parking brakes with "B" key on takeoff if necessary.** 
