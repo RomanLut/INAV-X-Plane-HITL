@@ -68,6 +68,7 @@ void TSimData::init()
   this->muteBeeper = true;
   this->attitude_use_sensors = false;
 
+  this->df_override_joystick = XPLMFindDataRef("sim/operation/override/override_joystick");
   this->df_control_throttle = XPLMFindDataRef("sim/cockpit2/engine/actuators/throttle_ratio_all");
   this->df_control_roll = XPLMFindDataRef("sim/joystick/yoke_roll_ratio");
   this->df_control_pitch = XPLMFindDataRef("sim/joystick/yoke_pitch_ratio");
@@ -117,6 +118,7 @@ void TSimData::updateFromXPlane()
 //==============================================================
 void TSimData::sendToXPlane()
 {
+  XPLMSetDatai(this->df_override_joystick, 1);
 	XPLMSetDataf(this->df_control_throttle, (this->control_throttle + 500.0f )/ 1000.0f);
 	XPLMSetDataf(this->df_control_roll, this->control_roll / 500.0f);
 	XPLMSetDataf(this->df_control_pitch, -(this->control_pitch / 500.0f ));

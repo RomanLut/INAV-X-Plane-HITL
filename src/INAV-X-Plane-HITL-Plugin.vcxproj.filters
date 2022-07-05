@@ -72,5 +72,8 @@
     <Media Include="assets\interference.png">
       <Filter>assets</Filter>
     </Media>
+    <Media Include="assets\unsupported_firmware.wav">
+      <Filter>assets</Filter>
+    </Media>
   </ItemGroup>
 </Project>

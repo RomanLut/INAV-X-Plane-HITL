@@ -112,6 +112,8 @@ public:
 
 	//---- from inav --------  
 
+  XPLMDataRef df_override_joystick;
+
 	XPLMDataRef df_control_throttle;
 	int16_t control_throttle;
 	XPLMDataRef df_control_roll;
