@@ -69,7 +69,7 @@ This will add plugin to the **Aerolite** airplane and install additional **NK_Su
 
 # Setup (MacOs)
 
- Sorry, MacOs in not supported currently *(assistance needed to build plugin for Linux, see [development.md](doc/development.md))*.
+ Sorry, MacOs in not supported currently *(assistance needed to build plugin for MacOs, see [development.md](doc/development.md))*.
 
 # Flight controller configuration
 
