@@ -66,7 +66,11 @@ This will add plugin to the **Aerolite** airplane and install additional **NK_Su
 # Setup (Linux)
 
  Sorry, Linux in not supported currently *(assistance needed to build plugin for Linux, see [development.md](doc/development.md))*.
- 
+
+# Setup (MacOs)
+
+ Sorry, MacOs in not supported currently *(assistance needed to build plugin for Linux, see [development.md](doc/development.md))*.
+
 # Flight controller configuration
 
 Flight controller should be fully configured like for the real flight. There is no need to calibrate mixer and motors output.
