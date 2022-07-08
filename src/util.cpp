@@ -10,39 +10,18 @@
 //==============================================================
 void buildAssetFilename(char pName[MAX_PATH], const char* pFileName)
 {
-#if IBM
-  HMODULE hm = NULL;
-
-  if (GetModuleHandleEx(GET_MODULE_HANDLE_EX_FLAG_FROM_ADDRESS |
-    GET_MODULE_HANDLE_EX_FLAG_UNCHANGED_REFCOUNT,
-    (LPCSTR)&buildAssetFilename, &hm) == 0)
+  char dirchar = *XPLMGetDirectorySeparator();
+  XPLMGetPluginInfo(XPLMGetMyID(), NULL, pName, NULL, NULL);
+  char* p = pName;
+  char* slash = p;
+  while (*p)
   {
-    return;
+    if (*p == dirchar) slash = p;
+    ++p;
   }
-  if (GetModuleFileName(hm, pName, MAX_PATH) == 0)
-  {
-    return;
-  }
-
-  char* dest = strstr(pName, "win.xpl");
-  if (dest)
-  {
-    strcpy(dest, pFileName);
-  }
-#elif LIN
-  Dl_info dlInfo;
-  dladdr((const void*)&buildAssetFilename, &dlInfo);
-
-  strcpy(pName, dlInfo.dli_fname);
-
-  char* dest = strstr( pName, "lin.xpl" );
-  if (dest)
-  {
-    strcpy(dest, pFileName);
-  }
-
-  LOG("AssetName: %s", pName);
-#endif
+  ++slash;
+  *slash = 0;
+  strcat(pName, pFileName);
 }
 
 //==============================================================
