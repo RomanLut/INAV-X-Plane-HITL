@@ -315,7 +315,7 @@ bool MSP::probeNextPort()
 #if IBM
     sprintf(portName, "\\\\.\\COM%d", portId );
 #elif LIN
-    sprintf(portName, "/dev/ttyUSB%d", portId);
+    sprintf(portName, "/dev/ttyUSB%d", portId-1);  //start from zero on linux
 #endif
 
     LOG("Probing port %s", portName);
