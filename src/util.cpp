@@ -24,6 +24,12 @@ void buildAssetFilename(char pName[MAX_PATH], const char* pFileName)
   ++slash;
   *slash = 0;
   strcat(pName, pFileName);
+
+  while (*slash)
+  {
+    if (*slash == '\\') *slash = dirchar;
+    ++slash;
+  }
 }
 
 //==============================================================
@@ -57,6 +63,8 @@ void LOG(const char* fmt, ...)
   vsnprintf(&msg[hl], 1024 - hl, fmt, args);
   va_end(args);
   msg[1023] = 0;
+
+  strcat(msg, "\n");
 
   XPLMDebugString(msg);
 #if IBM
