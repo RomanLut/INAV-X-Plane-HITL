@@ -19,8 +19,10 @@
 
 #if IBM
 #include <windows.h>
+#define USE_OPENAL
 #elif LIN
 #include <unistd.h>
+#define USE_OPENAL
 #endif
 
 

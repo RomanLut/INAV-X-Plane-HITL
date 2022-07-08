@@ -10,6 +10,7 @@
 #include "util.h"
 #include "osd.h"
 #include "graph.h"
+#include "sound.h"
 
 uint32_t lastUpdateTime;
 bool wait;
@@ -139,6 +140,7 @@ PLUGIN_API void	XPluginStop(void)
   XPLMUnregisterDrawCallback(&drawCallback, xplm_Phase_FirstCockpit, 0, NULL);
 
   g_osd.destroy();
+  g_sound.destroy();
 }
 
 //==============================================================
@@ -161,6 +163,8 @@ PLUGIN_API int XPluginEnable(void)
   params.refcon = NULL;
   loopId = XPLMCreateFlightLoop(&params);
   XPLMScheduleFlightLoop(loopId, -1, true);
+
+  g_sound.init();
 
   playSound("assets\\ready_to_connect.wav");
 

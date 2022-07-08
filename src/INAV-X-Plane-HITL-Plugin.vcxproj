@@ -110,7 +110,7 @@
       <Optimization>Disabled</Optimization>
       <SuppressStartupBanner>true</SuppressStartupBanner>
       <DebugInformationFormat>EditAndContinue</DebugInformationFormat>
-      <AdditionalIncludeDirectories>SDK\CHeaders\XPLM;SDK\CHeaders\Widgets;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>SDK\CHeaders\XPLM;SDK\CHeaders\Widgets;OpenAL\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>WINVER=0x0601;_WIN32_WINNT=0x0601;_WIN32_WINDOWS=0x0601;WIN32;_DEBUG;_WINDOWS;_USRDLL;SIMDATA_EXPORTS;IBM=1;XPLM200=1;XPLM210=1;XPLM300=1;XPLM301=1;XPLM302=1;XPLM303=1;_CRT_SECURE_NO_WARNINGS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <AssemblerListingLocation>.\Debug\64\</AssemblerListingLocation>
       <PrecompiledHeaderOutputFile>.\Debug\64\INAV-X-Plane-HITL-Plugin.pch</PrecompiledHeaderOutputFile>
@@ -143,7 +143,7 @@
       <SubSystem>Console</SubSystem>
       <ImportLibrary>.\Debug\64\INAV-X-Plane-HITL-Plugin.lib</ImportLibrary>
       <AdditionalLibraryDirectories>SDK\Libraries\Win;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
-      <AdditionalDependencies>Opengl32.lib;odbc32.lib;odbccp32.lib;XPLM_64.lib;XPWidgets_64.lib;%(AdditionalDependencies);Winmm.lib;glu32.lib</AdditionalDependencies>
+      <AdditionalDependencies>Opengl32.lib;odbc32.lib;odbccp32.lib;XPLM_64.lib;XPWidgets_64.lib;%(AdditionalDependencies);Winmm.lib;glu32.lib;OpenAL\libs\Win64\OpenAL32.lib</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
@@ -211,6 +211,7 @@
     <ClInclude Include="simData.h" />
     <ClInclude Include="stats.h" />
     <ClInclude Include="util.h" />
+    <ClInclude Include="sound.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="graph.cpp" />
@@ -222,6 +223,7 @@
     <ClCompile Include="serial.cpp" />
     <ClCompile Include="simData.cpp" />
     <ClCompile Include="stats.cpp" />
+    <ClCompile Include="sound.cpp" />
     <ClCompile Include="util.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

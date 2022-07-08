@@ -12,9 +12,10 @@ SOURCES = \
 	serial.cpp \
 	simData.cpp \
 	stats.cpp \
-	util.cpp
+	util.cpp \
+	sound.cpp \
 
-LIBS =
+LIBS = -lopenal
 
 INCLUDES = \
 	-I$(SRC_BASE)/SDK/CHeaders/XPLM \

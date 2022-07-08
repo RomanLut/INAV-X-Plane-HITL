@@ -1,4 +1,6 @@
 #include "util.h"
+#include "sound.h"
+
 #include <math.h>
 #include <stdarg.h>
 
@@ -32,9 +34,10 @@ void playSound(const char* pFileName)
 
   buildAssetFilename(assetName, pFileName);
 
-#if IBM
+#ifdef USE_OPENAL
+  g_sound.play(assetName);
+#elif
   PlaySound(assetName, NULL, SND_ASYNC);
-#elif LIN
 #endif
 }
 
@@ -165,6 +168,28 @@ uint32_t GetTickCount()
   struct timespec spec;
   clock_gettime(boot_time_id, &spec);
   return (uint32_t)(((uint64_t)spec.tv_sec) * 1000 + ((uint64_t)spec.tv_nsec) / 1000000);
+}
+#endif
+
+#if APL
+//==============================================================
+//==============================================================
+// Mac specific: this converts file paths from HFS (which we get from the SDK) to Unix (which the OS wants).
+// See this for more info:
+// http://www.xsquawkbox.net/xpsdk/mediawiki/FilePathsAndMacho
+static int ConvertPath(const char * inPath, char * outPath, int outPathMaxLen) {
+
+  CFStringRef inStr = CFStringCreateWithCString(kCFAllocatorDefault, inPath, kCFStringEncodingMacRoman);
+  if (inStr == NULL)
+    return -1;
+  CFURLRef url = CFURLCreateWithFileSystemPath(kCFAllocatorDefault, inStr, kCFURLHFSPathStyle, 0);
+  CFStringRef outStr = CFURLCopyFileSystemPath(url, kCFURLPOSIXPathStyle);
+  if (!CFStringGetCString(outStr, outPath, outPathMaxLen, kCFURLPOSIXPathStyle))
+    return -1;
+  CFRelease(outStr);
+  CFRelease(url);
+  CFRelease(inStr);
+  return 0;
 }
 #endif
 
