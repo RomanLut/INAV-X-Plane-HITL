@@ -190,6 +190,8 @@ See [development.md](doc/development.md)
 
 - X-Plane INAV HITL prototype has been implemented by Sergii Sevriugin: https://github.com/sevrugin/inav/tree/master-simulator-xplane, https://github.com/sevrugin/inav-configurator/tree/master-simulator-xplane
 
+[![IMAGE ALT TEXT HERE](https://img.youtube.com/vi/XeYr-l9Sowc/0.jpg)](https://www.youtube.com/watch?v=XeYr-l9Sowc)
+
 - NK_FPV Surfwing V2 | RC Plane 2.2.0 https://forums.x-plane.org/index.php?/files/file/43974-nk_fpv-surfwing-v2-rc-plane/
 
 - X PLANE TUTORIAL: MaxiSwift installation with X Plane v9.70 for HIL simulations https://github.com/jlnaudin/x-drone/wiki/X-PLANE-TUTORIAL:-MaxiSwift-installation-with-X-Plane-v9.70-for-HIL-simulations
