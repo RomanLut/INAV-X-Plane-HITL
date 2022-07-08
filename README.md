@@ -188,12 +188,22 @@ See [development.md](doc/development.md)
 
 # Links
 
-- X-Plane INAV HITL prototype has been implemented by Sergii Sevriugin: https://github.com/sevrugin/inav/tree/master-simulator-xplane, https://github.com/sevrugin/inav-configurator/tree/master-simulator-xplane
+- X-Plane INAV HITL prototype has been implemented by Sergii Sevriugin: 
 
-[![IMAGE ALT TEXT HERE](https://img.youtube.com/vi/XeYr-l9Sowc/0.jpg)](https://www.youtube.com/watch?v=XeYr-l9Sowc)
+   https://github.com/sevrugin/inav/tree/master-simulator-xplane
 
-- NK_FPV Surfwing V2 | RC Plane 2.2.0 https://forums.x-plane.org/index.php?/files/file/43974-nk_fpv-surfwing-v2-rc-plane/
+   https://github.com/sevrugin/inav-configurator/tree/master-simulator-xplane
 
-- X PLANE TUTORIAL: MaxiSwift installation with X Plane v9.70 for HIL simulations https://github.com/jlnaudin/x-drone/wiki/X-PLANE-TUTORIAL:-MaxiSwift-installation-with-X-Plane-v9.70-for-HIL-simulations
+   [![IMAGE ALT TEXT HERE](https://img.youtube.com/vi/XeYr-l9Sowc/0.jpg)](https://www.youtube.com/watch?v=XeYr-l9Sowc)
 
-- Quadrotor UAV simulation modelling using X-Plane simulation software http://www.iraj.in/journal/journal_file/journal_pdf/2-448-152361879882-85.pdf
+- NK_FPV Surfwing V2 | RC Plane 2.2.0 
+
+   https://forums.x-plane.org/index.php?/files/file/43974-nk_fpv-surfwing-v2-rc-plane/
+
+- X PLANE TUTORIAL: MaxiSwift installation with X Plane v9.70 for HIL simulations 
+
+   https://github.com/jlnaudin/x-drone/wiki/X-PLANE-TUTORIAL:-MaxiSwift-installation-with-X-Plane-v9.70-for-HIL-simulations
+
+- Quadrotor UAV simulation modelling using X-Plane simulation software 
+
+   http://www.iraj.in/journal/journal_file/journal_pdf/2-448-152361879882-85.pdf
