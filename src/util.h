@@ -16,3 +16,8 @@ extern void setView();
 
 extern float clampf(float value, float minValue, float maxValue);
 extern int16_t clampToInt16(float value);
+
+#ifdef LIN
+extern bool IsDebuggerPresent();
+extern uint32_t GetTickCount();
+#endif

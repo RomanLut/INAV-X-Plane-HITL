@@ -1,10 +1,16 @@
 #include "util.h"
 #include <math.h>
+#include <stdarg.h>
+
+#if LIN
+#include <dlfcn.h>
+#endif
 
 //==============================================================
 //==============================================================
 void buildAssetFilename(char pName[MAX_PATH], const char* pFileName)
 {
+#if IBM
   HMODULE hm = NULL;
 
   if (GetModuleHandleEx(GET_MODULE_HANDLE_EX_FLAG_FROM_ADDRESS |
@@ -23,6 +29,20 @@ void buildAssetFilename(char pName[MAX_PATH], const char* pFileName)
   {
     strcpy(dest, pFileName);
   }
+#elif LIN
+  Dl_info dlInfo;
+  dladdr((const void*)&buildAssetFilename, &dlInfo);
+
+  strcpy(pName, dlInfo.dli_fname);
+
+  char* dest = strstr( pName, "lin.xpl" );
+  if (dest)
+  {
+    strcpy(dest, pFileName);
+  }
+
+  LOG("AssetName: %s", pName);
+#endif
 }
 
 //==============================================================
@@ -32,7 +52,11 @@ void playSound(const char* pFileName)
   char assetName[MAX_PATH];
 
   buildAssetFilename(assetName, pFileName);
+
+#if IBM
   PlaySound(assetName, NULL, SND_ASYNC);
+#elif LIN
+#endif
 }
 
 //==============================================================
@@ -40,6 +64,7 @@ void playSound(const char* pFileName)
 void LOG(const char* fmt, ...)
 {
  #ifdef ENABLE_LOG
+
   va_list args;
   char msg[1024];
 
@@ -52,7 +77,10 @@ void LOG(const char* fmt, ...)
   msg[1023] = 0;
 
   XPLMDebugString(msg);
+#if IBM
   OutputDebugString(msg);
+#endif
+
 #endif
 }
 
@@ -131,3 +159,33 @@ int16_t clampToInt16(float value)
 {
   return (int16_t)round(clampf(value, INT16_MIN, INT16_MAX));
 }
+
+#ifdef LIN
+//==============================================================
+//==============================================================
+bool IsDebuggerPresent()
+{
+	return false;
+}
+
+#endif
+
+#ifdef LIN
+//==============================================================
+//==============================================================
+uint32_t GetTickCount()
+{
+  enum
+  {
+#ifdef CLOCK_BOOTTIME
+    boot_time_id = CLOCK_BOOTTIME
+#else
+    boot_time_id = 7
+#endif
+  };
+  struct timespec spec;
+  clock_gettime(boot_time_id, &spec);
+  return (uint32_t)(((uint64_t)spec.tv_sec) * 1000 + ((uint64_t)spec.tv_nsec) / 1000000);
+}
+#endif
+
