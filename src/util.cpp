@@ -157,7 +157,7 @@ void delayMS(uint32_t valueMS)
 #if IBM
   Sleep(valueMS);
 #elif LIN
-  sleep(valueMS);
+  usleep(valueMS*1000);
 #endif
 }
 
