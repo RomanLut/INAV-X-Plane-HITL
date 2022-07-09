@@ -360,6 +360,10 @@ void MSP::disconnect()
   if (this->serial)
   {
     this->serial->flushOut();
+    if (this->state == STATE_CONNECTED)
+    {
+      delayMS(100);  //make sure all bytes are sent. 100ms is enought to send 1kb
+    }
     delete this->serial;
     this->serial = NULL;
   }

@@ -202,8 +202,6 @@ void Serial::flushOut()
 {
   if (this->writeBufferCount > 0)
   {
-    uint32_t t = GetTickCount();
-
 #if IBM
     COMSTAT status;
     DWORD errors;
