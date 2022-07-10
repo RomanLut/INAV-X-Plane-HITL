@@ -39,7 +39,7 @@ The contents of `release\Aircraft` folder should be placed in the Aircraft folde
 
 This will add plugin to the **Aerolite** airplane and install additional **NK_Surfwing** flying wing model with this plugin.
 
-**IMPORTANT:: You have to flash Simulator-enabled INAV firmware. Take precompiled binaries from release https://github.com/RomanLut/INAV-X-Plane-HITL/releases/, or build yourself from branch: https://github.com/RomanLut/inav/tree/simulator_v0.1 . Simulator mode is not included in main INAV repository currently.**
+**IMPORTANT:: You have to flash Simulator-enabled INAV firmware. Take precompiled binaries from release https://github.com/RomanLut/INAV-X-Plane-HITL/releases/, or build yourself from branch: https://github.com/RomanLut/inav/tree/simulator_v0.2 . Simulator mode is not included in main INAV repository currently.**
 
 ![](doc/menu.png)
 
