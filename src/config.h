@@ -1,7 +1,9 @@
 #pragma once
 
-#define ENABLE_LOG
+//#if IBM => WinAPI 
+//#if LIN => Linux
 
+#define ENABLE_LOG
 
 #include <XPLMMenus.h>
 #include <XPLMPlugin.h>
@@ -11,14 +13,18 @@
 #include <XPLMDataAccess.h>
 #include <XPLMUtilities.h>
 
-
-#if IBM
-#include <windows.h>
-#endif
-
 #ifndef XPLM300
 #error This is made to be compiled against the XPLM300 SDK
 #endif
+
+#if IBM
+#include <windows.h>
+#define USE_OPENAL
+#elif LIN
+#include <unistd.h>
+#define USE_OPENAL
+#endif
+
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -27,4 +33,11 @@
 
 #include <GL/gl.h>
 #include <GL/glu.h>
+
+#ifdef LIN
+#define MAX_PATH 1260
+#include <time.h>
+#include <cmath>
+#endif
+
 

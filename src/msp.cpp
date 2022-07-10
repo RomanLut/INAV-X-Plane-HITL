@@ -312,17 +312,21 @@ bool MSP::probeNextPort()
     if (this->portId == 32) return false;
 
     char portName[16];
+#if IBM
     sprintf(portName, "\\\\.\\COM%d", portId );
+#elif LIN
+    sprintf(portName, "/dev/ttyACM%d", portId-1);  //start from zero on linux
+#endif
 
-    LOG("Probing port %s\n", portName);
+    LOG("Probing port %s", portName);
 
     this->serial = new Serial(portName);
     if (this->serial->IsConnected())
     {
-      LOG("Connected\n");
+      LOG("Connected");
       if (this->sendCommand(MSP_API_VERSION, NULL, 0))
       {
-        LOG("MSP_VERSION sent\n");
+        LOG("MSP_VERSION sent");
         this->state = STATE_ENUMERATE_WAIT;
         this->probeTime = GetTickCount();
         this->lastUpdate = GetTickCount();
@@ -330,7 +334,7 @@ bool MSP::probeNextPort()
         return true;
       }
     }
-    LOG("Unable to connect\n");
+    LOG("Unable to connect");
     delete this->serial;
     this->serial = NULL;
   }
@@ -352,10 +356,14 @@ void MSP::connect(TCBConnect cbConnect, TCBMessage cbMessage)
 //======================================================
 void MSP::disconnect()
 {
-  LOG("Disconnect\n");
+  LOG("Disconnect");
   if (this->serial)
   {
     this->serial->flushOut();
+    if (this->state == STATE_CONNECTED)
+    {
+      delayMS(100);  //make sure all bytes are sent. 100ms is enought to send 1kb
+    }
     delete this->serial;
     this->serial = NULL;
   }
@@ -375,7 +383,7 @@ void MSP::processMessage()
   switch (state)
   {
   case STATE_ENUMERATE_WAIT:
-    LOG("Connected\n");
+    LOG("Connected");
     this->state = STATE_CONNECTED;
     this->cbConnect(CBC_CONNECTED);
     break;
@@ -417,7 +425,7 @@ void MSP::loop()
   case STATE_ENUMERATE_WAIT:
     if (GetTickCount() - this->probeTime > MSP_DETECT_TIMEOUT_MS)
     {
-      LOG("Probe Timeout\n");
+      LOG("Probe Timeout");
       delete this->serial;
       this->serial = NULL;
       this->state = STATE_ENUMERATE;

@@ -10,8 +10,7 @@
 #include "util.h"
 #include "osd.h"
 #include "graph.h"
-
-#include "config.h"
+#include "sound.h"
 
 uint32_t lastUpdateTime;
 bool wait;
@@ -37,7 +36,7 @@ void cbMessage(int code, const uint8_t* messageBuffer, int length)
   {
     if (length < MSP_SIMULATOR_RESPOSE_MIN_LENGTH)
     {
-      g_menu.actionDisconnect();                          
+      g_menu.actionDisconnect();
       playSound("assets\\unsupported_firmware.wav");
       LOG("Unsupported firmware version, MSP_SIMULATOR response length: %d", length);
       g_osd.showMsg("UNSUPPORTED FIRMWARE");
@@ -65,7 +64,7 @@ void cbMessage(int code, const uint8_t* messageBuffer, int length)
   }
   else if (code == MSP_DEBUGMSG)
   {
-    LOG("INAV: %s", (const char*)messageBuffer);
+    LOG("INAV: %s\n", (const char*)messageBuffer);
   }
 
 }
@@ -119,7 +118,7 @@ PLUGIN_API int XPluginStart(
 	char *		outSig,
 	char *		outDesc)
 {
-  LOG("Plugin start\n");
+  LOG("Plugin start");
 
 	strcpy(outName, "INAV HITL");
 	strcpy(outSig, "https://github.com/RomanLut/INAV-X-Plane-HITL");
@@ -136,19 +135,20 @@ PLUGIN_API int XPluginStart(
 //==============================================================
 PLUGIN_API void	XPluginStop(void)
 {
-  LOG("Plugin stop\n");
+  LOG("Plugin stop");
 
   XPLMUnregisterDrawCallback(&drawCallback, xplm_Phase_FirstCockpit, 0, NULL);
 
   g_osd.destroy();
+  g_sound.destroy();
 }
 
 //==============================================================
 //==============================================================
 
-PLUGIN_API int XPluginEnable(void) 
-{ 
-  LOG("Plugin enable\n");
+PLUGIN_API int XPluginEnable(void)
+{
+  LOG("Plugin enable");
 
   g_stats.init();
   g_simData.init(); //initialize before memu
@@ -164,6 +164,8 @@ PLUGIN_API int XPluginEnable(void)
   loopId = XPLMCreateFlightLoop(&params);
   XPLMScheduleFlightLoop(loopId, -1, true);
 
+  g_sound.init();
+
   playSound("assets\\ready_to_connect.wav");
 
   return 1;
@@ -173,7 +175,7 @@ PLUGIN_API int XPluginEnable(void)
 //==============================================================
 PLUGIN_API void XPluginDisable(void)
 {
-  LOG("Plugin disable\n");
+  LOG("Plugin disable");
 
   g_stats.close();
 
@@ -189,7 +191,7 @@ PLUGIN_API void XPluginDisable(void)
 
 //==============================================================
 //==============================================================
-PLUGIN_API void XPluginReceiveMessage(XPLMPluginID inFrom, int inMsg, void * inParam) 
+PLUGIN_API void XPluginReceiveMessage(XPLMPluginID inFrom, int inMsg, void * inParam)
 {
   if (inMsg == XPLM_MSG_AIRPORT_LOADED)
   {

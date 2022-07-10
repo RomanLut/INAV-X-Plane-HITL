@@ -9,7 +9,6 @@
     <ClCompile Include="serial.cpp" />
     <ClCompile Include="simData.cpp" />
     <ClCompile Include="stats.cpp" />
-    <ClCompile Include="util.cpp" />
     <ClCompile Include="graph.cpp" />
     <ClCompile Include="lodepng.cpp" />
     <ClCompile Include="main.cpp" />
@@ -19,6 +18,8 @@
     <ClCompile Include="serial.cpp" />
     <ClCompile Include="simData.cpp" />
     <ClCompile Include="stats.cpp" />
+    <ClCompile Include="util.cpp" />
+    <ClCompile Include="sound.cpp" />
     <ClCompile Include="util.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -41,6 +42,7 @@
     <ClInclude Include="simData.h" />
     <ClInclude Include="stats.h" />
     <ClInclude Include="util.h" />
+    <ClInclude Include="sound.h" />
   </ItemGroup>
   <ItemGroup>
     <Filter Include="assets">
