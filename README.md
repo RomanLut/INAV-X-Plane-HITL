@@ -53,7 +53,7 @@ This will add plugin to the **Aerolite** airplane and install additional **NK_Su
 - Start **X-Plane 11**
 - Select "Show extra aircraft from older versions" to see NK_FPVSurfwing
 ![](doc/show_extra_aircraft.jpg)
-- Select Aircraft **NK Surfwing** or **Aerolite 103**
+- Select Airplane **NK Surfwing** or **Aerolite 103**
 - Start flight
 - Select **Plugins->INAV HITL->Link->Connect to flight controller**. Plugin should automatically detect COM port.
 - Flight using RC Controller, setup PIDs etc. **Hint: disable parking brakes with "B" key on takeoff if necessary.** 
@@ -66,7 +66,11 @@ This will add plugin to the **Aerolite** airplane and install additional **NK_Su
 # Setup (Linux)
 
  Sorry, Linux in not supported currently *(assistance needed to build plugin for Linux, see [development.md](doc/development.md))*.
- 
+
+# Setup (MacOs)
+
+ Sorry, MacOs in not supported currently *(assistance needed to build plugin for MacOs, see [development.md](doc/development.md))*.
+
 # Flight controller configuration
 
 Flight controller should be fully configured like for the real flight. There is no need to calibrate mixer and motors output.
@@ -107,7 +111,7 @@ Real acceleromerer should be calibrated in **INAV Configurator**. Accelerometer 
 
 ## Barometer
 
-Barometer will be simulatod if enabled in **INAV Configurator**. If real barometer is not present, select **"FAKE"** type.
+Barometer will be simulated if enabled in **INAV Configurator**. If real barometer is not present, select **"FAKE"** type.
 
 ![](doc/fakebaro.png)
 
@@ -184,10 +188,22 @@ See [development.md](doc/development.md)
 
 # Links
 
-- X-Plane INAV HITL prototype has been implemented by Sergii Sevriugin: https://github.com/sevrugin/inav/tree/master-simulator-xplane, https://github.com/sevrugin/inav-configurator/tree/master-simulator-xplane
+- X-Plane INAV HITL prototype has been implemented by Sergii Sevriugin: 
 
-- NK_FPV Surfwing V2 | RC Plane 2.2.0 https://forums.x-plane.org/index.php?/files/file/43974-nk_fpv-surfwing-v2-rc-plane/
+   https://github.com/sevrugin/inav/tree/master-simulator-xplane
 
-- X PLANE TUTORIAL: MaxiSwift installation with X Plane v9.70 for HIL simulations https://github.com/jlnaudin/x-drone/wiki/X-PLANE-TUTORIAL:-MaxiSwift-installation-with-X-Plane-v9.70-for-HIL-simulations
+   https://github.com/sevrugin/inav-configurator/tree/master-simulator-xplane
 
-- Quadrotor UAV simulation modelling using X-Plane simulation software http://www.iraj.in/journal/journal_file/journal_pdf/2-448-152361879882-85.pdf
+   [![IMAGE ALT TEXT HERE](https://img.youtube.com/vi/XeYr-l9Sowc/0.jpg)](https://www.youtube.com/watch?v=XeYr-l9Sowc)
+
+- NK_FPV Surfwing V2 | RC Plane 2.2.0 
+
+   https://forums.x-plane.org/index.php?/files/file/43974-nk_fpv-surfwing-v2-rc-plane/
+
+- X PLANE TUTORIAL: MaxiSwift installation with X Plane v9.70 for HIL simulations 
+
+   https://github.com/jlnaudin/x-drone/wiki/X-PLANE-TUTORIAL:-MaxiSwift-installation-with-X-Plane-v9.70-for-HIL-simulations
+
+- Quadrotor UAV simulation modelling using X-Plane simulation software 
+
+   http://www.iraj.in/journal/journal_file/journal_pdf/2-448-152361879882-85.pdf
