@@ -229,8 +229,8 @@ void TGraph::setGraphType(TGraphType type)
 
   switch (this->graph_type)
   {
-  case GRAPH_ATTITUDE_RPY:
-    this->pSeriesName = "Attitude";
+  case GRAPH_ATTITUDE_OUTPUT:
+    this->pSeriesName = "Attitude, output";
     this->activeCount = 6;
 
     this->series[0].setRange(0, 3600);
@@ -245,6 +245,24 @@ void TGraph::setGraphType(TGraphType type)
     this->series[3].setName("Output YAW___");
     this->series[4].setName("Output PITCH_");
     this->series[5].setName("Output ROLL__");
+    break;
+
+  case GRAPH_ATTITUDE_ESTIMATION:
+    this->pSeriesName = "Attitude estimation";
+    this->activeCount = 6;
+
+    this->series[0].setRange(0, 3600);
+    this->series[1].setRange(-1800, 1800);
+    this->series[2].setRange(-1800, 1800);
+    this->series[3].setRange(0, 3600);
+    this->series[4].setRange(-1800, 1800);
+    this->series[5].setRange(-1800, 1800);
+    this->series[0].setName("Real YAW_________");
+    this->series[1].setName("Real PITCH_______");
+    this->series[2].setName("Real ROLL________");
+    this->series[3].setName("Estimated YAW____");
+    this->series[4].setName("Estimated PITCH__");
+    this->series[5].setName("Estimated ROLL___");
     break;
 
   case GRAPH_ACC:
@@ -338,7 +356,7 @@ void TGraph::clear()
 //==============================================================
 void TGraph::addOutputYPR(float yaw, float pitch, float roll)
 {
-  if (this->graph_type != GRAPH_ATTITUDE_RPY) return;
+  if (this->graph_type != GRAPH_ATTITUDE_OUTPUT) return;
   this->series[3].addPoint(yaw);
   this->series[4].addPoint(pitch);
   this->series[5].addPoint(roll);
@@ -348,10 +366,20 @@ void TGraph::addOutputYPR(float yaw, float pitch, float roll)
 //==============================================================
 void TGraph::addAttitudeYPR(float yaw, float pitch, float roll)
 {
-  if (this->graph_type != GRAPH_ATTITUDE_RPY) return;
+  if ((this->graph_type != GRAPH_ATTITUDE_OUTPUT) && (this->graph_type != GRAPH_ATTITUDE_ESTIMATION)) return;
   this->series[0].addPoint(yaw);
   this->series[1].addPoint(pitch);
   this->series[2].addPoint(roll);
+}
+
+//==============================================================
+//==============================================================
+void TGraph::addEstimatedAttitudeYPR(float yaw, float pitch, float roll)
+{
+  if (this->graph_type != GRAPH_ATTITUDE_ESTIMATION) return;
+  this->series[3].addPoint(yaw);
+  this->series[4].addPoint(pitch);
+  this->series[5].addPoint(roll);
 }
 
 //==============================================================

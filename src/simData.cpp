@@ -66,6 +66,10 @@ void TSimData::init()
 
 	//static XPLMDataRef wrt = XPLMFindDataRef("sim/graphics/view/world_render_type");
 
+  this->estimated_attitude_roll = 0;
+  this->estimated_attitude_pitch = 0;
+  this->estimated_attitude_yaw = 0;
+
 	//---- output ----
   this->emulateBattery = true;
   this->muteBeeper = true;
@@ -148,6 +152,11 @@ void TSimData::updateFromINAV(const TMSPSimulatorFromINAV* data)
   }
 
   g_stats.debug[data->debugIndex & 7] = data->debugValue;
+
+  this->estimated_attitude_roll = (int16_t)data->estimated_attitude_roll;
+  this->estimated_attitude_pitch = (int16_t)data->estimated_attitude_pitch;
+  this->estimated_attitude_yaw = (uint16_t)data->estimated_attitude_yaw;
+  g_graph.addEstimatedAttitudeYPR(estimated_attitude_yaw, estimated_attitude_pitch, estimated_attitude_roll);
 
   g_graph.addDebug(data->debugIndex & 7, (float)data->debugValue);
   g_graph.addOutputYPR(this->control_yaw, this->control_pitch, this->control_roll);

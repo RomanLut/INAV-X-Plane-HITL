@@ -123,6 +123,10 @@ public:
 	XPLMDataRef df_control_yaw;
   int16_t control_yaw;
 
+  float estimated_attitude_roll;
+  float estimated_attitude_pitch;
+  float estimated_attitude_yaw;
+
   bool isAirplane;
   bool isArmed;
 

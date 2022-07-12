@@ -5,7 +5,8 @@
 typedef enum
 {
   GRAPH_NONE,
-  GRAPH_ATTITUDE_RPY,
+  GRAPH_ATTITUDE_OUTPUT,
+  GRAPH_ATTITUDE_ESTIMATION,
   GRAPH_ACC,
   GRAPH_GYRO,
   GRAPH_DEBUG_ALTITUDE,
@@ -64,6 +65,7 @@ public:
   void addAttitudeYPR(float yaw, float pitch, float roll);
   void addACC(float x, float y, float z );
   void addGyro(float x, float y, float z);
+  void addEstimatedAttitudeYPR(float yaw, float pitch, float roll);
 
   void addDebug(int index, float value);
 

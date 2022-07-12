@@ -86,7 +86,8 @@ void TMenu::updateBeeperMenu()
 void TMenu::updateGraphMenu()
 {
   XPLMCheckMenuItem(this->graph_menu_id, this->graph_none_id, g_graph.getGraphType() == GRAPH_NONE ? xplm_Menu_Checked : xplm_Menu_Unchecked);
-  XPLMCheckMenuItem(this->graph_menu_id, this->graph_attitude_id, g_graph.getGraphType() == GRAPH_ATTITUDE_RPY ? xplm_Menu_Checked : xplm_Menu_Unchecked);
+  XPLMCheckMenuItem(this->graph_menu_id, this->graph_attitude_estimation_id, g_graph.getGraphType() == GRAPH_ATTITUDE_ESTIMATION ? xplm_Menu_Checked : xplm_Menu_Unchecked);
+  XPLMCheckMenuItem(this->graph_menu_id, this->graph_attitude_output_id, g_graph.getGraphType() == GRAPH_ATTITUDE_OUTPUT ? xplm_Menu_Checked : xplm_Menu_Unchecked);
   XPLMCheckMenuItem(this->graph_menu_id, this->graph_acc_id, g_graph.getGraphType() == GRAPH_ACC ? xplm_Menu_Checked : xplm_Menu_Unchecked);
   XPLMCheckMenuItem(this->graph_menu_id, this->graph_gyro_id, g_graph.getGraphType() == GRAPH_GYRO ? xplm_Menu_Checked : xplm_Menu_Unchecked);
   XPLMCheckMenuItem(this->graph_menu_id, this->graph_debug_altitude_id, g_graph.getGraphType() == GRAPH_DEBUG_ALTITUDE ? xplm_Menu_Checked : xplm_Menu_Unchecked);
@@ -226,9 +227,14 @@ void TMenu::menu_handler(void * in_menu_ref, void * in_item_ref)
     g_graph.setGraphType(GRAPH_NONE);
     this->updateGraphMenu();
   }
-  else if (!strcmp((const char *)in_item_ref, "graph_attitude_rpy"))
+  else if (!strcmp((const char *)in_item_ref, "graph_attitude_estimation"))
   {
-    g_graph.setGraphType(GRAPH_ATTITUDE_RPY);
+    g_graph.setGraphType(GRAPH_ATTITUDE_ESTIMATION);
+    this->updateGraphMenu();
+  }
+  else if (!strcmp((const char *)in_item_ref, "graph_attitude_output"))
+  {
+    g_graph.setGraphType(GRAPH_ATTITUDE_OUTPUT);
     this->updateGraphMenu();
   }
   else if (!strcmp((const char *)in_item_ref, "graph_accelerometer"))
@@ -330,7 +336,8 @@ void TMenu::createMenu()
   this->graph_id = XPLMAppendMenuItem(this->menu_id, "Graph", (void *)"Graph", 1);
   this->graph_menu_id = XPLMCreateMenu("Graph", this->menu_id, this->graph_id, static_menu_handler, NULL);
   this->graph_none_id = XPLMAppendMenuItem(this->graph_menu_id, "None", (void *)"graph_none", 1);
-  this->graph_attitude_id = XPLMAppendMenuItem(this->graph_menu_id, "Attitude Roll/Pitch/Yaw (X-Plane)", (void *)"graph_attitude_rpy", 1);
+  this->graph_attitude_estimation_id = XPLMAppendMenuItem(this->graph_menu_id, "Attitude estimation", (void *)"graph_attitude_estimation", 1);
+  this->graph_attitude_output_id = XPLMAppendMenuItem(this->graph_menu_id, "Attitude, output", (void *)"graph_attitude_output", 1);
   this->graph_acc_id = XPLMAppendMenuItem(this->graph_menu_id, "Accelerometer", (void *)"graph_accelerometer", 1);
   this->graph_gyro_id = XPLMAppendMenuItem(this->graph_menu_id, "Gyroscope", (void *)"graph_gyroscope", 1);
   this->graph_debug_altitude_id = XPLMAppendMenuItem(this->graph_menu_id, "debug_mode = altitude", (void *)"graph_debug_altitude", 1);

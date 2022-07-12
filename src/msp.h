@@ -84,6 +84,10 @@ struct TMSPSimulatorFromINAV
   uint8_t debugIndex;  // | TFromINAVFlags
   int32_t debugValue;
 
+  int16_t estimated_attitude_roll;
+  int16_t estimated_attitude_pitch;
+  int16_t estimated_attitude_yaw;
+
   uint8_t osdRow;  //255 - not osd data. |128 - 16 rows, otherwise 13 rows.
   uint8_t osdCol;
   uint8_t osdRowData[200];
