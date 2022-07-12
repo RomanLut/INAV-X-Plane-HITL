@@ -140,6 +140,12 @@ public:
   void updateFromINAV(const TMSPSimulatorFromINAV* data);
   void sendToINAV();
 
+  void computeQuaternionFromRPY(float* quat, int16_t roll, int16_t pitch, int16_t yaw);
+  void transformVectorEarthToBody(float* v, float* quat);
+  void quaternionRotateVector(float* result, const float* vect, const float* quat);
+  void quaternionConjugate(float* result, const float* q);
+  void quaternionMultiply(float* result, const float* a, const float* b);
+
   void disconnect();
 
 };

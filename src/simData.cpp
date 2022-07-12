@@ -10,6 +10,9 @@ TSimData g_simData;
 
 #define GPS_RATE_HZ   5
 
+#define DEG2RAD         (.017453292519943f) /* PI / 180 */
+#define DECIDEGREES_TO_RADIANS(angle) (((angle) / 10.0f) * DEG2RAD)
+
 //==============================================================
 //==============================================================
 void TSimData::init()
@@ -156,7 +159,7 @@ void TSimData::sendToINAV()
 {
   TMSPSimulatorToINAV data;
 
-  data.version = 1;
+  data.version = 2;
 
   data.flags = 1 | (this->emulateBattery? 2 : 0) | (this->muteBeeper ? 4 : 0) | (this->attitude_use_sensors ? 8 : 0) | (this->GPSHasNewData ? 16 : 0 );
   this->GPSHasNewData = false;
@@ -203,7 +206,102 @@ void TSimData::sendToINAV()
 
   data.baro = (int32_t)round(this->baro * 3386.39f);
 
+  float north[3];
+  north[0] = 1.0f;
+  north[1] = 0;
+  north[2] = 0;
+
+  float quat[4];
+  this->computeQuaternionFromRPY(quat, data.roll, data.pitch, data.yaw );
+  this->transformVectorEarthToBody(north, quat);
+
+  data.mag_x = clampToInt16(north[0] * 16000.0f);
+  data.mag_y = clampToInt16(north[1] * 16000.0f);
+  data.mag_z = clampToInt16(north[2] * 16000.0f);
+
   g_msp.sendCommand(MSP_SIMULATOR, &data, sizeof(data));
+}
+
+//==============================================================
+//==============================================================
+void TSimData::computeQuaternionFromRPY( float* quat, int16_t roll, int16_t pitch, int16_t yaw)
+{
+  if (roll > 1800) roll -= 3600;
+  if (pitch > 1800) pitch -= 3600;
+  if (yaw > 1800) yaw -= 3600;
+
+  const float cosRoll = cosf(DECIDEGREES_TO_RADIANS(roll) * 0.5f);
+  const float sinRoll = sinf(DECIDEGREES_TO_RADIANS(roll) * 0.5f);
+
+  const float cosPitch = cosf(DECIDEGREES_TO_RADIANS(pitch) * 0.5f);
+  const float sinPitch = sinf(DECIDEGREES_TO_RADIANS(pitch) * 0.5f);
+
+  const float cosYaw = cosf(DECIDEGREES_TO_RADIANS(-yaw) * 0.5f);
+  const float sinYaw = sinf(DECIDEGREES_TO_RADIANS(-yaw) * 0.5f);
+
+  quat[0] = cosRoll * cosPitch * cosYaw + sinRoll * sinPitch * sinYaw;
+  quat[1] = sinRoll * cosPitch * cosYaw - cosRoll * sinPitch * sinYaw;
+  quat[2] = cosRoll * sinPitch * cosYaw + sinRoll * cosPitch * sinYaw;
+  quat[3] = cosRoll * cosPitch * sinYaw - sinRoll * sinPitch * cosYaw;
+}
+
+//==============================================================
+//==============================================================
+void TSimData::transformVectorEarthToBody(float* v, float* quat)
+{
+  // HACK: This is needed to correctly transform from NED (sensor frame) to NEU (navigation)
+  v[1] = -v[1];
+
+  // From earth frame to body frame
+  this->quaternionRotateVector(v, v, quat);
+}
+
+//==============================================================
+//==============================================================
+void TSimData::quaternionRotateVector(float* result, const float* vect, const float* quat)
+{
+  float vectQuat[4];
+  float refConj[4];
+
+  vectQuat[0] = 0;
+  vectQuat[1] = vect[0];
+  vectQuat[2] = vect[1];
+  vectQuat[3] = vect[2];
+
+  this->quaternionConjugate(refConj, quat);
+  this->quaternionMultiply(vectQuat, refConj, vectQuat);
+  this->quaternionMultiply(vectQuat, vectQuat, quat);
+
+  result[0] = vectQuat[1];
+  result[1] = vectQuat[2];
+  result[2] = vectQuat[3];
+}
+
+//==============================================================
+//==============================================================
+void TSimData::quaternionConjugate(float* result, const float* q)
+{
+  result[0] = q[0];
+  result[1] = -q[1];
+  result[2] = -q[2];
+  result[3] = -q[3];
+}
+
+//==============================================================
+//==============================================================
+void TSimData::quaternionMultiply(float* result, const float* a, const float* b)
+{
+  float p[4];
+
+  p[0] = a[0] * b[0] - a[1] * b[1] - a[2] * b[2] - a[3] * b[3];
+  p[1] = a[0] * b[1] + a[1] * b[0] + a[2] * b[3] - a[3] * b[2];
+  p[2] = a[0] * b[2] - a[1] * b[3] + a[2] * b[0] + a[3] * b[1];
+  p[3] = a[0] * b[3] + a[1] * b[2] - a[2] * b[1] + a[3] * b[0];
+
+  result[0] = p[0];
+  result[1] = p[1];
+  result[2] = p[2];
+  result[3] = p[3];
 }
 
 //==============================================================

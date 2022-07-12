@@ -34,7 +34,7 @@ struct TMSPAPIVersion
 #pragma pack(1)
 struct TMSPSimulatorToINAV
 {
-  uint8_t version; //1
+  uint8_t version; //2
 
   // SIMU_ENABLE				    = (1 << 0),
   // SIMU_SIMULATE_BATTERY  = (1 << 1),
@@ -64,6 +64,10 @@ struct TMSPSimulatorToINAV
   int16_t gyro_z;
 
   int32_t baro;
+
+  int16_t mag_x;
+  int16_t mag_y;
+  int16_t mag_z;
 };
 #pragma pack()
 
