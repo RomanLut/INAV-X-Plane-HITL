@@ -128,7 +128,7 @@ Simulated GPS Fix can be switched in menu:
 
 ## Magnetometer
 
-Magnetometer is simulated if selected in INAV configurator. It is not required to connect real sensor. Select QMC5883 if there is no real sensor present.
+Magnetometer is simulated if selected in INAV configurator. It is not required to connect real sensor. Select QMC5883 if there is no real sensor present. Calibration is not required.
 
 ## Battery sensor
 
