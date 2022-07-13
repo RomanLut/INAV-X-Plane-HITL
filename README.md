@@ -128,9 +128,7 @@ Simulated GPS Fix can be switched in menu:
 
 ## Magnetometer
 
-Magnetometer is not supported currently *(assistance needed to implement magnetometer support, see [development.md](doc/development.md))*.
-
-Magnetometer will be disabled in simulation.
+Magnetometer is simulated if selected in INAV configurator. It is not required to connect real sensor. Select QMC5883 if there is no real sensor present.
 
 ## Battery sensor
 
