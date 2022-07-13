@@ -69,7 +69,8 @@ INAV serial logging ( see https://github.com/iNavFlight/inav/blob/master/docs/de
 ![](graph.jpg)
 
 Plugin can draw number of graphs for debugging:
-- **Attitude Roll/Pitch/Yaw (X-Plane):** Yaw/Pitch/Roll angles sent to FC in **"Attitude: Copy From X-Plane"** mode. This is NOT attitude estimated by FC. **"Output Yaw/Pitch/Roll"** graphs show **"Stabilized Yaw/Pitch/Roll"** outputs from FC. Graph is usefull for PID tuning.
+- **Attitude estimation:** First 3 graphs: real Yaw/Pitch/Roll angles. Next 3 graphs: attitude estimated by FC. In **"Attitude: Copy From X-Plane"** mode, angles are equal. 
+- **Attitude, output:** First 3 graphs: Yaw/Pitch/Roll. Next 3 graphs: **"Output Yaw/Pitch/Roll"** = **"Stabilized Yaw/Pitch/Roll"** outputs from FC. Graph is usefull for PID tuning.
 - **Accelerometer:** Simulated Accelerometer readings
 - **Gyroscope:** Simulated Gyroscope readings
 - **"debug_mode = altitude:"** Visualize debug[] array in this mode
