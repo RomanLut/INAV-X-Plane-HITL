@@ -27,7 +27,7 @@ While not been a main purpose, plugin can be used to improve pilot skils or gett
 
 **X-Plane** 11 https://www.x-plane.com/ is flight simulator with accurate physics simulation. 
  
-X-Plane is extendable with plugins. This plugin connects to Flight Controller through USB cable and passes gyroscope, accelerometer, barometer and GPS data, which replace data from physical sensors. 
+X-Plane is extendable with plugins. This plugin connects to Flight Controller through USB cable and passes gyroscope, accelerometer, barometer, magnethometer and GPS data, which replace data from physical sensors. 
 
 FC sends back **yaw/pitch/roll** controls which are passed to X-Plane.
 
