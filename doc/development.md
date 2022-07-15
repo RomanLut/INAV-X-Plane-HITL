@@ -69,7 +69,7 @@ INAV serial logging ( see https://github.com/iNavFlight/inav/blob/master/docs/de
 ![](graph.jpg)
 
 Plugin can draw number of graphs for debugging:
-- **Updates period:** First graph shown period between updated from FC in ms. Second graph shown sumber of updates per second.
+- **Updates period:** First graph shows period between updates from FC in ms. Second graph shows number of updates per second.
 - **Attitude estimation:** First 3 graphs: real Yaw/Pitch/Roll angles. Next 3 graphs: attitude estimated by FC. In **"Attitude: Copy From X-Plane"** mode, angles are equal. 
 - **Attitude, output:** First 3 graphs: Yaw/Pitch/Roll. Next 3 graphs: **"Output Yaw/Pitch/Roll"** = **"Stabilized Yaw/Pitch/Roll"** outputs from FC. Graph is usefull for PID tuning.
 - **Accelerometer:** Simulated Accelerometer readings
