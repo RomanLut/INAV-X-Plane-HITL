@@ -51,6 +51,7 @@ public:
   XPLMMenuID graph_menu_id;
   int graph_id;
   int graph_none_id;
+  int graph_updates_id;
   int graph_attitude_estimation_id;
   int graph_attitude_output_id;
   int graph_acc_id;

@@ -5,6 +5,7 @@
 typedef enum
 {
   GRAPH_NONE,
+  GRAPH_UPDATES,
   GRAPH_ATTITUDE_OUTPUT,
   GRAPH_ATTITUDE_ESTIMATION,
   GRAPH_ACC,
@@ -66,6 +67,7 @@ public:
   void addACC(float x, float y, float z );
   void addGyro(float x, float y, float z);
   void addEstimatedAttitudeYPR(float yaw, float pitch, float roll);
+  void addUpdatePeriodMS(uint32_t period);
 
   void addDebug(int index, float value);
 
@@ -78,6 +80,10 @@ private:
   size_t lastLen;
 
   float debug[8];
+
+  uint32_t lastUpdatesCountTime;
+  int updatesCount;
+  int updatesCountValue;
 
   void formatRangeNumber(char* dest, float value);
   void formatValueNumber(char* dest, float value);

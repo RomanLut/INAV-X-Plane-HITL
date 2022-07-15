@@ -134,7 +134,8 @@ public:
   bool emulateBattery;
   bool muteBeeper;
   bool attitude_use_sensors;
-   
+
+  uint32_t lastUpdateMS;
 
 	void init();
 

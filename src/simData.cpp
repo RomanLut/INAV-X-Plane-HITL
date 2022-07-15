@@ -75,6 +75,8 @@ void TSimData::init()
   this->muteBeeper = true;
   this->attitude_use_sensors = false;
 
+  this->lastUpdateMS = 0;
+
   this->df_override_joystick = XPLMFindDataRef("sim/operation/override/override_joystick");
   this->df_control_throttle = XPLMFindDataRef("sim/cockpit2/engine/actuators/throttle_ratio_all");
   this->df_control_roll = XPLMFindDataRef("sim/joystick/yoke_roll_ratio");
@@ -160,6 +162,14 @@ void TSimData::updateFromINAV(const TMSPSimulatorFromINAV* data)
 
   g_graph.addDebug(data->debugIndex & 7, (float)data->debugValue);
   g_graph.addOutputYPR(this->control_yaw, this->control_pitch, this->control_roll);
+
+  uint32_t t = GetTickCount();
+  uint32_t delta = t - this->lastUpdateMS;
+  if ((this->lastUpdateMS != 0) && (delta < 300))
+  {
+    g_graph.addUpdatePeriodMS(delta);
+  }
+  this->lastUpdateMS = t;
 }
 
 //==============================================================

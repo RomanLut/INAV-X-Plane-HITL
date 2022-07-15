@@ -2,6 +2,7 @@
 #include "lodepng.h"
 
 #include "graph.h"
+#include "util.h"
 
 #include <math.h>
 
@@ -121,14 +122,19 @@ void TGraphSeries::draw(float bx, float by, float width, float height)
 //=============================================================
 TGraph::TGraph()
 {
-  this->series[0].color = 255ul;
+  this->series[0].color = (255ul << 16) + (255ul << 8 );
   this->series[1].color = 255ul << 8;
   this->series[2].color = 255ul << 16;
-  this->series[3].color = 128ul;
+  this->series[3].color = (190ul << 16) + (190ul << 8 );
   this->series[4].color = 164ul << 8;
-  this->series[5].color = 128ul << 16;
-  this->series[6].color = (255ul << 16) + (255ul << 8);
-  this->series[7].color = (255ul << 8) + (255ul << 0);
+  this->series[5].color = 190ul << 16;
+  this->series[6].color = (128ul << 8) + 255ul;
+  this->series[7].color = (255ul << 8) + 255ul;
+
+  this->lastUpdatesCountTime = 0;
+  this->updatesCount = 0;
+  this->updatesCountValue = 0;
+
 }
 
 //==============================================================
@@ -229,6 +235,14 @@ void TGraph::setGraphType(TGraphType type)
 
   switch (this->graph_type)
   {
+  case GRAPH_UPDATES:
+    this->pSeriesName = "Updates period, MS";
+    this->pSeriesName = "Updates per second";
+    this->activeCount = 2;
+    this->series[0].setRange(0, 0);
+    this->series[1].setRange(0, 0);
+    break;
+
   case GRAPH_ATTITUDE_OUTPUT:
     this->pSeriesName = "Attitude, output";
     this->activeCount = 6;
@@ -416,6 +430,26 @@ void TGraph::addDebug(int index, float value)
       this->series[i].addPoint(this->debug[i]);
     }
   }
+}
+
+//==============================================================
+//==============================================================
+void TGraph::addUpdatePeriodMS(uint32_t period)
+{
+  if (this->graph_type != GRAPH_UPDATES) return;
+  this->series[0].addPoint((float)period);
+
+  this->updatesCount++;
+  uint32_t t = GetTickCount();
+  uint32_t delta = t - this->lastUpdatesCountTime;
+  if (delta >= 1000)
+  {
+    this->updatesCountValue = this->updatesCount;
+    this->updatesCount = 0;
+    this->lastUpdatesCountTime = t;
+  }
+
+  this->series[1].addPoint((float)this->updatesCountValue);
 }
 
 //==============================================================
