@@ -64,6 +64,8 @@ INAV serial logging ( see https://github.com/iNavFlight/inav/blob/master/docs/de
 
 ![](devconsole.png)
 
+*Note: Please keep rate below ~100 characters per second, otherwise FC will freeze. For high frequencly output, use debug[] array.* 
+
 ## Graphs
 
 ![](graph.jpg)
