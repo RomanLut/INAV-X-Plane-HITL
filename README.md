@@ -179,7 +179,7 @@ Plugin will simulate analog video link quality acccording to setting. Home point
 
 # Flight path drawing
 
-Plugin can draw flight path on X-Plane map. Path is drawn on "INAV HITL" layer:
+Plugin can draw flight path on X-Plane map. 
 
 ![](doc/menu_map.jpg)
 
@@ -187,6 +187,7 @@ Coordinates can be extracted from:
 - **Latitude/Longitude from OSD** -  extracted from OSD. Note that these number have low accuracy and are not updated synchronously. Path will have jittering under zoom.
 - **debug[0]/debug[1] as Latitude/Longitude** - assumed that coordinates are provided in debug[0]/debug[1] variable by custom build (int32_t, int32_t).
 
+Path is drawn on "INAV HITL" layer:
 ![](doc/map.png)
 
 
