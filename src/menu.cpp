@@ -288,6 +288,10 @@ void TMenu::menu_handler(void * in_menu_ref, void * in_item_ref)
     g_map.setMarkingType(MMT_DEBUG_0_1);
     this->updateMapMenu();
   }
+  else if (!strcmp((const char *)in_item_ref, "map_download_waypoints"))
+  {
+    g_map.startDownloadWaypoints();
+  }
   else if (!strcmp((const char *)in_item_ref, "noise_none"))
   {
     g_osd.videoLink = VS_NONE;
@@ -364,6 +368,14 @@ void TMenu::createMenu()
 
   XPLMAppendMenuSeparator(this->menu_id);
 
+  this->map_id = XPLMAppendMenuItem(this->menu_id, "Map", (void *)"Map", 1);
+  this->map_menu_id = XPLMCreateMenu("Map", this->menu_id, this->map_id, static_menu_handler, NULL);
+  this->map_none_id = XPLMAppendMenuItem(this->map_menu_id, "None", (void *)"map_none", 1);
+  this->map_lat_lon_osd_id = XPLMAppendMenuItem(this->map_menu_id, "Latitude/Longitude from OSD", (void *)"map_lat_lon_osd", 1);
+  this->map_debug_0_1_id = XPLMAppendMenuItem(this->map_menu_id, "debug[0]/debug[1] as Latitude/Longitude", (void *)"map_debug_0_1", 1);
+  XPLMAppendMenuSeparator(this->map_menu_id);
+  this->map_download_waypoints = XPLMAppendMenuItem(this->map_menu_id, "Download waypoints from FC", (void *)"map_download_waypoints", 1);
+
   this->graph_id = XPLMAppendMenuItem(this->menu_id, "Graph", (void *)"Graph", 1);
   this->graph_menu_id = XPLMCreateMenu("Graph", this->menu_id, this->graph_id, static_menu_handler, NULL);
   this->graph_none_id = XPLMAppendMenuItem(this->graph_menu_id, "None", (void *)"graph_none", 1);
@@ -374,12 +386,6 @@ void TMenu::createMenu()
   this->graph_gyro_id = XPLMAppendMenuItem(this->graph_menu_id, "Gyroscope", (void *)"graph_gyroscope", 1);
   this->graph_debug_altitude_id = XPLMAppendMenuItem(this->graph_menu_id, "debug_mode = altitude", (void *)"graph_debug_altitude", 1);
   this->graph_debug_custom_id = XPLMAppendMenuItem(this->graph_menu_id, "debug[8] array", (void *)"graph_debug_custom", 1);
-
-  this->map_id = XPLMAppendMenuItem(this->menu_id, "Map", (void *)"Map", 1);
-  this->map_menu_id = XPLMCreateMenu("Map", this->menu_id, this->map_id, static_menu_handler, NULL);
-  this->map_none_id = XPLMAppendMenuItem(this->map_menu_id, "None", (void *)"map_none", 1);
-  this->map_lat_lon_osd_id = XPLMAppendMenuItem(this->map_menu_id, "Latitude/Longitude from OSD", (void *)"map_lat_lon_osd", 1);
-  this->map_debug_0_1_id = XPLMAppendMenuItem(this->map_menu_id, "debug[0]/debug[1] as Latitude/Longitude", (void *)"map_debug_0_1", 1);
 
 /*                               
 	this->gps_spoofing_1_id = XPLMAppendMenuItem(this->gps_fix_menu_id, "Spoofing: Freeze", (void *)"gps_spoofing_1", 1);

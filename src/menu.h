@@ -64,6 +64,7 @@ public:
   int map_none_id;
   int map_lat_lon_osd_id;
   int map_debug_0_1_id;
+  int map_download_waypoints;
 
   XPLMMenuID noise_menu_id;
   int noise_id;

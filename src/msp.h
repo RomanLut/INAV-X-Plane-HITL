@@ -7,6 +7,9 @@
 #define MSP_API_VERSION   1
 #define MSP_SIMULATOR     0x201F
 #define MSP_DEBUGMSG      253
+#define MSP_WP_GETINFO    20
+#define MSP_WP            118    //out message         get a WP, WP# is in the payload, returns (WP#, lat, lon, alt, flags) WP#0-home, WP#16-poshold
+
 
 #define MAX_MSP_MESSAGE 1024
 
@@ -26,6 +29,36 @@ struct TMSPAPIVersion
   uint8_t protocolVersion;
   uint8_t APIMajor;
   uint8_t APIMinor;
+};
+#pragma pack()
+
+
+//======================================================
+//======================================================
+#pragma pack(1)
+struct TMSPWPInfo
+{
+  uint8_t reserved;             // Reserved for waypoint capabilities
+  uint8_t maxWaypoints;         // Maximum number of waypoints supported
+  uint8_t waypointsListValid;   // Is current mission valid
+  uint8_t waypointsCount;       // Number of waypoints in current mission
+};
+#pragma pack()
+
+//======================================================
+//======================================================
+#pragma pack(1)
+struct TMSPWP
+{
+  uint8_t index;
+  uint8_t action;
+  int32_t lat;
+  int32_t lon;
+  int32_t alt; //cm
+  uint16_t p1;
+  uint16_t p2;
+  uint16_t p3;
+  uint8_t flags;
 };
 #pragma pack()
 

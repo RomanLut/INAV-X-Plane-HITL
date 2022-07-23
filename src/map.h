@@ -1,8 +1,10 @@
 #pragma once
 
 #include "config.h"
+#include "msp.h"
 
 #define MAX_MAP_POINTS  10000
+#define MAX_WAYPOINTS   255
 
 //=======================================================
 //=======================================================
@@ -29,6 +31,10 @@ public:
   void setMarkingType(TMapMarkType type);
   TMapMarkType getMarkingType();
 
+  void startDownloadWaypoints();
+  void onWPInfo(const TMSPWPInfo* messageBuffer);
+  void onWP(const TMSPWP* messageBuffer);
+
 private:
 
   typedef struct
@@ -48,6 +54,11 @@ private:
   float crossLat = 0;
   float crossLon = 0;
 
+  TCoords waypoints[MAX_WAYPOINTS];
+  int waypointsCount = 0;
+
+  int waypointsDownloadState = -1;
+                                    
   void createOurMapLayer(const char * mapIdentifier, void * refcon);
   static void createOurMapLayerStatic(const char * mapIdentifier, void * refcon);
   static void willBeDeletedStatic(XPLMMapLayerID layer, void * inRefcon);
@@ -57,6 +68,7 @@ private:
   void addPoint(float lat, float lon);
   void addPointEx(float lat, float lon);
 
+  void retrieveNextWaypoint();
 };
 
 extern TMap g_map;

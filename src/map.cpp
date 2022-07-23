@@ -1,5 +1,7 @@
 #include "map.h"
 #include "config.h"
+#include "msp.h"
+#include "util.h"
 
 TMap g_map;
 
@@ -95,8 +97,6 @@ void TMap::drawMarkingsStatic(XPLMMapLayerID layer, const float * inMapBoundsLef
 //==============================================================
 void TMap::drawMarkings(XPLMMapLayerID layer, const float * inMapBoundsLeftTopRightBottom, float zoomRatio, float mapUnitsPerUserInterfaceUnit, XPLMMapStyle mapStyle, XPLMMapProjectionID projection, void * inRefcon)
 {
-  if (this->pHead == this->pTail) return;
-
   XPLMSetGraphicsState(
     0 /* no fog */,
     0 /* 0 texture units */,
@@ -107,33 +107,59 @@ void TMap::drawMarkings(XPLMMapLayerID layer, const float * inMapBoundsLeftTopRi
     0 /* no depth writing */
   );
 
-  glColor3f(1, 0, 0);
-
   float x;
   float y;
 
-  glBegin(GL_LINE_STRIP);
-  for (int i = this->pHead; i != this->pTail; i++)
+  if (this->waypointsCount > 1)
   {
-    if (i >= MAX_MAP_POINTS) i = 0;
-    XPLMMapProject(projection, coords[i].lat, coords[i].lon, &x, &y);
-    glVertex2f(x, y);
+    glColor3f(1, 0, 1);
+    glBegin(GL_LINE_STRIP);
+    for (int i = 0; i < this->waypointsCount; i++)
+    {
+      XPLMMapProject(projection, waypoints[i].lat, waypoints[i].lon, &x, &y);
+      glVertex2f(x, y);
+    }
+    glEnd();
+
+    for (int i = 0; i < this->waypointsCount; i++)
+    {
+      const float width = XPLMMapScaleMeter(projection, this->crossLat, this->crossLon) * 10;
+      XPLMMapProject(projection, waypoints[i].lat, waypoints[i].lon, &x, &y);
+      glBegin(GL_LINE_LOOP);
+      glVertex2f(x - width, y - width);
+      glVertex2f(x - width, y + width);
+      glVertex2f(x + width, y + width);
+      glVertex2f(x + width, y - width);
+      glEnd();
+    }
   }
-  glEnd();
 
-  const float width = XPLMMapScaleMeter(projection, this->crossLat, this->crossLon) * 10;
+  if (this->pHead != this->pTail)
+  {
+    glColor3f(1, 0, 0);
+    glBegin(GL_LINE_STRIP);
+    for (int i = this->pHead; i != this->pTail; i++)
+    {
+      if (i >= MAX_MAP_POINTS) i = 0;
+      XPLMMapProject(projection, coords[i].lat, coords[i].lon, &x, &y);
+      glVertex2f(x, y);
+    }
+    glEnd();
 
-  XPLMMapProject(projection, this->crossLat, this->crossLon, &x, &y);
+    const float width = XPLMMapScaleMeter(projection, this->crossLat, this->crossLon) * 10;
 
-  glBegin(GL_LINE_STRIP);
-  glVertex2f(x - width, y);
-  glVertex2f(x + width, y);
-  glEnd();
+    XPLMMapProject(projection, this->crossLat, this->crossLon, &x, &y);
 
-  glBegin(GL_LINE_STRIP);
-  glVertex2f(x, y -  width);
-  glVertex2f(x, y +  width);
-  glEnd();
+    glBegin(GL_LINE_STRIP);
+    glVertex2f(x - width, y);
+    glVertex2f(x + width, y);
+    glEnd();
+
+    glBegin(GL_LINE_STRIP);
+    glVertex2f(x, y - width);
+    glVertex2f(x, y + width);
+    glEnd();
+  }
 }
 
 //==============================================================
@@ -205,3 +231,65 @@ void TMap::addLatLonOSD(float lat, float lon)
     this->addPointEx(lat, lon);
   }
 }
+
+//==============================================================
+//==============================================================
+void TMap::startDownloadWaypoints()
+{
+  this->waypointsDownloadState = 0;
+  this->waypointsCount = 0;
+
+  if (!g_msp.sendCommand(MSP_WP_GETINFO, NULL, 0)) this->waypointsDownloadState = -1;
+}
+
+//==============================================================
+//==============================================================
+void TMap::onWPInfo(const TMSPWPInfo* messageBuffer)
+{
+  LOG("Got WP Info command, valid = %d, count = %d", messageBuffer->waypointsListValid, messageBuffer->waypointsCount);
+
+  if (this->waypointsDownloadState != 0) return;
+  if (!messageBuffer->waypointsListValid || (messageBuffer->waypointsCount == 0))
+  {
+    this->waypointsDownloadState = -1;
+  }
+  else
+  {
+    this->waypointsDownloadState = 1;
+    this->waypointsCount = messageBuffer->waypointsCount;
+
+    for (int i = 0; i < this->waypointsCount; i++)
+    {
+      this->waypoints[i].lat = 0;
+      this->waypoints[i].lon = 0;
+    }
+
+    this->retrieveNextWaypoint();
+  }
+}
+
+//==============================================================
+//==============================================================
+void TMap::onWP(const TMSPWP* messageBuffer)
+{
+  LOG("Got WP command, index = %d", messageBuffer->index);
+
+  if ((messageBuffer->index < 1) || (messageBuffer->index > this->waypointsCount)) return;
+
+  this->waypoints[messageBuffer->index-1].lat = messageBuffer->lat / INAV_LAT_LON_SCALE;
+  this->waypoints[messageBuffer->index-1].lon = messageBuffer->lon / INAV_LAT_LON_SCALE;
+  this->waypointsDownloadState++;
+  if (this->waypointsDownloadState <= this->waypointsCount )
+  {
+    this->retrieveNextWaypoint();
+  }
+}
+
+//==============================================================
+//==============================================================
+void TMap::retrieveNextWaypoint()
+{
+  if (!g_msp.sendCommand(MSP_WP, &this->waypointsDownloadState, 1)) this->waypointsDownloadState = -100;
+}
+
+

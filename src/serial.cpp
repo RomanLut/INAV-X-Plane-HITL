@@ -174,6 +174,8 @@ int Serial::ReadData(unsigned char *buffer, unsigned int nbChar)
 //======================================================
 bool Serial::WriteData(unsigned char *buffer, unsigned int nbChar)
 {
+  if (!this->IsConnected()) return false;
+
   if (this->writeBufferCount + nbChar < SERIAL_BUFFER_SIZE)
   {
     for (unsigned int i = 0; i < nbChar; i++)

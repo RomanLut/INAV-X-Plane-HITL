@@ -67,6 +67,14 @@ void cbMessage(int code, const uint8_t* messageBuffer, int length)
   {
     LOG("INAV: %s\n", (const char*)messageBuffer);
   }
+  else if (code == MSP_WP_GETINFO)
+  {
+    g_map.onWPInfo((const TMSPWPInfo*)messageBuffer);
+  }
+  else if (code == MSP_WP)
+  {
+    g_map.onWP((const TMSPWP*)messageBuffer);
+  }
 
 }
 

@@ -265,6 +265,8 @@ uint8_t MSP::crc8_dvb_s2(uint8_t crc, unsigned char a)
 //======================================================
 bool MSP::sendCommand(uint16_t messageID, void * payload, uint16_t size)
 {
+  if (!this->serial || !this->serial->IsConnected()) return false;
+
   uint8_t flag = 0;
   int msg_size = 9;
   uint8_t crc = 0;
