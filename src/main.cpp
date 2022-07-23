@@ -11,6 +11,7 @@
 #include "osd.h"
 #include "graph.h"
 #include "sound.h"
+#include "map.h"
 
 uint32_t lastUpdateTime;
 bool wait;
@@ -141,6 +142,8 @@ PLUGIN_API void	XPluginStop(void)
 
   g_osd.destroy();
   g_sound.destroy();
+  g_map.destroy();
+
 }
 
 //==============================================================
@@ -153,6 +156,8 @@ PLUGIN_API int XPluginEnable(void)
   g_stats.init();
   g_simData.init(); //initialize before memu
   g_simData.updateFromXPlane();
+
+  g_map.init();
 
   g_menu.createMenu();
 

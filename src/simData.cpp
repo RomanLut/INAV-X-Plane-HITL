@@ -3,6 +3,7 @@
 #include "graph.h"
 #include "util.h"
 #include "osd.h"
+#include "map.h"
 
 #include <math.h>
 
@@ -162,6 +163,11 @@ void TSimData::updateFromINAV(const TMSPSimulatorFromINAV* data)
 
   g_graph.addDebug(data->debugIndex & 7, (float)data->debugValue);
   g_graph.addOutputYPR(this->control_yaw, this->control_pitch, this->control_roll);
+
+  if ((data->debugIndex & 7 ) == 7)
+  {
+    g_map.addDebug(g_stats.debug[0], g_stats.debug[1]);
+  }
 
   uint32_t t = GetTickCount();
   uint32_t delta = t - this->lastUpdateMS;

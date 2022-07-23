@@ -59,6 +59,12 @@ public:
   int graph_debug_altitude_id;
   int graph_debug_custom_id;
 
+  XPLMMenuID map_menu_id;
+  int map_id;
+  int map_none_id;
+  int map_lat_lon_osd_id;
+  int map_debug_0_1_id;
+
   XPLMMenuID noise_menu_id;
   int noise_id;
   int noise_none_id;
@@ -83,6 +89,7 @@ public:
   void updateBeeperMenu();
   void updateAttitudeMenu();
   void updateGraphMenu();
+  void updateMapMenu();
   void updateNoiseMenu();
 
   void actionDisconnect();

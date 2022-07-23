@@ -212,6 +212,7 @@
     <ClInclude Include="stats.h" />
     <ClInclude Include="util.h" />
     <ClInclude Include="sound.h" />
+    <ClInclude Include="map.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="graph.cpp" />
@@ -225,6 +226,7 @@
     <ClCompile Include="stats.cpp" />
     <ClCompile Include="sound.cpp" />
     <ClCompile Include="util.cpp" />
+    <ClCompile Include="map.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

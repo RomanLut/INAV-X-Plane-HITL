@@ -5,6 +5,7 @@
 #include "util.h"
 #include "stats.h"
 #include "msp.h"
+#include "map.h"
 
 TOSD g_osd;
 
@@ -37,6 +38,11 @@ TOSD g_osd;
 
 #define INERFERENCE_TEXTURE_WIDTH   1024
 #define INERFERENCE_TEXTURE_HEIGHT  128
+
+#define SYM_LAT                     0x03  // 003 GPS LAT
+#define SYM_LON                     0x04  // 004 GPS LON
+#define SYM_ZERO_HALF_TRAILING_DOT  0xA1  // 161 to 170 Numbers with trailing dot
+#define SYM_ZERO_HALF_LEADING_DOT   0xB1  // 177 to 186 Numbers with leading dot
 
 //==============================================================
 //==============================================================
@@ -465,6 +471,7 @@ void TOSD::updateFromINAV(const TMSPSimulatorFromINAV* message)
         osdRow++;
         if (osdRow == 16)
         {
+          this->extractLatLon();
           osdRow = 0;
           g_stats.OSDUpdates++;
         }
@@ -568,4 +575,81 @@ void TOSD::showMsg(const char* msg)
 {
   this->clear();
   this->drawString(0, 4, msg);
+}
+
+//==============================================================
+//==============================================================
+float TOSD::extractFloat(int index)
+{
+  int rowEndIndex = (index / OSD_COLS) * OSD_COLS + OSD_COLS;
+
+  int res = 0;
+  bool neg = false;
+  int div = 1;
+  bool p = false;
+
+  index++;
+
+  while (index < rowEndIndex)
+  {
+    int ch = CHAR_BYTE(this->osdData[index]);
+
+    if ( ch == '-')
+    {
+      neg = true;
+    }
+    else if ((ch >= '0') && (ch <= '9'))
+    {
+      res = res * 10 + (ch - '0');
+    }
+    else if ((ch >= SYM_ZERO_HALF_TRAILING_DOT) && (ch <= (SYM_ZERO_HALF_TRAILING_DOT+10)))
+    {
+      res = res * 10 + (ch - SYM_ZERO_HALF_TRAILING_DOT);
+    }
+    else if ((ch >= SYM_ZERO_HALF_LEADING_DOT) && (ch <= (SYM_ZERO_HALF_LEADING_DOT + 10)))
+    {
+      res = res * 10 + (ch - SYM_ZERO_HALF_LEADING_DOT);
+      p = true;
+    }
+    else
+    {
+      break;
+    }
+      
+    index++;
+    if (p) div *= 10;
+  }
+
+  float resf = res * 1.0f / div;
+
+  return neg ? -resf : resf;
+}
+
+//==============================================================
+//==============================================================
+void TOSD::extractLatLon()
+{
+  float lat = 0;
+  float lon = 0;
+
+  int flags = 0;
+
+  for (int i = 0; i < OSD_ROWS*OSD_COLS; i++)
+  {
+    if (CHAR_BYTE(osdData[i]) == SYM_LAT)
+    {
+      lat = this->extractFloat(i);
+      flags |= 1;
+    }
+    if (CHAR_BYTE(osdData[i]) == SYM_LON)
+    {
+      lon = this->extractFloat(i);
+      flags |= 2;
+    }
+  }
+
+  if (flags == 3)
+  {
+    g_map.addLatLonOSD(lat, lon);
+  }
 }

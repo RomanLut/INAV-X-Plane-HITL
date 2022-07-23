@@ -5,6 +5,7 @@
 #include "simData.h"
 #include "osd.h"
 #include "graph.h"
+#include "map.h"
 
 TMenu g_menu;
 
@@ -92,6 +93,15 @@ void TMenu::updateGraphMenu()
   XPLMCheckMenuItem(this->graph_menu_id, this->graph_acc_id, g_graph.getGraphType() == GRAPH_ACC ? xplm_Menu_Checked : xplm_Menu_Unchecked);
   XPLMCheckMenuItem(this->graph_menu_id, this->graph_gyro_id, g_graph.getGraphType() == GRAPH_GYRO ? xplm_Menu_Checked : xplm_Menu_Unchecked);
   XPLMCheckMenuItem(this->graph_menu_id, this->graph_debug_altitude_id, g_graph.getGraphType() == GRAPH_DEBUG_ALTITUDE ? xplm_Menu_Checked : xplm_Menu_Unchecked);
+}
+
+//==============================================================
+//==============================================================
+void TMenu::updateMapMenu()
+{
+  XPLMCheckMenuItem(this->map_menu_id, this->map_none_id, g_map.getMarkingType() == MMT_NONE ? xplm_Menu_Checked : xplm_Menu_Unchecked);
+  XPLMCheckMenuItem(this->map_menu_id, this->map_lat_lon_osd_id, g_map.getMarkingType() == MMT_LAT_LON_OSD ? xplm_Menu_Checked : xplm_Menu_Unchecked);
+  XPLMCheckMenuItem(this->map_menu_id, this->map_debug_0_1_id, g_map.getMarkingType() == MMT_DEBUG_0_1 ? xplm_Menu_Checked : xplm_Menu_Unchecked);
 }
 
 //==============================================================
@@ -263,6 +273,21 @@ void TMenu::menu_handler(void * in_menu_ref, void * in_item_ref)
     g_graph.setGraphType(GRAPH_DEBUG_CUSTOM);
     this->updateGraphMenu();
   }
+  else if (!strcmp((const char *)in_item_ref, "map_none"))
+  {
+    g_map.setMarkingType(MMT_NONE);
+    this->updateMapMenu();
+  }
+  else if (!strcmp((const char *)in_item_ref, "map_lat_lon_osd"))
+  {
+    g_map.setMarkingType(MMT_LAT_LON_OSD);
+    this->updateMapMenu();
+  }
+  else if (!strcmp((const char *)in_item_ref, "map_debug_0_1"))
+  {
+    g_map.setMarkingType(MMT_DEBUG_0_1);
+    this->updateMapMenu();
+  }
   else if (!strcmp((const char *)in_item_ref, "noise_none"))
   {
     g_osd.videoLink = VS_NONE;
@@ -325,7 +350,7 @@ void TMenu::createMenu()
   this->beeper_default_id = XPLMAppendMenuItem(this->beeper_menu_id, "Default", (void *)"beeper_default", 1);
   this->beeper_mute_id = XPLMAppendMenuItem(this->beeper_menu_id, "Mute", (void *)"beeper_mute", 1);
 
-  XPLMAppendMenuSeparator(this->osd_menu_id);
+  XPLMAppendMenuSeparator(this->menu_id);
 
   this->osd_nearest_id = XPLMAppendMenuItem(this->osd_menu_id, "Smoothing: Nearest", (void *)"osd_nearest", 1);
   this->osd_linear_id = XPLMAppendMenuItem(this->osd_menu_id, "Smoothing: Linear", (void *)"osd_linear", 1);
@@ -337,7 +362,7 @@ void TMenu::createMenu()
   this->noise_10KM_id = XPLMAppendMenuItem(this->noise_menu_id, "Link up to 10km", (void *)"noise_10km", 1);
   this->noise_50KM_id = XPLMAppendMenuItem(this->noise_menu_id, "Link up to 50km", (void *)"noise_50km", 1);
 
-  XPLMAppendMenuSeparator(this->osd_menu_id);
+  XPLMAppendMenuSeparator(this->menu_id);
 
   this->graph_id = XPLMAppendMenuItem(this->menu_id, "Graph", (void *)"Graph", 1);
   this->graph_menu_id = XPLMCreateMenu("Graph", this->menu_id, this->graph_id, static_menu_handler, NULL);
@@ -349,6 +374,12 @@ void TMenu::createMenu()
   this->graph_gyro_id = XPLMAppendMenuItem(this->graph_menu_id, "Gyroscope", (void *)"graph_gyroscope", 1);
   this->graph_debug_altitude_id = XPLMAppendMenuItem(this->graph_menu_id, "debug_mode = altitude", (void *)"graph_debug_altitude", 1);
   this->graph_debug_custom_id = XPLMAppendMenuItem(this->graph_menu_id, "debug[8] array", (void *)"graph_debug_custom", 1);
+
+  this->map_id = XPLMAppendMenuItem(this->menu_id, "Map", (void *)"Map", 1);
+  this->map_menu_id = XPLMCreateMenu("Map", this->menu_id, this->map_id, static_menu_handler, NULL);
+  this->map_none_id = XPLMAppendMenuItem(this->map_menu_id, "None", (void *)"map_none", 1);
+  this->map_lat_lon_osd_id = XPLMAppendMenuItem(this->map_menu_id, "Latitude/Longitude from OSD", (void *)"map_lat_lon_osd", 1);
+  this->map_debug_0_1_id = XPLMAppendMenuItem(this->map_menu_id, "debug[0]/debug[1] as Latitude/Longitude", (void *)"map_debug_0_1", 1);
 
 /*                               
 	this->gps_spoofing_1_id = XPLMAppendMenuItem(this->gps_fix_menu_id, "Spoofing: Freeze", (void *)"gps_spoofing_1", 1);
@@ -364,6 +395,7 @@ void TMenu::createMenu()
   this->updateAttitudeMenu();
   this->updateNoiseMenu();
   this->updateGraphMenu();
+  this->updateMapMenu();
 }
 
 //==============================================================

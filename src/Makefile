@@ -14,6 +14,7 @@ SOURCES = \
 	stats.cpp \
 	util.cpp \
 	sound.cpp \
+	map.cpp \
 
 LIBS = -lopenal
 

@@ -49,6 +49,8 @@ public:
 
   void showMsg(const char* msg);
 
+  void extractLatLon();
+
 private:
   int fontTextureId = 0;
   int noiseTextureId = 0;
@@ -76,6 +78,8 @@ private:
   void drawInterference( float amount );
 
   float getNoiseAmount();
+
+  float extractFloat(int index);
 
 };
 
