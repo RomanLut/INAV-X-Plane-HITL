@@ -177,6 +177,20 @@ Plugin will simulate analog video link quality acccording to setting. Home point
 
 ![](doc/noise.jpg)
 
+# Flight path drawing
+
+Plugin can draw flight path on X-Plane map. 
+
+![](doc/menu_map.jpg)
+
+Coordinates can be extracted from:
+- **Latitude/Longitude from OSD** -  extracted from OSD. Note that these number have low accuracy and are not updated synchronously. Path will have jittering under zoom.
+- **debug[0]/debug[1] as Latitude/Longitude** - assumed that coordinates are provided in debug[0]/debug[1] variables by custom INAV build (int32_t, int32_t).
+
+Path is drawn on "INAV HITL" layer:
+![](doc/map.png)
+
+
 # Servo autotrim
 
 Autotrim and servo autotrim have no effect in simulation (TODO).
@@ -184,6 +198,12 @@ Autotrim and servo autotrim have no effect in simulation (TODO).
 # Development
 
 See [development.md](doc/development.md)
+
+# Special thanks
+
+Many thanks to Sergii Sevriugin for initial implementation and a lot of testing
+
+
 
 # Links
 
