@@ -64,6 +64,8 @@ INAV serial logging ( see https://github.com/iNavFlight/inav/blob/master/docs/de
 
 ![](devconsole.png)
 
+*Note: Please keep rate below ~100 characters per second, otherwise FC will freeze. For high frequencly output, use debug[] array.* 
+
 ## Graphs
 
 ![](graph.jpg)
@@ -76,6 +78,8 @@ Plugin can draw number of graphs for debugging:
 - **Gyroscope:** Simulated Gyroscope readings
 - **"debug_mode = altitude:"** Visualize debug[] array in this mode
 - **"debug[8] array:** Graph of debug[] values. Automatic scale. Values are shown as int32_t.
+
+*Hint: To reset automatic scale, select graph in menu again.*
   
   
 # Assitance
