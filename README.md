@@ -199,6 +199,12 @@ Autotrim and servo autotrim have no effect in simulation (TODO).
 
 See [development.md](doc/development.md)
 
+# Special thanks
+
+Many thanks to Sergii Sevriugin for initial implementation and a lot of testing
+
+
+
 # Links
 
 - X-Plane INAV HITL prototype has been implemented by Sergii Sevriugin: 
