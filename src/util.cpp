@@ -42,7 +42,7 @@ void playSound(const char* pFileName)
 
 #ifdef USE_OPENAL
   g_sound.play(assetName);
-#elif
+#else
   PlaySound(assetName, NULL, SND_ASYNC);
 #endif
 }

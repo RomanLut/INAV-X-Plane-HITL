@@ -20,7 +20,8 @@
 
 #if IBM
 #include <windows.h>
-#define USE_OPENAL
+//do not use OpanAL on windows to avoid requirements of OpenAL installation
+//#define USE_OPENAL
 #elif LIN
 #include <unistd.h>
 #define USE_OPENAL
