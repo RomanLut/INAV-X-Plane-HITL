@@ -186,6 +186,7 @@ Plugin can draw flight path on X-Plane map.
 Coordinates can be extracted from:
 - **Latitude/Longitude from OSD** -  extracted from OSD. Note that these number have low accuracy and are not updated synchronously. Path will have jittering under zoom.
 - **debug[0]/debug[1] as Latitude/Longitude** - assumed that coordinates are provided in debug[0]/debug[1] variables by custom INAV build (int32_t, int32_t).
+- **Download waypoints from FC** - this option will download Mission waypoints from FC and show on X-Plane map (in pink color)
 
 Path is drawn on "INAV HITL" layer:
 ![](doc/map.png)
