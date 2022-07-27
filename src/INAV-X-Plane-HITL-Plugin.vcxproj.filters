@@ -21,6 +21,7 @@
     <ClCompile Include="util.cpp" />
     <ClCompile Include="sound.cpp" />
     <ClCompile Include="util.cpp" />
+    <ClCompile Include="map.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="graph.h" />
@@ -43,6 +44,7 @@
     <ClInclude Include="stats.h" />
     <ClInclude Include="util.h" />
     <ClInclude Include="sound.h" />
+    <ClInclude Include="map.h" />
   </ItemGroup>
   <ItemGroup>
     <Filter Include="assets">
