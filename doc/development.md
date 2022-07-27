@@ -1,6 +1,18 @@
 # Development
 
-Plugin is compiled using Microsoft Visual Studio 2017.
+# Building for Windows
+
+Build with Microsoft Visual Studio 2017.
+
+# Building for Linux
+
+Check Dockerfile for building requiremens on Linux https://github.com/RomanLut/INAV-X-Plane-HITL/blob/main/Dockerfile
+
+Can be built on Windows using docker:
+
+```docker build -t inav-hitl-build  .```
+
+```docker run --rm -it -u root -v //d/Github/inav/INAV-X-Plane-HITL-Plugin/INAV-X-Plane-HITL/:/trunk inav-hitl-build ```
 
 # Concerns
 
