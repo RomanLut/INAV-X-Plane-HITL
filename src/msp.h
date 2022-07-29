@@ -17,8 +17,10 @@
 //======================================================
 typedef enum
 {
-  FIF_ARMED       = 64,
-  FIF_IS_AIRPLANE = 128
+  FIF_ARMED                   = 64,
+  FIF_IS_AIRPLANE             = 128,
+  FIF_OSD_DISABLED            = 32,
+  FIF_ANALOG_OSD_NOT_FOUND    = 16
 } TFromINAVFlags;
 
 //======================================================

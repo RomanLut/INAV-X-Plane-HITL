@@ -55,6 +55,15 @@ void cbMessage(int code, const uint8_t* messageBuffer, int length)
       }
       else
       {
+        if (g_simData.isOSDDisabled)
+        {
+          g_osd.showMsg("OSD IS DISABLED:\n\nCONFIURATION\n->OTHER FEATURES\n->OSD");
+        }
+        else if (g_simData.isOSDAnalogOSDNotFound)
+        {
+          g_osd.showMsg("SUPPORTED OSD TYPE\nNOT FOUND OR DISABLED\n\nCHECK REQUIREMENTS\nON PROJECT PAGE");
+        }
+
         g_simData.sendToXPlane();
 
         g_osd.updateFromINAV((const TMSPSimulatorFromINAV*)messageBuffer);

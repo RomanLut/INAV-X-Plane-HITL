@@ -492,13 +492,20 @@ void TOSD::clear()
 //==============================================================
 void TOSD::drawString( int row, int col, const char* str)
 {
-
   uint16_t* p = &this->osdData[ row * OSD_COLS + col];
 
   while (*str && p < &this->osdData[OSD_ROWS * OSD_COLS ])
   {
     char c = *str++;  //avoid macro side effect
-    *p++ = MAKE_CHAR_MODE( c, 0 );
+    if (c == '\n')
+    {
+      row++;
+      p = &this->osdData[row * OSD_COLS + col];
+    }
+    else
+    {
+      *p++ = MAKE_CHAR_MODE(c, 0);
+    }
   }
 
 }

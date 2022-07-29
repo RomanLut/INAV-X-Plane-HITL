@@ -129,6 +129,8 @@ public:
 
   bool isAirplane;
   bool isArmed;
+  bool isOSDDisabled;
+  bool isOSDAnalogOSDNotFound;
 
   //-- state --
   bool emulateBattery;
