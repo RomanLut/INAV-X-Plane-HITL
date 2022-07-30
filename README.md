@@ -80,7 +80,7 @@ Configure **Aircraft with tail** for **Aerolite** and **Flying wing** for **NK S
 
 Platforms other than "Airplane" are not supported.
 
-*Note: If FC is mouted on UAV, you can use profiles to have different PIDs for simulated airplane. Motor and Servo outputs are disabled in simulation mode.*
+*Note: If FC is mounted on UAV, you can use profiles to have different PIDs for simulated airplane. Motor and Servo outputs are disabled in simulation mode.*
 
 *Note: There is no need to connect battery, if receiver is powered from USB connection.*
 
