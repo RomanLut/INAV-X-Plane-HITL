@@ -74,7 +74,7 @@ This will add plugin to the **Aerolite** airplane and install additional **NK_Su
 
 # Flight controller configuration
 
-Flight controller should be fully configured like for the real flight. There is no need to calibrate mixer and motors output.
+Flight controller should be fully configured like for the real flight. There is no need to configure mixer and motors output.
 
 Configure **Aircraft with tail** for **Aerolite** and **Flying wing** for **NK Sufwing**. It is possible to use plugin with any other airplane (copy plugin to corresponding Aircraft subfolder).
 
