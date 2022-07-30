@@ -74,13 +74,13 @@ This will add plugin to the **Aerolite** airplane and install additional **NK_Su
 
 # Flight controller configuration
 
-Flight controller should be fully configured like for the real flight. There is no need to calibrate mixer and motors output.
+Flight controller should be fully configured like for the real flight. There is no need to configure mixer and motors output.
 
 Configure **Aircraft with tail** for **Aerolite** and **Flying wing** for **NK Sufwing**. It is possible to use plugin with any other airplane (copy plugin to corresponding Aircraft subfolder).
 
 Platforms other than "Airplane" are not supported.
 
-*Note: If FC is mouted on UAV, you can use profiles to have different PIDs for simulated airplane. Motor and Servo outputs are disabled in simulation mode.*
+*Note: If FC is mounted on UAV, you can use profiles to have different PIDs for simulated airplane. Motor and Servo outputs are disabled in simulation mode.*
 
 *Note: There is no need to connect battery, if receiver is powered from USB connection.*
 
@@ -146,7 +146,8 @@ It is highly recommended to use Flight Controller with OSD to see system message
 
 The following requirements should be met to have OSD drawn in **X-Plane**:
 
-- OSD should be configured and enabled in **INAV Configurator** ( `AUTO`, `PAL` or `NTSC` type ).
+- OSD should be configured as `AUTO`, `PAL` or `NTSC` type in "OSD" tab in **INAV Configurator**.
+- OSD should be enabled in "Configuration->Other features->OSD" in **INAV Configurator**.
 - OSD chip should be present on Flight Controller (MAX7456). OSD will not work without MAX7456 compatible chip. OSD will not work with HD Zero, DJI or Pixel OSD selected in configuration.
 - **X-Plane** should **NOT** use **Vulkan** drivers. Please uncheck the following option:
 
@@ -167,7 +168,7 @@ OSD is using **Bold** font from **INAV Configurator**. It is possible to replace
 
 # Beeper
 
-For coonvience, it is possible to mute beeper in simulation mode:
+For convience, it is possible to mute beeper in simulation mode:
 
 ![](doc/beeper.png)
 
