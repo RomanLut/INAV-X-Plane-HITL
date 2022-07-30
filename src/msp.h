@@ -64,19 +64,28 @@ struct TMSPWP
 };
 #pragma pack()
 
+#define MSP_SIMULATOR_VERSION 2
+
+//======================================================
+//======================================================
+typedef enum
+{
+  SIMU_ENABLE               = (1 << 0),
+  SIMU_SIMULATE_BATTERY     = (1 << 1),
+  SIMU_MUTE_BEEPER          = (1 << 2),
+  SIMU_USE_SENSORS          = (1 << 3),
+  SIMU_HAS_NEW_GPS_DATA     = (1 << 4),
+  SIMU_EXT_BATTERY_VOLTAGE  = (1 << 5) //extend MSP_SIMULATOR format 2
+} TSimulatorFlags;
+
 //======================================================
 //======================================================
 #pragma pack(1)
 struct TMSPSimulatorToINAV
 {
-  uint8_t version; //2
+  uint8_t version; //MSP_SIMULATOR_VERSION
 
-  // SIMU_ENABLE				    = (1 << 0),
-  // SIMU_SIMULATE_BATTERY  = (1 << 1),
-  // SIMU_MUTE_BEEPER       = (1 << 2),
-  // SIMU_USE_SENSORS       = (1 << 3)
-  uint8_t flags;  
-
+  uint8_t flags; // TSimulatorFlags
   uint8_t fix;
   uint8_t numSat;
   int32_t lat;
@@ -103,6 +112,9 @@ struct TMSPSimulatorToINAV
   int16_t mag_x;
   int16_t mag_y;
   int16_t mag_z;
+
+  //SIMU_EXT_BATTERY_VOLTAGE in format 2
+  uint8_t vbat; //126->12.6V
 };
 #pragma pack()
 

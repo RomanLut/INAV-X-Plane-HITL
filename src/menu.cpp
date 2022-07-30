@@ -70,8 +70,12 @@ void TMenu::updateOSDMenu()
 //==============================================================
 void TMenu::updateBatteryMenu()
 {
-  XPLMCheckMenuItem(this->battery_menu_id, this->battery_default_id, g_simData.emulateBattery == false ? xplm_Menu_Checked : xplm_Menu_Unchecked);
-  XPLMCheckMenuItem(this->battery_menu_id, this->battery_emulate_id, g_simData.emulateBattery == true ? xplm_Menu_Checked : xplm_Menu_Unchecked);
+  XPLMCheckMenuItem(this->battery_menu_id, this->battery_none_id, g_simData.batEmulation == BATTERY_NONE ? xplm_Menu_Checked : xplm_Menu_Unchecked);
+  XPLMCheckMenuItem(this->battery_menu_id, this->battery_infinite_id, g_simData.batEmulation == BATTERY_INFINITE ? xplm_Menu_Checked : xplm_Menu_Unchecked);
+  XPLMCheckMenuItem(this->battery_menu_id, this->battery_discharged_id, g_simData.batEmulation == BATTERY_DISCHAGED ? xplm_Menu_Checked : xplm_Menu_Unchecked);
+  XPLMCheckMenuItem(this->battery_menu_id, this->battery_3min_id, g_simData.batEmulation == BATTERY_3MIN ? xplm_Menu_Checked : xplm_Menu_Unchecked);
+  XPLMCheckMenuItem(this->battery_menu_id, this->battery_10min_id, g_simData.batEmulation == BATTERY_10MIN ? xplm_Menu_Checked : xplm_Menu_Unchecked);
+  XPLMCheckMenuItem(this->battery_menu_id, this->battery_30min_id, g_simData.batEmulation == BATTERY_30MIN ? xplm_Menu_Checked : xplm_Menu_Unchecked);
 }
 
 //==============================================================
@@ -203,14 +207,34 @@ void TMenu::menu_handler(void * in_menu_ref, void * in_item_ref)
     g_osd.smoothed = true;
     this->updateOSDMenu();
   }
-  else if (!strcmp((const char *)in_item_ref, "battery_default"))
+  else if (!strcmp((const char *)in_item_ref, "battery_none"))
   {
-    g_simData.emulateBattery = false;
+    g_simData.setBateryEmulation(BATTERY_NONE);
     this->updateBatteryMenu();
   }
-  else if (!strcmp((const char *)in_item_ref, "battery_emulate"))
+  else if (!strcmp((const char *)in_item_ref, "battery_infinite"))
   {
-    g_simData.emulateBattery = true;
+    g_simData.setBateryEmulation(BATTERY_INFINITE);
+    this->updateBatteryMenu();
+  }
+  else if (!strcmp((const char *)in_item_ref, "battery_discharged"))
+  {
+    g_simData.setBateryEmulation(BATTERY_DISCHAGED);
+    this->updateBatteryMenu();
+  }
+  else if (!strcmp((const char *)in_item_ref, "battery_3min"))
+  {
+    g_simData.setBateryEmulation(BATTERY_3MIN);
+    this->updateBatteryMenu();
+  }
+  else if (!strcmp((const char *)in_item_ref, "battery_10min"))
+  {
+    g_simData.setBateryEmulation(BATTERY_10MIN);
+    this->updateBatteryMenu();
+  }
+  else if (!strcmp((const char *)in_item_ref, "battery_30min"))
+  {
+    g_simData.setBateryEmulation(BATTERY_30MIN);
     this->updateBatteryMenu();
   }
   else if (!strcmp((const char *)in_item_ref, "beeper_default"))
@@ -346,8 +370,12 @@ void TMenu::createMenu()
 
   this->battery_id = XPLMAppendMenuItem(this->menu_id, "Battery", (void *)"Battery", 1);
   this->battery_menu_id = XPLMCreateMenu("Battery", this->menu_id, this->battery_id, static_menu_handler, NULL);
-  this->battery_default_id = XPLMAppendMenuItem(this->battery_menu_id, "Default", (void *)"battery_default", 1);
-  this->battery_emulate_id = XPLMAppendMenuItem(this->battery_menu_id, "Emulate 3s", (void *)"battery_emulate", 1);
+  this->battery_none_id = XPLMAppendMenuItem(this->battery_menu_id, "No emulation", (void *)"battery_none", 1);
+  this->battery_infinite_id = XPLMAppendMenuItem(this->battery_menu_id, "Infinite 3s", (void *)"battery_infinite", 1);
+  this->battery_discharged_id = XPLMAppendMenuItem(this->battery_menu_id, "Discharged 3s", (void *)"battery_discharged", 1);
+  this->battery_3min_id = XPLMAppendMenuItem(this->battery_menu_id, "3 minutes 3s", (void *)"battery_3min", 1);
+  this->battery_10min_id = XPLMAppendMenuItem(this->battery_menu_id, "10 minutes 3s", (void *)"battery_10min", 1);
+  this->battery_30min_id = XPLMAppendMenuItem(this->battery_menu_id, "30 minutes 3s", (void *)"battery_30min", 1);
 
   this->beeper_id = XPLMAppendMenuItem(this->menu_id, "Beeper", (void *)"Beeper", 1);
   this->beeper_menu_id = XPLMCreateMenu("Battery", this->menu_id, this->beeper_id, static_menu_handler, NULL);

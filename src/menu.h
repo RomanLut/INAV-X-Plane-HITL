@@ -40,8 +40,12 @@ public:
 
   XPLMMenuID battery_menu_id;
   int battery_id;
-  int battery_default_id;
-  int battery_emulate_id;
+  int battery_none_id;
+  int battery_infinite_id;
+  int battery_discharged_id;
+  int battery_3min_id;
+  int battery_10min_id;
+  int battery_30min_id;
 
   XPLMMenuID beeper_menu_id;
   int beeper_id;

@@ -72,7 +72,6 @@ void TSimData::init()
   this->estimated_attitude_yaw = 0;
 
 	//---- output ----
-  this->emulateBattery = true;
   this->muteBeeper = true;
   this->attitude_use_sensors = false;
 
@@ -88,6 +87,8 @@ void TSimData::init()
   this->isArmed = false;
   this->isOSDDisabled = false;
   this->isOSDAnalogOSDNotFound = false;
+
+  this->setBateryEmulation(BATTERY_INFINITE);
 }
 
 //==============================================================
@@ -191,9 +192,15 @@ void TSimData::sendToINAV()
 {
   TMSPSimulatorToINAV data;
 
-  data.version = 2;
+  data.version = MSP_SIMULATOR_VERSION;
 
-  data.flags = 1 | (this->emulateBattery? 2 : 0) | (this->muteBeeper ? 4 : 0) | (this->attitude_use_sensors ? 8 : 0) | (this->GPSHasNewData ? 16 : 0 );
+  data.flags = SIMU_ENABLE |
+    ((this->batEmulation != BATTERY_NONE)? SIMU_SIMULATE_BATTERY : 0) |
+    (this->muteBeeper ? SIMU_MUTE_BEEPER : 0) |
+    (this->attitude_use_sensors ? SIMU_USE_SENSORS : 0) |
+    (this->GPSHasNewData ? SIMU_HAS_NEW_GPS_DATA : 0 ) |
+    SIMU_EXT_BATTERY_VOLTAGE;
+
   this->GPSHasNewData = false;
 
   data.fix = this->gps_fix;
@@ -250,6 +257,9 @@ void TSimData::sendToINAV()
   data.mag_x = clampToInt16(north[0] * 16000.0f);
   data.mag_y = clampToInt16(north[1] * 16000.0f);
   data.mag_z = clampToInt16(north[2] * 16000.0f);
+
+  this->recalculateBattery();
+  data.vbat = (uint8_t)round(this->battery_chargeV * 10);
 
   g_msp.sendCommand(MSP_SIMULATOR, &data, sizeof(data));
 }
@@ -351,5 +361,56 @@ void TSimData::disconnect()
   this->control_yaw = 0;
 
   this->sendToXPlane();
+}
+
+//==============================================================
+//==============================================================
+void TSimData::setBateryEmulation(TBatteryEmulationType s)
+{
+  this->batEmulation = s;
+  this->battery_lastUpdate = GetTickCount();
+  this->battery_chargeV = (s == BATTERY_DISCHAGED) ? 9.8f : 12.6f;
+}
+
+//==============================================================
+//==============================================================
+void TSimData::recalculateBattery()
+{
+  uint32_t t = GetTickCount();
+  uint32_t dt = t - this->battery_lastUpdate;
+  this->battery_lastUpdate = t;
+  if (dt > 1000) dt = 1000;
+
+  float k = (this->control_throttle + 500.0f) / 1000.0f;
+  if (k < 0) k = 0;
+  if (k > 1.0f) k = 1.0f;
+
+  //k=k*k;
+  //use linear dependency for simplicity
+
+  //12.6-9.6 = 3V
+  float n = 0;
+  switch (this->batEmulation)
+  {
+  case BATTERY_3MIN:
+    n = 3.0f;
+    break;
+  case BATTERY_10MIN:
+    n = 10.0f;
+    break;
+  case BATTERY_30MIN:
+    n = 30.0f;
+    break;
+  }
+
+  if (n > 0)
+  {
+    this->battery_chargeV -= k * dt * 3.0f / (1000 * 60 * n);
+  }
+
+  if (this->battery_chargeV < 9.6f)
+  {
+    this->battery_chargeV = 9.6f;
+  }
 }
 

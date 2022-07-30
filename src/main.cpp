@@ -25,6 +25,7 @@ void cbConnect(TCBConnectParm state)
 {
   g_menu._cbConnect(state);
   g_osd.cbConnect(state);
+  g_simData.setBateryEmulation(g_simData.batEmulation); //rechange battery
   lastUpdateTime = GetTickCount();
   wait = false;
 }

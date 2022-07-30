@@ -11,6 +11,20 @@
 
 #define DEBUG_U32_COUNT 8
 
+
+//=======================================================
+//=======================================================
+typedef enum
+{
+  BATTERY_NONE      = 0,
+  BATTERY_INFINITE  = 1,
+  BATTERY_DISCHAGED = 2,
+  BATTERY_3MIN      = 3,
+  BATTERY_10MIN     = 4,
+  BATTERY_30MIN     = 5
+} TBatteryEmulationType;
+
+
 //======================================================
 //======================================================
 class TSimData
@@ -133,11 +147,15 @@ public:
   bool isOSDAnalogOSDNotFound;
 
   //-- state --
-  bool emulateBattery;
   bool muteBeeper;
   bool attitude_use_sensors;
 
   uint32_t lastUpdateMS;
+
+  //battery state
+  TBatteryEmulationType batEmulation;
+  uint32_t battery_lastUpdate;
+  float battery_chargeV;
 
 	void init();
 
@@ -155,6 +173,8 @@ public:
 
   void disconnect();
 
+  void setBateryEmulation(TBatteryEmulationType s);
+  void recalculateBattery();
 };
 
 extern TSimData g_simData;
