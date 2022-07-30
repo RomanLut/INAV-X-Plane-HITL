@@ -168,7 +168,7 @@ OSD is using **Bold** font from **INAV Configurator**. It is possible to replace
 
 # Beeper
 
-For coonvience, it is possible to mute beeper in simulation mode:
+For convience, it is possible to mute beeper in simulation mode:
 
 ![](doc/beeper.png)
 
