@@ -2,6 +2,7 @@
 #include "config.h"
 #include "msp.h"
 #include "util.h"
+#include "osd.h"
 #include <math.h>
 #include <string>     
 
@@ -369,9 +370,17 @@ void TMap::teleport()
   df_local_y = XPLMFindDataRef("sim/flightmodel/position/local_y");
   df_local_z = XPLMFindDataRef("sim/flightmodel/position/local_z");
 
-  XPLMSetDatad(df_local_x, info.locationX);
-  XPLMSetDatad(df_local_y, info.locationY + aboveTerrain);
-  XPLMSetDatad(df_local_z, info.locationZ);
+  xLocal = info.locationX;
+  yLocal = info.locationY + aboveTerrain;
+  zLocal = info.locationZ;
+
+  XPLMSetDatad(df_local_x, xLocal);
+  XPLMSetDatad(df_local_y, yLocal);
+  XPLMSetDatad(df_local_z, zLocal);
+
+  XPLMLocalToWorld(xLocal, yLocal, zLocal, &plane_latitude, &plane_longitude, &plane_elevation );
+
+  g_osd.setHomeLocation(plane_latitude, plane_longitude, plane_elevation);
 
   XPLMDestroyProbe(probeRef);
 }

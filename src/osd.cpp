@@ -660,3 +660,12 @@ void TOSD::extractLatLon()
     g_map.addLatLonOSD(lat, lon);
   }
 }
+
+//==============================================================
+//==============================================================
+void TOSD::setHomeLocation(double home_lattitude, double home_longitude, double home_elevation)
+{
+  this->home_lattitude = home_lattitude;
+  this->home_longitude = home_longitude;
+  this->home_elevation = home_elevation;
+}

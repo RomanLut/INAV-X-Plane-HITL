@@ -51,6 +51,8 @@ public:
 
   void extractLatLon();
 
+  void setHomeLocation(double home_lattitude, double home_longitude, double home_elevation);
+
 private:
   int fontTextureId = 0;
   int noiseTextureId = 0;
