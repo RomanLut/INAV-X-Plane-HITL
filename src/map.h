@@ -35,6 +35,8 @@ public:
   void onWPInfo(const TMSPWPInfo* messageBuffer);
   void onWP(const TMSPWP* messageBuffer);
 
+  void teleport();
+
 private:
 
   typedef struct

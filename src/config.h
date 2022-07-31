@@ -13,6 +13,7 @@
 #include <XPLMDataAccess.h>
 #include <XPLMUtilities.h>
 #include <XPLMMap.h>
+#include <XPLMScenery.h>
 
 #ifndef XPLM300
 #error This is made to be compiled against the XPLM300 SDK

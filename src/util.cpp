@@ -212,3 +212,33 @@ static int ConvertPath(const char * inPath, char * outPath, int outPathMaxLen) {
 }
 #endif
 
+#if IBM
+//==============================================================
+//==============================================================
+extern void getClipboardText(char str[1024])
+{
+  str[0] = 0;
+
+  if (OpenClipboard(NULL))
+  {
+    const char* clip = (const char*)GetClipboardData(CF_TEXT);
+    CloseClipboard();
+
+    if (clip)
+    {
+      strncpy(str, clip, 1024);
+      str[1023] = 0;
+    }
+  }
+
+}
+#endif
+
+#if LIN
+//==============================================================
+//==============================================================
+extern void getClipboardText(char* str[1024])
+{
+  str[0] = 0;
+}
+#endif

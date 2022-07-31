@@ -2,6 +2,8 @@
 #include "config.h"
 #include "msp.h"
 #include "util.h"
+#include <math.h>
+#include <string>     
 
 TMap g_map;
 
@@ -292,4 +294,85 @@ void TMap::retrieveNextWaypoint()
   if (!g_msp.sendCommand(MSP_WP, &this->waypointsDownloadState, 1)) this->waypointsDownloadState = -100;
 }
 
+//==============================================================
+//==============================================================
+void TMap::teleport()
+{
+  // extract lat,lon from clipboard
+  char str[1024];
+  getClipboardText(str);
+
+  char* p = strstr(str, ",");
+  if (!p) return;
+
+  *p = 0;
+
+  double latitude = std::stod(str);
+  if (isnan(latitude)) return;
+
+  p++;
+  while (p && *p == ' ') p++;
+
+  double longitude = std::stod(p);
+  if (isnan(longitude)) return;                      
+
+  //find current plane position above terrain
+
+  XPLMDataRef df_lattitude = XPLMFindDataRef("sim/flightmodel/position/latitude");
+  XPLMDataRef df_longitude = XPLMFindDataRef("sim/flightmodel/position/longitude");
+  XPLMDataRef df_elevation = XPLMFindDataRef("sim/flightmodel/position/elevation");
+
+  double plane_latitude = XPLMGetDatad(df_lattitude);
+  double plane_longitude = XPLMGetDatad(df_longitude);
+  double plane_elevation = XPLMGetDatad(df_elevation);
+
+  double xLocal;
+  double yLocal;
+  double zLocal;
+
+  XPLMWorldToLocal(plane_latitude, plane_longitude, plane_elevation, &xLocal, &yLocal, &zLocal);
+
+  XPLMProbeRef probeRef = XPLMCreateProbe(xplm_ProbeY);
+
+  XPLMProbeInfo_t info;
+  info.structSize = sizeof(XPLMProbeInfo_t);
+  XPLMProbeResult status = XPLMProbeTerrainXYZ(probeRef, (float)xLocal, (float)yLocal, (float)zLocal, &info);
+
+  if (status != xplm_ProbeHitTerrain)
+  {
+    XPLMDestroyProbe(probeRef);
+    return;
+  }
+
+  double aboveTerrain = yLocal - info.locationY + 0.1; //+10cm
+
+  if (aboveTerrain < 0) aboveTerrain = 100;
+  if (aboveTerrain > 2000 ) aboveTerrain = 2000;
+
+  //place plane to new coords
+  XPLMWorldToLocal(latitude, longitude, 0, &xLocal, &yLocal, &zLocal);
+
+  info.structSize = sizeof(XPLMProbeInfo_t);
+  status = XPLMProbeTerrainXYZ(probeRef, (float)xLocal, (float)yLocal, (float)zLocal, &info);
+
+  if (status != xplm_ProbeHitTerrain)
+  {
+    XPLMDestroyProbe(probeRef);
+    return;
+  }
+
+  XPLMDataRef df_local_x;
+  XPLMDataRef df_local_y;
+  XPLMDataRef df_local_z;
+
+  df_local_x = XPLMFindDataRef("sim/flightmodel/position/local_x");
+  df_local_y = XPLMFindDataRef("sim/flightmodel/position/local_y");
+  df_local_z = XPLMFindDataRef("sim/flightmodel/position/local_z");
+
+  XPLMSetDatad(df_local_x, info.locationX);
+  XPLMSetDatad(df_local_y, info.locationY + aboveTerrain);
+  XPLMSetDatad(df_local_z, info.locationZ);
+
+  XPLMDestroyProbe(probeRef);
+}
 

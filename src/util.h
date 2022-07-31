@@ -19,6 +19,8 @@ extern int16_t clampToInt16(float value);
 
 extern void delayMS(uint32_t valueMS);
 
+extern void getClipboardText(char str[1024]);
+
 #ifdef LIN
 extern bool IsDebuggerPresent();
 extern uint32_t GetTickCount();

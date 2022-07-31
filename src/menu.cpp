@@ -316,6 +316,10 @@ void TMenu::menu_handler(void * in_menu_ref, void * in_item_ref)
   {
     g_map.startDownloadWaypoints();
   }
+  else if (!strcmp((const char *)in_item_ref, "map_teleport"))
+  {
+    g_map.teleport();
+  }
   else if (!strcmp((const char *)in_item_ref, "noise_none"))
   {
     g_osd.videoLink = VS_NONE;
@@ -403,6 +407,9 @@ void TMenu::createMenu()
   this->map_debug_0_1_id = XPLMAppendMenuItem(this->map_menu_id, "debug[0]/debug[1] as Latitude/Longitude", (void *)"map_debug_0_1", 1);
   XPLMAppendMenuSeparator(this->map_menu_id);
   this->map_download_waypoints = XPLMAppendMenuItem(this->map_menu_id, "Download waypoints from FC", (void *)"map_download_waypoints", 1);
+#if IBM
+  this->map_teleport = XPLMAppendMenuItem(this->map_menu_id, "Teleport to location (from clipboard)", (void *)"map_teleport", 1);
+#endif
 
   this->graph_id = XPLMAppendMenuItem(this->menu_id, "Graph", (void *)"Graph", 1);
   this->graph_menu_id = XPLMCreateMenu("Graph", this->menu_id, this->graph_id, static_menu_handler, NULL);
