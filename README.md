@@ -201,7 +201,7 @@ Path is drawn on "INAV HITL" layer:
 
 An option in **Map** menu allows to teleport plane to any GPS location from clipboard. *Currently available on Windows only*.
 
-Right click in Google Maps, then click on coordinates to copy them to clipboard:
+Right click in Google Maps, then click on the coordinates to copy them to clipboard:
 
 ![](doc/googlemaps.png)
 
