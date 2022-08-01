@@ -39,7 +39,7 @@ The contents of `release\Aircraft` folder should be placed in the Aircraft folde
 
 This will add plugin to the **Aerolite** airplane and install additional **NK_Surfwing** flying wing model with this plugin.
 
-**IMPORTANT:: You have to flash Simulator-enabled INAV firmware. Take precompiled binaries from release https://github.com/RomanLut/INAV-X-Plane-HITL/releases/, or build yourself from branch: https://github.com/RomanLut/inav/tree/simulator_v0.5 . Simulator mode is not included in main INAV repository currently.**
+**IMPORTANT:: You have to flash Simulator-enabled INAV firmware. Take precompiled binaries from release https://github.com/RomanLut/INAV-X-Plane-HITL/releases/, or build yourself from branch: https://github.com/RomanLut/inav/tree/simulator_v0.9 . Simulator mode is not included in main INAV repository currently.**
 
 ![](doc/menu.png)
 
@@ -134,6 +134,10 @@ Magnetometer is simulated if selected in INAV configurator. It is not required t
 
 For convience, it is possible to simulate 3S battery presense:
 
+- infinite 3s battery
+- discharged 3s battery
+- a battery which lasts a period of time on full throtle, 2x time on 50% throtle etc.
+
 ![](doc/battery.png)
 
 # OSD 
@@ -178,20 +182,32 @@ Plugin will simulate analog video link quality acccording to setting. Home point
 
 ![](doc/noise.jpg)
 
-# Flight path drawing
+# Flight path drawing 
 
 Plugin can draw flight path on X-Plane map. 
 
-![](doc/menu_map.jpg)
+![](doc/menu_map.png)
 
 Coordinates can be extracted from:
 - **Latitude/Longitude from OSD** -  extracted from OSD. Note that these number have low accuracy and are not updated synchronously. Path will have jittering under zoom.
 - **debug[0]/debug[1] as Latitude/Longitude** - assumed that coordinates are provided in debug[0]/debug[1] variables by custom INAV build (int32_t, int32_t).
 - **Download waypoints from FC** - this option will download Mission waypoints from FC and show on X-Plane map (in pink color)
+- **Teleport to location** - https://github.com/RomanLut/INAV-X-Plane-HITL/edit/main/README.md#teleporting-to-gps-coordinates
 
 Path is drawn on "INAV HITL" layer:
 ![](doc/map.png)
 
+# Teleporting to GPS coordinates
+
+An option in **Map** menu allows to teleport plane to any GPS location from clipboard. *Currently available on Windows only*.
+
+Right click in Google Maps, then click on coordinates to copy them to clipboard:
+
+![](doc/googlemaps.png)
+
+Then select **Plugin->INAV HITL->Map->Teleport to location (from clipboard)**
+
+This works Ok for small distances. If you teleport to the other side of the Earth, you may find yourself in the empty space. Try to teleport again, it usually works.
 
 # Servo autotrim
 
