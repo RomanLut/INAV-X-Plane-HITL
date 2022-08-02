@@ -88,6 +88,14 @@ void TMenu::updateBeeperMenu()
 
 //==============================================================
 //==============================================================
+void TMenu::updatePitotMenu()
+{
+  XPLMCheckMenuItem(this->pitot_menu_id, this->pitot_none_id, g_simData.simulatePitot == false ? xplm_Menu_Checked : xplm_Menu_Unchecked);
+  XPLMCheckMenuItem(this->pitot_menu_id, this->pitot_simulate_id, g_simData.simulatePitot == true ? xplm_Menu_Checked : xplm_Menu_Unchecked);
+}
+
+//==============================================================
+//==============================================================
 void TMenu::updateGraphMenu()
 {
   XPLMCheckMenuItem(this->graph_menu_id, this->graph_none_id, g_graph.getGraphType() == GRAPH_NONE ? xplm_Menu_Checked : xplm_Menu_Unchecked);
@@ -247,6 +255,16 @@ void TMenu::menu_handler(void * in_menu_ref, void * in_item_ref)
     g_simData.muteBeeper = true;
     this->updateBeeperMenu();
   }
+  else if (!strcmp((const char *)in_item_ref, "pitot_none"))
+  {
+    g_simData.simulatePitot = false;
+    this->updatePitotMenu();
+  }
+  else if (!strcmp((const char *)in_item_ref, "pitot_simulate"))
+  {
+    g_simData.simulatePitot = true;
+    this->updatePitotMenu();
+  }
   else if (!strcmp((const char *)in_item_ref, "attitude_force"))
   {
     g_simData.attitude_use_sensors = false;
@@ -386,6 +404,11 @@ void TMenu::createMenu()
   this->beeper_default_id = XPLMAppendMenuItem(this->beeper_menu_id, "Default", (void *)"beeper_default", 1);
   this->beeper_mute_id = XPLMAppendMenuItem(this->beeper_menu_id, "Mute", (void *)"beeper_mute", 1);
 
+  this->pitot_id = XPLMAppendMenuItem(this->menu_id, "Pitot", (void *)"Pitot", 1);
+  this->pitot_menu_id = XPLMCreateMenu("Pitot", this->menu_id, this->pitot_id, static_menu_handler, NULL);
+  this->pitot_none_id = XPLMAppendMenuItem(this->pitot_menu_id, "None", (void *)"pitot_none", 1);
+  this->pitot_simulate_id = XPLMAppendMenuItem(this->pitot_menu_id, "Simulate", (void *)"pitot_simulate", 1);
+
   XPLMAppendMenuSeparator(this->menu_id);
 
   this->osd_nearest_id = XPLMAppendMenuItem(this->osd_menu_id, "Smoothing: Nearest", (void *)"osd_nearest", 1);
@@ -433,6 +456,7 @@ void TMenu::createMenu()
   this->updateOSDMenu();
   this->updateBatteryMenu();
   this->updateBeeperMenu();
+  this->updatePitotMenu();
   this->updateAttitudeMenu();
   this->updateNoiseMenu();
   this->updateGraphMenu();

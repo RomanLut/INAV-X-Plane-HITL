@@ -35,6 +35,7 @@ void TSimData::init()
   this->df_local_vz = XPLMFindDataRef("sim/flightmodel/position/local_vz");
 
   this->df_speed = XPLMFindDataRef("sim/flightmodel/position/groundspeed");
+  this->df_airspeed = XPLMFindDataRef("sim/flightmodel/position/true_airspeed");
 
   this->df_roll = XPLMFindDataRef("sim/flightmodel/position/phi");
   this->df_pitch = XPLMFindDataRef("sim/flightmodel/position/theta");
@@ -70,6 +71,9 @@ void TSimData::init()
   this->estimated_attitude_roll = 0;
   this->estimated_attitude_pitch = 0;
   this->estimated_attitude_yaw = 0;
+
+  this->simulatePitot = true;
+  this->airspeed = 0;
 
 	//---- output ----
   this->muteBeeper = true;
@@ -112,6 +116,7 @@ void TSimData::updateFromXPlane()
     this->local_vz = XPLMGetDataf(this->df_local_vz);
 
     this->speed = XPLMGetDataf(this->df_speed);
+    this->airspeed = XPLMGetDataf(this->df_airspeed);
     this->course = XPLMGetDataf(this->df_yaw);
   }
   
@@ -195,11 +200,12 @@ void TSimData::sendToINAV()
   data.version = MSP_SIMULATOR_VERSION;
 
   data.flags = SIMU_ENABLE |
-    ((this->batEmulation != BATTERY_NONE)? SIMU_SIMULATE_BATTERY : 0) |
+    ((this->batEmulation != BATTERY_NONE) ? SIMU_SIMULATE_BATTERY : 0) |
     (this->muteBeeper ? SIMU_MUTE_BEEPER : 0) |
     (this->attitude_use_sensors ? SIMU_USE_SENSORS : 0) |
-    (this->GPSHasNewData ? SIMU_HAS_NEW_GPS_DATA : 0 ) |
-    SIMU_EXT_BATTERY_VOLTAGE;
+    (this->GPSHasNewData ? SIMU_HAS_NEW_GPS_DATA : 0) |
+    SIMU_EXT_BATTERY_VOLTAGE |
+    (this->simulatePitot ? SIMU_AIRSPEED : 0 );
 
   this->GPSHasNewData = false;
 
@@ -209,6 +215,7 @@ void TSimData::sendToINAV()
   data.lon = (int32_t)round(this->longitude * 10000000);
   data.alt = (int32_t)round(this->elevation * 100); //expected by inav: elevation in cm
   data.speed = (int16_t)round(this->speed * 100); //expected by inav: ground speed cm/sec   
+  data.airspeed = (uint16_t)round(this->airspeed * 100); //expected by inav: ground speed cm/sec   
   data.course = (int16_t)round(this->course * 10);  // expected by inav: deg * 10
                                                                                       
   data.velNED[0] = (int16_t)round(-this->local_vz*100); // nedVelNorth;  

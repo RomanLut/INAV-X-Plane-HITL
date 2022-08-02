@@ -52,6 +52,11 @@ public:
   int beeper_default_id;
   int beeper_mute_id;
 
+  XPLMMenuID pitot_menu_id;
+  int pitot_id;
+  int pitot_none_id;
+  int pitot_simulate_id;
+
   XPLMMenuID graph_menu_id;
   int graph_id;
   int graph_none_id;
@@ -93,6 +98,7 @@ public:
   void updateOSDMenu();
   void updateBatteryMenu();
   void updateBeeperMenu();
+  void updatePitotMenu();
   void updateAttitudeMenu();
   void updateGraphMenu();
   void updateMapMenu();

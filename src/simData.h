@@ -116,13 +116,11 @@ public:
 	XPLMDataRef df_baro;
 	float baro;
 
-	// velocity
-	//XPLMDataRef df_velocity_x;
-	//float velocity_x;
-	//XPLMDataRef df_velocity_y;
-	//float velocity_y;
-	//XPLMDataRef df_velocity_z;
-	//float velocity_z;
+  bool simulatePitot;
+
+  //meters/sec, the ground speed of the aircraft
+  XPLMDataRef df_airspeed;
+  float airspeed;
 
 	//---- from inav --------  
 
