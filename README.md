@@ -140,6 +140,10 @@ For convience, it is possible to simulate 3S battery presense:
 
 ![](doc/battery.png)
 
+## Pitot
+
+If enabled in menu, airspeed from X-Plane will replace readings of pitot. Pitot should be enabled in INav Configurator. It is possible to use VIRTUAL pitot device. Note that VIRTUAL pitot is not supported on 411 and 722(you will not be able to arm).
+
 # OSD 
 
 OSD is rendered in **X-Plane** exactly as configured in **INAV Configurator**. 
