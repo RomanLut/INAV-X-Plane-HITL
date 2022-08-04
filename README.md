@@ -39,7 +39,7 @@ The contents of `release\Aircraft` folder should be placed in the Aircraft folde
 
 This will add plugin to the **Aerolite** airplane and install additional **NK_Surfwing** flying wing model with this plugin.
 
-**IMPORTANT:: You have to flash Simulator-enabled INAV firmware. Take precompiled binaries from release https://github.com/RomanLut/INAV-X-Plane-HITL/releases/, or build yourself from branch: https://github.com/RomanLut/inav/tree/simulator_v0.9 . Simulator mode is not included in main INAV repository currently.**
+**IMPORTANT:: You have to flash Simulator-enabled INAV firmware. Take precompiled binaries from release https://github.com/RomanLut/INAV-X-Plane-HITL/releases/, or build yourself from branch: https://github.com/RomanLut/inav/tree/simulator_v1.0 . Simulator mode is not included in main INAV repository currently.**
 
 ![](doc/menu.png)
 
@@ -139,6 +139,18 @@ For convience, it is possible to simulate 3S battery presense:
 - a battery which lasts a period of time on full throtle, 2x time on 50% throtle etc.
 
 ![](doc/battery.png)
+
+## Pitot
+
+If enabled in menu, airspeed from X-Plane will replace readings of pitot. 
+
+Pitot should be enabled in INav Configurator. 
+
+It is possible to use VIRTUAL pitot device. 
+
+*Note: VIRTUAL pitot is not supported on 411 and 722 CPUs (you will not be able to arm).*
+
+*Note: VIRTUAL pitot will fail initialize if GPS sensor is disabled in configuration.*
 
 # OSD 
 
