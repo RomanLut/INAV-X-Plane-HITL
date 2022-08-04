@@ -40,6 +40,7 @@ void TSimData::init()
   this->df_roll = XPLMFindDataRef("sim/flightmodel/position/phi");
   this->df_pitch = XPLMFindDataRef("sim/flightmodel/position/theta");
   this->df_yaw = XPLMFindDataRef("sim/flightmodel/position/psi");
+  this->df_hpath = XPLMFindDataRef("sim/flightmodel/position/hpath");
 
 	// Accelerometer
   this->df_accel_x = XPLMFindDataRef("sim/flightmodel/forces/g_axil");
@@ -117,7 +118,7 @@ void TSimData::updateFromXPlane()
 
     this->speed = XPLMGetDataf(this->df_speed);
     this->airspeed = XPLMGetDataf(this->df_airspeed);
-    this->course = XPLMGetDataf(this->df_yaw);
+    this->course = XPLMGetDataf(this->df_hpath);
   }
   
   this->roll = XPLMGetDataf(this->df_roll);
@@ -217,7 +218,8 @@ void TSimData::sendToINAV()
   data.speed = (int16_t)round(this->speed * 100); //expected by inav: ground speed cm/sec   
   data.airspeed = (uint16_t)round(this->airspeed * 100); //expected by inav: ground speed cm/sec   
   data.course = (int16_t)round(this->course * 10);  // expected by inav: deg * 10
-                                                                                      
+  if (data.course < 0) data.course += 3600;
+
   data.velNED[0] = (int16_t)round(-this->local_vz*100); // nedVelNorth;  
   data.velNED[1] = (int16_t)round( this->local_vx*100); //nedVelEast
   data.velNED[2] = (int16_t)round(-this->local_vy*100); //nedVelDown

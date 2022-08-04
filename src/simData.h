@@ -70,7 +70,8 @@ public:
 	float speed;
 
   //degrees, the true heading of the aircraft in degrees from the Z axis - OpenGL coordinates
-  float course; //== yaw with GPS update rate
+  XPLMDataRef df_hpath;
+  float course; //==ground course heading with GPS update rate
   //---- gps ---
 
   //degrees, the roll of the aircraft in degrees - OpenGL coordinates
