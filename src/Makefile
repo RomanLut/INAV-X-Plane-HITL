@@ -16,11 +16,11 @@ SOURCES = \
 	sound.cpp \
 	map.cpp \
 
-LIBS = -lopenal
+LIBS = -lopenal 
 
 INCLUDES = \
 	-I$(SRC_BASE)/SDK/CHeaders/XPLM \
-	-I$(SRC_BASE)/SDK/CHeaders/Widgets
+	-I$(SRC_BASE)/SDK/CHeaders/Widgets 
 
 DEFINES = -DXPLM200=1 -DXPLM210=1 -DXPLM300=1 -DXPLM301=1 -DXPLM302=1 -DXPLM303=1 -DAPL=0 -DIBM=0 -DLIN=1
 
@@ -39,7 +39,7 @@ CXXOBJECTS64	:= $(patsubst %.cpp, $(BUILDDIR)/obj64/%.o, $(CXXSOURCES))
 ALL_DEPS64		:= $(sort $(CDEPS64) $(CXXDEPS64))
 ALL_OBJECTS64	:= $(sort $(COBJECTS64) $(CXXOBJECTS64))
 
-CFLAGS := $(DEFINES) $(INCLUDES) -fPIC -fvisibility=hidden
+CFLAGS := $(DEFINES) $(INCLUDES) -fPIC -fvisibility=hidden `pkg-config --cflags gtk+-3.0`
 
 
 # Phony directive tells make that these are "virtual" targets, even if a file named "clean" exists.

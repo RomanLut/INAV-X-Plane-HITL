@@ -6,6 +6,7 @@
 
 #if LIN
 #include <dlfcn.h>
+#include <gtk/gtk.h>
 #endif
 
 //==============================================================
@@ -237,8 +238,21 @@ extern void getClipboardText(char str[1024])
 #if LIN
 //==============================================================
 //==============================================================
-extern void getClipboardText(char* str[1024])
+extern void getClipboardText(char str[1024])
 {
   str[0] = 0;
+
+  GtkClipboard* clipboard = gtk_clipboard_get(GDK_SELECTION_CLIPBOARD);
+  if (clipboard)
+  {
+    gchar *text = gtk_clipboard_wait_for_text(clipboard);
+
+    if (text)
+    {
+      strncpy(str, text, 1024);
+      str[1023] = 0;
+      g_free(text);
+    }
+  }
 }
 #endif
