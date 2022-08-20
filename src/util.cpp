@@ -242,6 +242,12 @@ extern void getClipboardText(char str[1024])
 {
   str[0] = 0;
 
+  if (!gtk_init_check(0, NULL))
+  {
+    LOG("Unable to init GTK");
+    return;
+  }
+
   GtkClipboard* clipboard = gtk_clipboard_get(GDK_SELECTION_CLIPBOARD);
   if (clipboard)
   {

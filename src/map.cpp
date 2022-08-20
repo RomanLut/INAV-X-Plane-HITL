@@ -304,18 +304,30 @@ void TMap::teleport()
   getClipboardText(str);
 
   char* p = strstr(str, ",");
-  if (!p) return;
+  if (!p)
+  {
+    LOG("TELEPORT: Clipboard is empty");
+    return;
+  }
 
   *p = 0;
 
   double latitude = std::stod(str);
-  if (isnan(latitude)) return;
+  if (isnan(latitude))
+  {
+    LOG("TELEPORT: Unable to parse lattitude %s", str);
+    return;
+  }
 
   p++;
   while (p && *p == ' ') p++;
 
   double longitude = std::stod(p);
-  if (isnan(longitude)) return;                      
+  if (isnan(longitude))
+  {
+    LOG("TELEPORT: Unable to parse longitude %s", str);
+    return;
+  }
 
   //find current plane position above terrain
 
@@ -342,6 +354,7 @@ void TMap::teleport()
   if (status != xplm_ProbeHitTerrain)
   {
     XPLMDestroyProbe(probeRef);
+    LOG("TELEPORT: Unable to find terrain height at tatrget point");
     return;
   }
 
@@ -359,6 +372,7 @@ void TMap::teleport()
   if (status != xplm_ProbeHitTerrain)
   {
     XPLMDestroyProbe(probeRef);
+    LOG("TELEPORT: Unable to find terrain height at tatrget point");
     return;
   }
 
