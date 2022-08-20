@@ -34,7 +34,7 @@ public:
   int auto_rows = 16;
   bool smoothed = true;
 
-  TVideoLinkSimulation videoLink = VS_10KM;
+  TVideoLinkSimulation videoLink = VS_50KM;
 
   void init();
   void destroy();
