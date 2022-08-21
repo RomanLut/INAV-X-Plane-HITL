@@ -495,3 +495,26 @@ void TGraph::formatValueNumber(char* dest, float value)
     sprintf(dest, "%+1.3f", value);
   }
 }
+
+//==============================================================
+//==============================================================
+void TGraph::loadConfig(mINI::INIStructure& ini)
+{
+  if (ini[SETTINGS_SECTION].has(SETTINGS_GRAPH_TYPE))
+  {
+    TGraphType val = (TGraphType)atoi(ini[SETTINGS_SECTION][SETTINGS_GRAPH_TYPE].c_str());
+    if (val < GRAPH_NONE || val > GRAPH_DEBUG_CUSTOM)
+    {
+      val = GRAPH_NONE;
+    }
+    this->setGraphType(val);
+  }
+}
+
+//==============================================================
+//==============================================================
+void TGraph::saveConfig(mINI::INIStructure& ini)
+{
+  ini[SETTINGS_SECTION][SETTINGS_GRAPH_TYPE] = std::to_string(this->getGraphType());
+}
+

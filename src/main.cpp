@@ -19,6 +19,8 @@ bool firstRender = true;
 
 XPLMFlightLoopID loopId;
 
+mINI::INIStructure ini;
+
 //==============================================================
 //==============================================================
 void cbConnect(TCBConnectParm state)
@@ -166,7 +168,60 @@ PLUGIN_API void	XPluginStop(void)
 
 //==============================================================
 //==============================================================
+bool buildIniFileName( char* iniFileName )
+{
+  XPLMGetPrefsPath(iniFileName);
+  char* p = XPLMExtractFileAndPath(iniFileName);
+  if (!p) return false;
+  strncat(iniFileName, XPLMGetDirectorySeparator(), MAX_PATH);
+  strcat(iniFileName, "inavhitl.ini");
+  return true;
+}
 
+//==============================================================
+//==============================================================
+bool loadIniFile()
+{
+  char iniFileName[MAX_PATH];
+  if (!buildIniFileName(iniFileName))
+  {
+    g_menu.updateAll();
+    return false;
+  }
+
+  mINI::INIFile iniFile(iniFileName);
+  iniFile.read(ini);
+
+  g_simData.loadConfig(ini);
+  g_osd.loadConfig(ini);
+  g_graph.loadConfig(ini);
+  g_map.loadConfig(ini);
+
+  g_menu.updateAll();
+
+  return true;
+}
+
+
+//==============================================================
+//==============================================================
+bool saveIniFile()
+{
+  g_simData.saveConfig(ini);
+  g_osd.saveConfig(ini);
+  g_graph.saveConfig(ini);
+  g_map.saveConfig(ini);
+
+  char iniFileName[MAX_PATH];
+  if (!buildIniFileName(iniFileName)) return false;
+
+  mINI::INIFile iniFile(iniFileName);
+  iniFile.generate(ini);
+  return true;
+}
+
+//==============================================================
+//==============================================================
 PLUGIN_API int XPluginEnable(void)
 {
   LOG("Plugin enable");
@@ -190,6 +245,8 @@ PLUGIN_API int XPluginEnable(void)
   g_sound.init();
 
   playSound("assets\\ready_to_connect.wav");
+
+  loadIniFile();
 
   return 1;
 }

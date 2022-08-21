@@ -71,6 +71,9 @@ public:
 
   void addDebug(int index, float value);
 
+  void loadConfig(mINI::INIStructure& ini);
+  void saveConfig(mINI::INIStructure& ini);
+
 private:
 
   TGraphType graph_type = GRAPH_NONE;

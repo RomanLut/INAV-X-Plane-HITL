@@ -410,3 +410,25 @@ void TMap::teleport()
   XPLMDestroyProbe(probeRef);
 }
 
+//==============================================================
+//==============================================================
+void TMap::loadConfig(mINI::INIStructure& ini)
+{
+  if (ini[SETTINGS_SECTION].has(SETTINGS_MAP_MARKING_TYPE))
+  {
+    TMapMarkType val = (TMapMarkType)atoi(ini[SETTINGS_SECTION][SETTINGS_MAP_MARKING_TYPE].c_str());
+    if (val < MMT_NONE || val > MMT_DEBUG_0_1)
+    {
+      val = MMT_LAT_LON_OSD;
+    }
+    this->setMarkingType(val);
+  }
+}
+
+//==============================================================
+//==============================================================
+void TMap::saveConfig(mINI::INIStructure& ini)
+{
+  ini[SETTINGS_SECTION][SETTINGS_MAP_MARKING_TYPE] = std::to_string(this->getMarkingType());
+}
+

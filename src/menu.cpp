@@ -105,6 +105,7 @@ void TMenu::updateGraphMenu()
   XPLMCheckMenuItem(this->graph_menu_id, this->graph_acc_id, g_graph.getGraphType() == GRAPH_ACC ? xplm_Menu_Checked : xplm_Menu_Unchecked);
   XPLMCheckMenuItem(this->graph_menu_id, this->graph_gyro_id, g_graph.getGraphType() == GRAPH_GYRO ? xplm_Menu_Checked : xplm_Menu_Unchecked);
   XPLMCheckMenuItem(this->graph_menu_id, this->graph_debug_altitude_id, g_graph.getGraphType() == GRAPH_DEBUG_ALTITUDE ? xplm_Menu_Checked : xplm_Menu_Unchecked);
+  XPLMCheckMenuItem(this->graph_menu_id, this->graph_debug_custom_id, g_graph.getGraphType() == GRAPH_DEBUG_CUSTOM ? xplm_Menu_Checked : xplm_Menu_Unchecked);
 }
 
 //==============================================================
@@ -176,159 +177,128 @@ void TMenu::menu_handler(void * in_menu_ref, void * in_item_ref)
     g_simData.gps_numSat = GPS_NO_FIX;
     g_simData.gps_fix = 0;
     g_simData.gps_spoofing = 0;
-    this->updateGPSMenu();
   }
   else if (!strcmp((const char *)in_item_ref, "gps_fix_12"))
   {
     g_simData.gps_numSat = 12;
     g_simData.gps_fix = GPS_FIX_3D;
     g_simData.gps_spoofing = 0;
-    this->updateGPSMenu();
   }
   else if (!strcmp((const char *)in_item_ref, "osd_none"))
   {
     g_osd.osd_type = OSD_NONE;
-    this->updateOSDMenu();
   }
   else if (!strcmp((const char *)in_item_ref, "osd_auto"))
   {
     g_osd.osd_type = OSD_AUTO;
-    this->updateOSDMenu();
   }
   else if (!strcmp((const char *)in_item_ref, "osd_pal"))
   {
     g_osd.osd_type = OSD_PAL;
-    this->updateOSDMenu();
   }
   else if (!strcmp((const char *)in_item_ref, "osd_ntsc"))
   {
     g_osd.osd_type = OSD_NTSC;
-    this->updateOSDMenu();
   }
   else if (!strcmp((const char *)in_item_ref, "osd_nearest"))
   {
     g_osd.smoothed = false;
-    this->updateOSDMenu();
   }
   else if (!strcmp((const char *)in_item_ref, "osd_linear"))
   {
     g_osd.smoothed = true;
-    this->updateOSDMenu();
   }
   else if (!strcmp((const char *)in_item_ref, "battery_none"))
   {
     g_simData.setBateryEmulation(BATTERY_NONE);
-    this->updateBatteryMenu();
   }
   else if (!strcmp((const char *)in_item_ref, "battery_infinite"))
   {
     g_simData.setBateryEmulation(BATTERY_INFINITE);
-    this->updateBatteryMenu();
   }
   else if (!strcmp((const char *)in_item_ref, "battery_discharged"))
   {
     g_simData.setBateryEmulation(BATTERY_DISCHAGED);
-    this->updateBatteryMenu();
   }
   else if (!strcmp((const char *)in_item_ref, "battery_3min"))
   {
     g_simData.setBateryEmulation(BATTERY_3MIN);
-    this->updateBatteryMenu();
   }
   else if (!strcmp((const char *)in_item_ref, "battery_10min"))
   {
     g_simData.setBateryEmulation(BATTERY_10MIN);
-    this->updateBatteryMenu();
   }
   else if (!strcmp((const char *)in_item_ref, "battery_30min"))
   {
     g_simData.setBateryEmulation(BATTERY_30MIN);
-    this->updateBatteryMenu();
   }
   else if (!strcmp((const char *)in_item_ref, "beeper_default"))
   {
     g_simData.muteBeeper = false;
-    this->updateBeeperMenu();
   }
   else if (!strcmp((const char *)in_item_ref, "beeper_mute"))
   {
     g_simData.muteBeeper = true;
-    this->updateBeeperMenu();
   }
   else if (!strcmp((const char *)in_item_ref, "pitot_none"))
   {
     g_simData.simulatePitot = false;
-    this->updatePitotMenu();
   }
   else if (!strcmp((const char *)in_item_ref, "pitot_simulate"))
   {
     g_simData.simulatePitot = true;
-    this->updatePitotMenu();
   }
   else if (!strcmp((const char *)in_item_ref, "attitude_force"))
   {
     g_simData.attitude_use_sensors = false;
-    this->updateAttitudeMenu();
   }
   else if (!strcmp((const char *)in_item_ref, "attitude_sensors"))
   {
     g_simData.attitude_use_sensors = true;
-    this->updateAttitudeMenu();
   }
   else if (!strcmp((const char *)in_item_ref, "graph_none"))
   {
     g_graph.setGraphType(GRAPH_NONE);
-    this->updateGraphMenu();
   }
   else if (!strcmp((const char *)in_item_ref, "graph_updates"))
   {
     g_graph.setGraphType(GRAPH_UPDATES);
-    this->updateGraphMenu();
   }
   else if (!strcmp((const char *)in_item_ref, "graph_attitude_estimation"))
   {
     g_graph.setGraphType(GRAPH_ATTITUDE_ESTIMATION);
-    this->updateGraphMenu();
   }
   else if (!strcmp((const char *)in_item_ref, "graph_attitude_output"))
   {
     g_graph.setGraphType(GRAPH_ATTITUDE_OUTPUT);
-    this->updateGraphMenu();
   }
   else if (!strcmp((const char *)in_item_ref, "graph_accelerometer"))
   {
     g_graph.setGraphType(GRAPH_ACC);
-    this->updateGraphMenu();
   }
   else if (!strcmp((const char *)in_item_ref, "graph_gyroscope"))
   {
     g_graph.setGraphType(GRAPH_GYRO);
-    this->updateGraphMenu();
   }
   else if (!strcmp((const char *)in_item_ref, "graph_debug_altitude"))
   {
     g_graph.setGraphType(GRAPH_DEBUG_ALTITUDE);
-    this->updateGraphMenu();
   }
   else if (!strcmp((const char *)in_item_ref, "graph_debug_custom"))
   {
     g_graph.setGraphType(GRAPH_DEBUG_CUSTOM);
-    this->updateGraphMenu();
   }
   else if (!strcmp((const char *)in_item_ref, "map_none"))
   {
     g_map.setMarkingType(MMT_NONE);
-    this->updateMapMenu();
   }
   else if (!strcmp((const char *)in_item_ref, "map_lat_lon_osd"))
   {
     g_map.setMarkingType(MMT_LAT_LON_OSD);
-    this->updateMapMenu();
   }
   else if (!strcmp((const char *)in_item_ref, "map_debug_0_1"))
   {
     g_map.setMarkingType(MMT_DEBUG_0_1);
-    this->updateMapMenu();
   }
   else if (!strcmp((const char *)in_item_ref, "map_download_waypoints"))
   {
@@ -341,42 +311,41 @@ void TMenu::menu_handler(void * in_menu_ref, void * in_item_ref)
   else if (!strcmp((const char *)in_item_ref, "noise_none"))
   {
     g_osd.videoLink = VS_NONE;
-    this->updateNoiseMenu();
   }
   else if (!strcmp((const char *)in_item_ref, "noise_2km"))
   {
     g_osd.videoLink = VS_2KM;
-    this->updateNoiseMenu();
   }
   else if (!strcmp((const char *)in_item_ref, "noise_10km"))
   {
     g_osd.videoLink = VS_10KM;
-    this->updateNoiseMenu();
   }
   else if (!strcmp((const char *)in_item_ref, "noise_50km"))
   {
     g_osd.videoLink = VS_50KM;
-    this->updateNoiseMenu();
   }
+
+  this->updateAll();
+  saveIniFile();
 }
 
 //==============================================================
 //==============================================================
 void TMenu::createMenu()
 {
-	this->menu_container_idx = XPLMAppendMenuItem(XPLMFindPluginsMenu(), "INAV HITL", 0, 0);
+  this->menu_container_idx = XPLMAppendMenuItem(XPLMFindPluginsMenu(), "INAV HITL", 0, 0);
 
-	this->menu_id = XPLMCreateMenu("INAV HITL", XPLMFindPluginsMenu(), this->menu_container_idx, static_menu_handler, NULL);
-	this->connect_id = XPLMAppendMenuItem(this->menu_id, "Link", (void *)"Menu Item 1", 1);
-	this->connect_menu_id = XPLMCreateMenu("Link", this->menu_id, this->connect_id, static_menu_handler, NULL);
-	this->connect_disconnect_id = XPLMAppendMenuItem(this->connect_menu_id, "Connect to Flight Controller", (void *)"connect_disconnect", 1);
+  this->menu_id = XPLMCreateMenu("INAV HITL", XPLMFindPluginsMenu(), this->menu_container_idx, static_menu_handler, NULL);
+  this->connect_id = XPLMAppendMenuItem(this->menu_id, "Link", (void *)"Menu Item 1", 1);
+  this->connect_menu_id = XPLMCreateMenu("Link", this->menu_id, this->connect_id, static_menu_handler, NULL);
+  this->connect_disconnect_id = XPLMAppendMenuItem(this->connect_menu_id, "Connect to Flight Controller", (void *)"connect_disconnect", 1);
 
-	XPLMAppendMenuSeparator(this->menu_id);
+  XPLMAppendMenuSeparator(this->menu_id);
 
-	this->gps_fix_id = XPLMAppendMenuItem(this->menu_id, "GPS Fix", (void *)"gps_fix", 1);
-	this->gps_fix_menu_id = XPLMCreateMenu("GPS Fix", this->menu_id, this->gps_fix_id, static_menu_handler, NULL);
-	this->gps_fix_0_id = XPLMAppendMenuItem(this->gps_fix_menu_id, "0 satellites (No fix)", (void *)"gps_fix_0", 1);
-	this->gps_fix_12_id = XPLMAppendMenuItem(this->gps_fix_menu_id, "12 satellites (3D fix)", (void *)"gps_fix_12", 1);
+  this->gps_fix_id = XPLMAppendMenuItem(this->menu_id, "GPS Fix", (void *)"gps_fix", 1);
+  this->gps_fix_menu_id = XPLMCreateMenu("GPS Fix", this->menu_id, this->gps_fix_id, static_menu_handler, NULL);
+  this->gps_fix_0_id = XPLMAppendMenuItem(this->gps_fix_menu_id, "0 satellites (No fix)", (void *)"gps_fix_0", 1);
+  this->gps_fix_12_id = XPLMAppendMenuItem(this->gps_fix_menu_id, "12 satellites (3D fix)", (void *)"gps_fix_12", 1);
 
   this->attitude_id = XPLMAppendMenuItem(this->menu_id, "Attitude", (void *)"attitude", 1);
   this->attitude_menu_id = XPLMCreateMenu("Attitude", this->menu_id, this->attitude_id, static_menu_handler, NULL);
@@ -443,13 +412,20 @@ void TMenu::createMenu()
   this->graph_debug_altitude_id = XPLMAppendMenuItem(this->graph_menu_id, "debug_mode = altitude", (void *)"graph_debug_altitude", 1);
   this->graph_debug_custom_id = XPLMAppendMenuItem(this->graph_menu_id, "debug[8] array", (void *)"graph_debug_custom", 1);
 
-/*                               
-	this->gps_spoofing_1_id = XPLMAppendMenuItem(this->gps_fix_menu_id, "Spoofing: Freeze", (void *)"gps_spoofing_1", 1);
-	this->gps_spoofing_2_id = XPLMAppendMenuItem(this->gps_fix_menu_id, "Spoofing: Linear 1m/s", (void *)"gps_spoofing_2", 1);
-	this->gps_spoofing_3_id = XPLMAppendMenuItem(this->gps_fix_menu_id, "Spoofing: Random jump 100m", (void *)"gps_spoofing_3", 1);
-	this->gps_spoofing_4_id = XPLMAppendMenuItem(this->gps_fix_menu_id, "Spoofing: Random jump 100m + satellites count", (void *)"gps_spoofing_4", 1);
-	this->gps_spoofing_5_id = XPLMAppendMenuItem(this->gps_fix_menu_id, "Spoofing: Circle 500m 1m/s", (void *)"gps_spoofing_5", 1);
-*/
+  /*
+    this->gps_spoofing_1_id = XPLMAppendMenuItem(this->gps_fix_menu_id, "Spoofing: Freeze", (void *)"gps_spoofing_1", 1);
+    this->gps_spoofing_2_id = XPLMAppendMenuItem(this->gps_fix_menu_id, "Spoofing: Linear 1m/s", (void *)"gps_spoofing_2", 1);
+    this->gps_spoofing_3_id = XPLMAppendMenuItem(this->gps_fix_menu_id, "Spoofing: Random jump 100m", (void *)"gps_spoofing_3", 1);
+    this->gps_spoofing_4_id = XPLMAppendMenuItem(this->gps_fix_menu_id, "Spoofing: Random jump 100m + satellites count", (void *)"gps_spoofing_4", 1);
+    this->gps_spoofing_5_id = XPLMAppendMenuItem(this->gps_fix_menu_id, "Spoofing: Circle 500m 1m/s", (void *)"gps_spoofing_5", 1);
+  */
+  this->updateAll();
+}
+
+//==============================================================
+//==============================================================
+void TMenu::updateAll()
+{
   this->updateGPSMenu();
   this->updateOSDMenu();
   this->updateBatteryMenu();

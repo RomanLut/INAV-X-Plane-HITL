@@ -37,6 +37,9 @@ public:
 
   void teleport();
 
+  void loadConfig(mINI::INIStructure& ini);
+  void saveConfig(mINI::INIStructure& ini);
+
 private:
 
   typedef struct

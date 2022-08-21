@@ -174,6 +174,9 @@ public:
 
   void setBateryEmulation(TBatteryEmulationType s);
   void recalculateBattery();
+
+  void loadConfig(mINI::INIStructure& ini);
+  void saveConfig(mINI::INIStructure& ini);
 };
 
 extern TSimData g_simData;

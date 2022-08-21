@@ -423,3 +423,51 @@ void TSimData::recalculateBattery()
   }
 }
 
+//==============================================================
+//==============================================================
+void TSimData::loadConfig(mINI::INIStructure& ini)
+{
+  if (ini[SETTINGS_SECTION].has(SETTINGS_GPS_NUMSAT))
+  {
+    this->gps_numSat = atoi( ini[SETTINGS_SECTION][SETTINGS_GPS_NUMSAT].c_str() );
+    if (this->gps_numSat == 0)
+    {
+      this->gps_fix = GPS_NO_FIX;
+    }
+    else if (gps_numSat == 12)
+    {
+      this->gps_fix = GPS_FIX_3D;
+    }
+    else
+    {
+      this->gps_fix = GPS_FIX_3D;
+      this->gps_numSat = 12;
+    }
+  }
+
+  this->attitude_use_sensors = ini[SETTINGS_SECTION].has(SETTINGS_ATTITUDE_USE_SENSORS) && (ini[SETTINGS_SECTION][SETTINGS_ATTITUDE_USE_SENSORS] == "1");
+
+  if (ini[SETTINGS_SECTION].has(SETTINGS_BATTERY_EMULATION))
+  {
+    this->batEmulation = (TBatteryEmulationType)atoi(ini[SETTINGS_SECTION][SETTINGS_BATTERY_EMULATION].c_str());
+    if (this->batEmulation < BATTERY_NONE || this->batEmulation > BATTERY_30MIN)
+    {
+      this->batEmulation = BATTERY_INFINITE;
+    }
+  }
+
+  this->muteBeeper = !ini[SETTINGS_SECTION].has(SETTINGS_MUTE_BEEPER) || (ini[SETTINGS_SECTION][SETTINGS_MUTE_BEEPER] != "0");
+  this->simulatePitot = !ini[SETTINGS_SECTION].has(SETTINGS_SIMULATE_PITOT) || (ini[SETTINGS_SECTION][SETTINGS_SIMULATE_PITOT] != "0");
+}
+
+//==============================================================
+//==============================================================
+void TSimData::saveConfig(mINI::INIStructure& ini)
+{
+  ini[SETTINGS_SECTION][SETTINGS_GPS_NUMSAT] = std::to_string(this->gps_numSat);
+  ini[SETTINGS_SECTION][SETTINGS_ATTITUDE_USE_SENSORS] = std::to_string(this->attitude_use_sensors ? 1 : 0);
+  ini[SETTINGS_SECTION][SETTINGS_BATTERY_EMULATION] = std::to_string(this->batEmulation);
+  ini[SETTINGS_SECTION][SETTINGS_MUTE_BEEPER] = std::to_string(this->muteBeeper);
+  ini[SETTINGS_SECTION][SETTINGS_SIMULATE_PITOT] = std::to_string(this->simulatePitot);
+}
+

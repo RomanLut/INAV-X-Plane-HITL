@@ -103,6 +103,7 @@ public:
   void updateGraphMenu();
   void updateMapMenu();
   void updateNoiseMenu();
+  void updateAll();
 
   void actionDisconnect();
 };

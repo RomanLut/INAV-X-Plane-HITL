@@ -53,6 +53,9 @@ public:
 
   void setHomeLocation(double home_lattitude, double home_longitude, double home_elevation);
 
+  void loadConfig(mINI::INIStructure& ini);
+  void saveConfig(mINI::INIStructure& ini);
+
 private:
   int fontTextureId = 0;
   int noiseTextureId = 0;
@@ -82,7 +85,6 @@ private:
   float getNoiseAmount();
 
   float extractFloat(int index);
-
 };
 
 extern TOSD g_osd;

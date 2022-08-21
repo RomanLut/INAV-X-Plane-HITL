@@ -37,6 +37,8 @@
 #include <GL/gl.h>
 #include <GL/glu.h>
 
+#include "mINI\ini.h"
+
 #ifdef LIN
 #define MAX_PATH 1260
 #include <time.h>

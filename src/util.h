@@ -21,7 +21,22 @@ extern void delayMS(uint32_t valueMS);
 
 extern void getClipboardText(char str[1024]);
 
+extern bool saveIniFile();
+
 #ifdef LIN
 extern bool IsDebuggerPresent();
 extern uint32_t GetTickCount();
 #endif
+
+#define SETTINGS_SECTION                "settings"
+#define SETTINGS_GPS_NUMSAT             "gps_numSat"
+#define SETTINGS_ATTITUDE_USE_SENSORS   "attitude_use_sensors"
+#define SETTINGS_OSD_TYPE               "osd_type"
+#define SETTINGS_OSD_SMOOTHED           "osd_smoothed"
+#define SETTINGS_BATTERY_EMULATION      "battery_emulation"
+#define SETTINGS_MUTE_BEEPER            "mute_beeper"
+#define SETTINGS_SIMULATE_PITOT         "simulate_pitot"
+#define SETTINGS_GRAPH_TYPE             "graph_type"
+#define SETTINGS_MAP_MARKING_TYPE       "map_markings_type"
+#define SETTINGS_VIDEOLINK_SIMULATION   "videolink_simulation"
+

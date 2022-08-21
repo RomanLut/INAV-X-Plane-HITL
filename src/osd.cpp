@@ -669,3 +669,39 @@ void TOSD::setHomeLocation(double home_lattitude, double home_longitude, double 
   this->home_longitude = home_longitude;
   this->home_elevation = home_elevation;
 }
+
+//==============================================================
+//==============================================================
+void TOSD::loadConfig(mINI::INIStructure& ini)
+{
+  if (ini[SETTINGS_SECTION].has(SETTINGS_OSD_TYPE))
+  {
+    this->osd_type = (TOSDType)atoi(ini[SETTINGS_SECTION][SETTINGS_OSD_TYPE].c_str());
+    if (this->osd_type < OSD_NONE || this->osd_type > OSD_NONE)
+    {
+      this->osd_type = OSD_AUTO;
+    }
+  }
+
+  this->smoothed = !ini[SETTINGS_SECTION].has(SETTINGS_OSD_SMOOTHED) || (ini[SETTINGS_OSD_SMOOTHED][SETTINGS_OSD_SMOOTHED] != "0");
+
+  if (ini[SETTINGS_SECTION].has(SETTINGS_VIDEOLINK_SIMULATION))
+  {
+    this->videoLink = (TVideoLinkSimulation)atoi(ini[SETTINGS_SECTION][SETTINGS_VIDEOLINK_SIMULATION].c_str());
+    if (this->videoLink < VS_NONE || this->videoLink > VS_50KM)
+    {
+      this->videoLink = VS_50KM;
+    }
+  }
+
+}
+
+//==============================================================
+//==============================================================
+void TOSD::saveConfig(mINI::INIStructure& ini)
+{
+  ini[SETTINGS_SECTION][SETTINGS_OSD_TYPE] = std::to_string(this->osd_type);
+  ini[SETTINGS_SECTION][SETTINGS_OSD_SMOOTHED] = std::to_string(this->smoothed ? 1 : 0);
+  ini[SETTINGS_SECTION][SETTINGS_VIDEOLINK_SIMULATION] = std::to_string(this->videoLink);
+}
+
