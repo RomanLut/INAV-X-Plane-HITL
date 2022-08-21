@@ -254,6 +254,7 @@ void TMap::onWPInfo(const TMSPWPInfo* messageBuffer)
   if (this->waypointsDownloadState != 0) return;
   if (!messageBuffer->waypointsListValid || (messageBuffer->waypointsCount == 0))
   {
+    XPLMSpeakString("No waypoints defined");
     this->waypointsDownloadState = -1;
   }
   else
@@ -286,6 +287,11 @@ void TMap::onWP(const TMSPWP* messageBuffer)
   {
     this->retrieveNextWaypoint();
   }
+  else
+  {
+    std::string s = "Downloaded " + std::to_string(this->waypointsCount) + " waypoints";
+    XPLMSpeakString(s.c_str());    
+  }
 }
 
 //==============================================================
@@ -306,7 +312,8 @@ void TMap::teleport()
   char* p = strstr(str, ",");
   if (!p)
   {
-    LOG("TELEPORT: Clipboard is empty");
+    XPLMSpeakString("Clipboard does not contain coordinates");
+    LOG("TELEPORT: Clipboard does not contain coordinates");    
     return;
   }
 
@@ -315,6 +322,7 @@ void TMap::teleport()
   double latitude = std::stod(str);
   if (isnan(latitude))
   {
+    XPLMSpeakString("Unable to parse coordinates");
     LOG("TELEPORT: Unable to parse lattitude %s", str);
     return;
   }
@@ -325,6 +333,7 @@ void TMap::teleport()
   double longitude = std::stod(p);
   if (isnan(longitude))
   {
+    XPLMSpeakString("Unable to parse coordinates");
     LOG("TELEPORT: Unable to parse longitude %s", str);
     return;
   }
@@ -354,7 +363,8 @@ void TMap::teleport()
   if (status != xplm_ProbeHitTerrain)
   {
     XPLMDestroyProbe(probeRef);
-    LOG("TELEPORT: Unable to find terrain height at tatrget point");
+    XPLMSpeakString("Unable to find terrain height at target point");
+    LOG("TELEPORT: Unable to find terrain height at target point");
     return;
   }
 
@@ -372,7 +382,8 @@ void TMap::teleport()
   if (status != xplm_ProbeHitTerrain)
   {
     XPLMDestroyProbe(probeRef);
-    LOG("TELEPORT: Unable to find terrain height at tatrget point");
+    XPLMSpeakString("Unable to find terrain height at target point");
+    LOG("TELEPORT: Unable to find terrain height at target point");
     return;
   }
 
