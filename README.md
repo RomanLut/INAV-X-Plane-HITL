@@ -45,7 +45,7 @@ This will add plugin to the **Aerolite** airplane and install additional **NK_Su
 
 ## Installation steps
 
-- Install **X-Plane 11 demo** from: https://www.x-plane.com/desktop/try-it/
+- Install **X-Plane 11 demo** from: https://www.x-plane.com/desktop/try-it/older/ *Select X-Plane 11. Other versions are not supported*
   Demo allows to fly for 10 minutes in Seattle region. Than you have to restart the game.
 - download **Aircraft.zip** from last release https://github.com/RomanLut/INAV-X-Plane-HITL/releases/
 - Unzip, copy `Aircraft` folder to `X-Plane 11\Aircraft` folder in **X-Plane** installation location. 
