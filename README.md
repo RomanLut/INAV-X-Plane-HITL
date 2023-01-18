@@ -93,7 +93,11 @@ See recommended starting pids for **NK SurfWing** (flying wing) [nkfpvsurfwing.m
 
 Plugin will simulate sensors, enabled in FC's configuration.
 
-In minimal case, you need FC with some kind of receiver attached. No real barometer and GPS sensors are required. FC with OSD is highly recommended.
+In minimal case, you need FC with some kind of receiver attached. 
+
+No real barometer and GPS sensors are required. 
+
+FC with analog OSD is highly recommended. If FC does not have OSD chip, there will be no OSD in simulator.
 
 ![](doc/attitude.png)
 
@@ -202,6 +206,8 @@ Plugin can draw flight path on X-Plane map.
 Coordinates can be extracted from:
 - **Latitude/Longitude from OSD** -  extracted from OSD. Note that these number have low accuracy and are not updated synchronously. Path will have jittering under zoom.
 - **debug[0]/debug[1] as Latitude/Longitude** - assumed that coordinates are provided in debug[0]/debug[1] variables by custom INAV build (int32_t, int32_t).
+
+Other menu options:
 - **Download waypoints from FC** - this option will download Mission waypoints from FC and show on X-Plane map (in pink color)
 - **Teleport to location** - https://github.com/RomanLut/INAV-X-Plane-HITL/edit/main/README.md#teleporting-to-gps-coordinates
 
