@@ -25,7 +25,7 @@ While not been a main purpose, plugin can be used to improve pilot skils or gett
 
 ![](doc/x-plane-logo.png) 
 
-**X-Plane** 11 https://www.x-plane.com/ is flight simulator with accurate physics simulation. 
+**X-Plane** https://www.x-plane.com/ is flight simulator with accurate physics simulation. 
  
 X-Plane is extendable with plugins. This plugin connects to Flight Controller through USB cable and passes gyroscope, accelerometer, barometer, magnethometer and GPS data, which replace data from physical sensors. 
 
@@ -45,8 +45,7 @@ This will add plugin to the **Aerolite** airplane and install additional **NK_Su
 
 ## Installation steps
 
-- Install **X-Plane 11 demo** from: https://www.x-plane.com/desktop/try-it/older/ *Select X-Plane 11. Other versions are not supported*
-  Demo allows to fly for 10 minutes in Seattle region. Than you have to restart the game.
+- Install **X-Plane 11 demo** from: https://www.x-plane.com/desktop/try-it/older/ **Select X-Plane 11. Other versions are not supported.** Demo allows to fly for 10 minutes in Seattle region. Than you have to restart the game.
 - download **Aircraft.zip** from last release https://github.com/RomanLut/INAV-X-Plane-HITL/releases/
 - Unzip, copy `Aircraft` folder to `X-Plane 11\Aircraft` folder in **X-Plane** installation location. 
 - Connect Flight Controller to PC using USB Cable. **Make sure FC is flashed with simulator-enabled firmware**  https://github.com/RomanLut/INAV-X-Plane-HITL/releases/
