@@ -49,7 +49,7 @@ This action will add **INAV Surfwing** flying wing model with this plugin.
 
 ## Installation steps
 
-- Install **X-Plane 11 demo** from: https://www.x-plane.com/desktop/try-it/older/ **Select X-Plane 11. X-Plane 12 is supported but not recommended.** Demo allows to fly for 15 minutes in Seattle region. Than you have to restart the game.
+- Install **X-Plane 11 demo** from: https://www.x-plane.com/desktop/try-it/older/ .  Demo allows to fly for 15 minutes in Seattle region. Than you have to restart the game.
 - download **Aircraft.zip** from last release https://github.com/RomanLut/INAV-X-Plane-HITL/releases/
 - If upgrading from previous  version, delete folder `X-Plane 11\Aircraft\Extra Aircraft\NK_FPVSurfwing\`
 - Unzip, copy `Aircraft` folder to `X-Plane 11\Aircraft` folder in **X-Plane** installation location. 
