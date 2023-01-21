@@ -543,6 +543,7 @@ void TOSD::cbConnect(TCBConnectParm state)
   else  if (state != CBC_CONNECTED)
   {
     this->drawString(0, 4, "INAV HITL DISCONNECTED");
+    this->drawString(1, 15 - (int)(strlen(HITL_VERSION_STRING)) / 2 , HITL_VERSION_STRING);
   }
 }
 
