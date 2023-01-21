@@ -216,7 +216,7 @@ Path is drawn on "INAV HITL" layer:
 
 # Teleporting to GPS coordinates
 
-An option in **Map** menu allows to teleport plane to any GPS location from clipboard. *Currently available on Windows only*.
+An option in **Map** menu allows to teleport plane to any GPS location from clipboard. 
 
 Right click in Google Maps, then click on the coordinates to copy them to clipboard:
 
@@ -236,7 +236,10 @@ See [development.md](doc/development.md)
 
 # Special thanks
 
-Many thanks to Sergii Sevriugin for initial implementation and a lot of testing
+Many thanks to:
+- Sergii Sevriugin for initial implementation and a lot of testing
+- NKDesign for NK FPV SurfWing RC plane for X-Plane
+- b14ckyy for Surfwing 3D model
 
 
 
