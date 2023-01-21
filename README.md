@@ -25,7 +25,7 @@ While not been a main purpose, plugin can be used to improve pilot skils or gett
 
 ![](doc/x-plane-logo.png) 
 
-**X-Plane** 11 https://www.x-plane.com/ is flight simulator with accurate physics simulation. 
+**X-Plane** https://www.x-plane.com/ is flight simulator with accurate physics simulation. 
  
 X-Plane is extendable with plugins. This plugin connects to Flight Controller through USB cable and passes gyroscope, accelerometer, barometer, magnethometer and GPS data, which replace data from physical sensors. 
 
@@ -39,14 +39,13 @@ The contents of `release\Aircraft` folder should be placed in the Aircraft folde
 
 This will add plugin to the **Aerolite** airplane and install additional **NK_Surfwing** flying wing model with this plugin.
 
-**IMPORTANT:: You have to flash Simulator-enabled INAV firmware. Take precompiled binaries from release https://github.com/RomanLut/INAV-X-Plane-HITL/releases/, or build yourself from branch: https://github.com/RomanLut/inav/tree/simulator_v1.0 . Currently official INAV firmware does not include simulator support. It will be included in INAV 6.**
+**IMPORTANT:: You have to flash Simulator-enabled INAV firmware. Take precompiled binaries from release https://github.com/RomanLut/INAV-X-Plane-HITL/releases/, or build yourself from branch: https://github.com/RomanLut/inav/tree/simulator_v1.0 . Official INAV firmware does not include simulator support currently. It will be included in INAV 6.**
 
 ![](doc/menu.png)
 
 ## Installation steps
 
-- Install **X-Plane 11 demo** from: https://www.x-plane.com/desktop/try-it/
-  Demo allows to fly for 10 minutes in Seattle region. Than you have to restart the game.
+- Install **X-Plane 11 demo** from: https://www.x-plane.com/desktop/try-it/older/ **Select X-Plane 11. Other versions are not supported.** Demo allows to fly for 10 minutes in Seattle region. Than you have to restart the game.
 - download **Aircraft.zip** from last release https://github.com/RomanLut/INAV-X-Plane-HITL/releases/
 - Unzip, copy `Aircraft` folder to `X-Plane 11\Aircraft` folder in **X-Plane** installation location. 
 - Connect Flight Controller to PC using USB Cable. **Make sure FC is flashed with simulator-enabled firmware**  https://github.com/RomanLut/INAV-X-Plane-HITL/releases/
@@ -94,7 +93,11 @@ See recommended starting pids for **NK SurfWing** (flying wing) [nkfpvsurfwing.m
 
 Plugin will simulate sensors, enabled in FC's configuration.
 
-In minimal case, you need FC with some kind of receiver attached. No real barometer and GPS sensors are required. FC with OSD is highly recommended.
+In minimal case, you need FC with some kind of receiver attached. 
+
+No real barometer and GPS sensors are required. 
+
+FC with analog OSD is highly recommended. If FC does not have OSD chip, there will be no OSD in simulator.
 
 ![](doc/attitude.png)
 
@@ -203,6 +206,8 @@ Plugin can draw flight path on X-Plane map.
 Coordinates can be extracted from:
 - **Latitude/Longitude from OSD** -  extracted from OSD. Note that these number have low accuracy and are not updated synchronously. Path will have jittering under zoom.
 - **debug[0]/debug[1] as Latitude/Longitude** - assumed that coordinates are provided in debug[0]/debug[1] variables by custom INAV build (int32_t, int32_t).
+
+Other menu options:
 - **Download waypoints from FC** - this option will download Mission waypoints from FC and show on X-Plane map (in pink color)
 - **Teleport to location** - https://github.com/RomanLut/INAV-X-Plane-HITL/edit/main/README.md#teleporting-to-gps-coordinates
 
@@ -211,7 +216,7 @@ Path is drawn on "INAV HITL" layer:
 
 # Teleporting to GPS coordinates
 
-An option in **Map** menu allows to teleport plane to any GPS location from clipboard. *Currently available on Windows only*.
+An option in **Map** menu allows to teleport plane to any GPS location from clipboard. 
 
 Right click in Google Maps, then click on the coordinates to copy them to clipboard:
 
@@ -231,7 +236,10 @@ See [development.md](doc/development.md)
 
 # Special thanks
 
-Many thanks to Sergii Sevriugin for initial implementation and a lot of testing
+Many thanks to:
+- Sergii Sevriugin for initial implementation and a lot of testing
+- NKDesign for NK FPV SurfWing RC plane for X-Plane
+- b14ckyy for Surfwing 3D model
 
 
 
