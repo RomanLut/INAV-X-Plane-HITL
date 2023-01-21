@@ -1,6 +1,6 @@
 # INAV X-Plane HITL plugin
 
-**Hardware-in-the-loop** plugin for **X-Plane 11** for **INAV Flight Controller firmware**: 
+**Hardware-in-the-loop** plugin for **X-Plane 11 & 12** for **INAV Flight Controller firmware**: 
 
 [![IMAGE ALT TEXT HERE](https://img.youtube.com/vi/krTDi1tXGX8/0.jpg)](https://www.youtube.com/watch?v=krTDi1tXGX8)
 
@@ -8,7 +8,7 @@
 
 **X-Plane** is a flight simulation engine series developed and published by Laminar Research https://www.x-plane.com/
 
-**INAV-X-Plane-HITL** is plugin for **X-Plane** for testing and developing flight controllers with **INAV flight controller firmware** https://github.com/iNavFlight/inav.
+**INAV-X-Plane-HITL** is plugin for **X-Plane** for testing and developing **INAV flight controller firmware** https://github.com/iNavFlight/inav.
 
 
 # Motivation
@@ -17,7 +17,7 @@ I believe that good testing and debugging tools are key points to achieve softwa
 
 It is not Ok when people debug autopilot by running with RC Plane on the field :smiley:
 
-I hope this plugin can help improve INAV firmware.
+I hope this plugin can help to improve INAV firmware.
 
 While not been a main purpose, plugin can be used to improve pilot skils or getting familiar with INAV settings.
 
@@ -27,9 +27,13 @@ While not been a main purpose, plugin can be used to improve pilot skils or gett
 
 **X-Plane** https://www.x-plane.com/ is flight simulator with accurate physics simulation. 
  
-X-Plane is extendable with plugins. This plugin connects to Flight Controller through USB cable and passes gyroscope, accelerometer, barometer, magnethometer and GPS data, which replace data from physical sensors. 
+X-Plane is extendable with plugins. This plugin connects to Flight Controller through USB cable and passes gyroscope, accelerometer, barometer, magnethometer, GPS and Pitot tube data from X-Plane, which replace data from physical sensors. 
 
 FC sends back **yaw/pitch/roll** controls which are passed to X-Plane.
+
+## X-Plane 11 or X-Plane 12?
+
+Simulation requires at least 60 solid FPS without freezing. While **X-Plane 12** has better visual appearance, **X-Plane 11** is till recommented due to better performance. Also **INAV Surfwing** flying characteristic seems to be worse in **X-Plane 12**.
 
 # Setup (Windows)
 
@@ -37,29 +41,29 @@ Plugin is **Aircraft** plugin.
 
 The contents of `release\Aircraft` folder should be placed in the Aircraft folder of X-Plane: `X-Plane11\Aircraft\`.
 
-This will add plugin to the **Aerolite** airplane and install additional **NK_Surfwing** flying wing model with this plugin.
+This action will add **INAV Surfwing** flying wing model with this plugin.
 
-**IMPORTANT:: You have to flash Simulator-enabled INAV firmware. Take precompiled binaries from release https://github.com/RomanLut/INAV-X-Plane-HITL/releases/, or build yourself from branch: https://github.com/RomanLut/inav/tree/simulator_v1.0 . Official INAV firmware does not include simulator support currently. It will be included in INAV 6.**
+**IMPORTANT:: You have to flash Simulator-enabled INAV firmware. Take precompiled binaries from release https://github.com/RomanLut/INAV-X-Plane-HITL/releases/ (INAV 5.0.0 with simulator support), or build yourself from branch: https://github.com/RomanLut/inav/tree/simulator_v1.0 (INAV 5.0.0 with simulator support), or build yourself from master branch of official INAV repository . Official INAV firmware releases do not include simulator support currently. It will be included in INAV 6.**
 
 ![](doc/menu.png)
 
 ## Installation steps
 
-- Install **X-Plane 11 demo** from: https://www.x-plane.com/desktop/try-it/older/ **Select X-Plane 11. Other versions are not supported.** Demo allows to fly for 10 minutes in Seattle region. Than you have to restart the game.
+- Install **X-Plane 11 demo** from: https://www.x-plane.com/desktop/try-it/older/ **Select X-Plane 11. X-Plane 12 is supported but not recommended.** Demo allows to fly for 15 minutes in Seattle region. Than you have to restart the game.
 - download **Aircraft.zip** from last release https://github.com/RomanLut/INAV-X-Plane-HITL/releases/
+- If upgrading from previous  version, delete folder `X-Plane 11\Aircraft\Extra Aircraft\NK_FPVSurfwing\`
 - Unzip, copy `Aircraft` folder to `X-Plane 11\Aircraft` folder in **X-Plane** installation location. 
 - Connect Flight Controller to PC using USB Cable. **Make sure FC is flashed with simulator-enabled firmware**  https://github.com/RomanLut/INAV-X-Plane-HITL/releases/
 - Configure FC (see **Flight Controller configuration** below)
 - Start **X-Plane 11**
-- Select "Show extra aircraft from older versions" to see NK_FPVSurfwing
+- Select **"Show extra aircraft from older versions"** to see **INAV Surfwing**
 ![](doc/show_extra_aircraft.jpg)
-- Select Airplane **NK Surfwing** or **Aerolite 103**
-- Start flight
-- Select **Plugins->INAV HITL->Link->Connect to flight controller**. Plugin should automatically detect COM port.
-- Flight using RC Controller, setup PIDs etc. **Hint: disable parking brakes with "B" key on takeoff if necessary.** 
+- Select **INAV Surfwing**, start flight
+- When scenery is loaded, select **Plugins->INAV HITL->Link->Connect to flight controller**. Plugin should automatically detect serial port.
+- Flight using RC Controller, setup PIDs etc. 
 
 
-*Note:Use **"Internal View/Forward with No Display"** for full immersion FPV flights:*
+*Note: Use **"Internal View/Forward with No Display"** for full immersion FPV flights:*
 
 ![](doc/internalview.png)
 
@@ -75,7 +79,9 @@ This will add plugin to the **Aerolite** airplane and install additional **NK_Su
 
 Flight controller should be fully configured like for the real flight. There is no need to configure mixer and motors output.
 
-Configure **Aircraft with tail** for **Aerolite** and **Flying wing** for **NK Sufwing**. It is possible to use plugin with any other airplane (copy plugin to corresponding Aircraft subfolder).
+Configure **Platform type: Flying wing** for **INAV Sufwing** in **INAV Configurator**. 
+
+It is possible to use plugin with any other airplane (copy HITL plugin from `NK_FRVSurfWing\plugins\INAV-X-Plane-HITL` to corresponding Aircraft subfolder of other airplane).
 
 Platforms other than "Airplane" are not supported.
 
@@ -85,9 +91,7 @@ Platforms other than "Airplane" are not supported.
 
 ## Pids and rates
 
-See recommended starting pids for **Aerolite** (Aircraft with tail ) [aerolite.md](doc/aerolite/aerolite.md)
-
-See recommended starting pids for **NK SurfWing** (flying wing) [nkfpvsurfwing.md](doc/nkfpvsufrwing/nkfpvsurfwing.md)
+See recommended starting pids for **INAV SurfWing** (Platform: Flying wing) [nkfpvsurfwing.md](doc/nkfpvsufrwing/nkfpvsurfwing.md)
 
 # Sensors simulation
 
@@ -167,12 +171,9 @@ The following requirements should be met to have OSD drawn in **X-Plane**:
 
 - OSD should be configured as `AUTO`, `PAL` or `NTSC` type in "OSD" tab in **INAV Configurator**.
 - OSD should be enabled in "Configuration->Other features->OSD" in **INAV Configurator**.
-- OSD chip should be present on Flight Controller (MAX7456). OSD will not work without MAX7456 compatible chip. OSD will not work with HD Zero, DJI or Pixel OSD selected in configuration.
-- **X-Plane** should **NOT** use **Vulkan** drivers. Please uncheck the following option:
+- OSD chip should be present on Flight Controller (MAX7456). OSD will not work without MAX7456 compatible chip. OSD will not work if HD Zero, DJI or Pixel OSD selected in configuration.
 
-![](doc/vulkan.png)
-
-The following options present in menu:
+The following options are present in menu:
 
 ![](doc/osdoptions.png) 
 
@@ -180,8 +181,8 @@ The following options present in menu:
 - **AUTO:** number of OSD lines is provided by FC
 - **PAL:** force rendering of 16 OSD lines
 - **NTSC:** force rendering of 13 OSD lines
-- **Smoothing: Nearest:** Use nearest pixels for charactes rendering
-- **Smoothing: Linear:** Use linear smoothing for charactes rendering
+- **Smoothing: Nearest:** Use nearest pixels for characters rendering
+- **Smoothing: Linear:** Use linear smoothing for characters rendering
 
 OSD is using **Bold** font from **INAV Configurator**. It is possible to replace font `(\plugins\INAV-X-Plane-HITL\64\assets\osd_font.png)` with other font from **INAV Configurator** https://github.com/iNavFlight/inav-configurator/tree/master/resources/osd
 
@@ -245,7 +246,7 @@ Many thanks to:
 
 # Links
 
-- X-Plane INAV HITL prototype has been implemented by Sergii Sevriugin: 
+- X-Plane INAV HITL prototype has been orignally implemented by Sergii Sevriugin: 
 
    https://github.com/sevrugin/inav/tree/master-simulator-xplane
 
