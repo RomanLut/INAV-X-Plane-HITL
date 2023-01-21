@@ -147,7 +147,7 @@ PLUGIN_API int XPluginStart(
 
   g_osd.init();
 
-  XPLMRegisterDrawCallback(&drawCallback, xplm_Phase_LastCockpit, 0, NULL);
+  XPLMRegisterDrawCallback(&drawCallback, xplm_Phase_Window/*xplm_Phase_LastCockpit*/, 0, NULL);
 
 	return 1;
 }
