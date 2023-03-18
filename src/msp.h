@@ -75,8 +75,12 @@ typedef enum
   SIMU_MUTE_BEEPER          = (1 << 2),
   SIMU_USE_SENSORS          = (1 << 3),
   SIMU_HAS_NEW_GPS_DATA     = (1 << 4),
-  SIMU_EXT_BATTERY_VOLTAGE  = (1 << 5), //extend MSP_SIMULATOR format 2
-  SIMU_AIRSPEED             = (1 << 6)
+  SIMU_EXT_BATTERY_VOLTAGE  = (1 << 5), //extend MSP_SIMULATOR format 2: battery voltage value
+  SIMU_AIRSPEED             = (1 << 6),
+  SIMU_EXTENDED_FLAGS       = (1 << 7), //extend MSP_SIMULATOR format 2: extra flags
+
+  SIMU2_GPS_TIMEOUT         = (1 << 8),
+  SIMU2_PITOT_FAILURE       = (1 << 9)
 } TSimulatorFlags;
 
 //======================================================
@@ -117,6 +121,8 @@ struct TMSPSimulatorToINAV
   //SIMU_EXT_BATTERY_VOLTAGE in format 2
   uint8_t vbat; //126->12.6V
   uint16_t airspeed; //cm/s
+
+  uint8_t flags2; // TSimulatorFlags -  
 };
 #pragma pack()
 

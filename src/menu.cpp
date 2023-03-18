@@ -41,8 +41,17 @@ void TMenu::_cbConnect(TCBConnectParm state)
 //==============================================================
 void TMenu::updateGPSMenu()
 {
-  XPLMCheckMenuItem(this->gps_fix_menu_id, this->gps_fix_0_id, g_simData.gps_numSat == 0 ? xplm_Menu_Checked : xplm_Menu_Unchecked);
-  XPLMCheckMenuItem(this->gps_fix_menu_id, this->gps_fix_12_id, g_simData.gps_numSat == 12 ? xplm_Menu_Checked : xplm_Menu_Unchecked);
+  XPLMCheckMenuItem(this->gps_fix_menu_id, this->gps_fix_0_id, (g_simData.gps_numSat == 0) && !g_simData.gps_timeout? xplm_Menu_Checked : xplm_Menu_Unchecked);
+  XPLMCheckMenuItem(this->gps_fix_menu_id, this->gps_fix_12_id, (g_simData.gps_numSat == 12) && !g_simData.gps_timeout ? xplm_Menu_Checked : xplm_Menu_Unchecked);
+  XPLMCheckMenuItem(this->gps_fix_menu_id, this->gps_timeout_id, g_simData.gps_timeout ? xplm_Menu_Checked : xplm_Menu_Unchecked);
+}
+
+//==============================================================
+//==============================================================
+void TMenu::updateMagMenu()
+{
+  XPLMCheckMenuItem(this->mag_menu_id, this->mag_normal_id, (g_simData.simulate_mag_failure == false) ? xplm_Menu_Checked : xplm_Menu_Unchecked);
+  XPLMCheckMenuItem(this->mag_menu_id, this->mag_failure_id, (g_simData.simulate_mag_failure == true) ? xplm_Menu_Checked : xplm_Menu_Unchecked);
 }
 
 //==============================================================
@@ -90,8 +99,9 @@ void TMenu::updateBeeperMenu()
 //==============================================================
 void TMenu::updatePitotMenu()
 {
-  XPLMCheckMenuItem(this->pitot_menu_id, this->pitot_none_id, g_simData.simulatePitot == false ? xplm_Menu_Checked : xplm_Menu_Unchecked);
-  XPLMCheckMenuItem(this->pitot_menu_id, this->pitot_simulate_id, g_simData.simulatePitot == true ? xplm_Menu_Checked : xplm_Menu_Unchecked);
+  XPLMCheckMenuItem(this->pitot_menu_id, this->pitot_none_id, (g_simData.simulatePitot == false) ? xplm_Menu_Checked : xplm_Menu_Unchecked);
+  XPLMCheckMenuItem(this->pitot_menu_id, this->pitot_simulate_id, (g_simData.simulatePitot == true) && (g_simData.simulatePitotFailure == false) ? xplm_Menu_Checked : xplm_Menu_Unchecked);
+  XPLMCheckMenuItem(this->pitot_menu_id, this->pitot_failure_id, (g_simData.simulatePitot == true) && (g_simData.simulatePitotFailure == true) ? xplm_Menu_Checked : xplm_Menu_Unchecked);
 }
 
 //==============================================================
@@ -177,12 +187,29 @@ void TMenu::menu_handler(void * in_menu_ref, void * in_item_ref)
     g_simData.gps_numSat = GPS_NO_FIX;
     g_simData.gps_fix = 0;
     g_simData.gps_spoofing = 0;
+    g_simData.gps_timeout = false;
   }
   else if (!strcmp((const char *)in_item_ref, "gps_fix_12"))
   {
     g_simData.gps_numSat = 12;
     g_simData.gps_fix = GPS_FIX_3D;
     g_simData.gps_spoofing = 0;
+    g_simData.gps_timeout = false;
+  }
+  else if (!strcmp((const char *)in_item_ref, "gps_timeout"))
+  {
+    g_simData.gps_numSat = GPS_NO_FIX;
+    g_simData.gps_fix = 0;
+    g_simData.gps_spoofing = 0;
+    g_simData.gps_timeout = true;
+  }
+  else if (!strcmp((const char *)in_item_ref, "mag_normal"))
+  {
+    g_simData.simulate_mag_failure = false;
+  }
+  else if (!strcmp((const char *)in_item_ref, "mag_failure"))
+  {
+    g_simData.simulate_mag_failure = true;
   }
   else if (!strcmp((const char *)in_item_ref, "osd_none"))
   {
@@ -243,10 +270,17 @@ void TMenu::menu_handler(void * in_menu_ref, void * in_item_ref)
   else if (!strcmp((const char *)in_item_ref, "pitot_none"))
   {
     g_simData.simulatePitot = false;
+    g_simData.simulatePitotFailure = false;
   }
   else if (!strcmp((const char *)in_item_ref, "pitot_simulate"))
   {
     g_simData.simulatePitot = true;
+    g_simData.simulatePitotFailure = false;
+  }
+  else if (!strcmp((const char *)in_item_ref, "pitot_simulate_failure"))
+  {
+    g_simData.simulatePitot = true;
+    g_simData.simulatePitotFailure = true;
   }
   else if (!strcmp((const char *)in_item_ref, "attitude_force"))
   {
@@ -346,6 +380,12 @@ void TMenu::createMenu()
   this->gps_fix_menu_id = XPLMCreateMenu("GPS Fix", this->menu_id, this->gps_fix_id, static_menu_handler, NULL);
   this->gps_fix_0_id = XPLMAppendMenuItem(this->gps_fix_menu_id, "0 satellites (No fix)", (void *)"gps_fix_0", 1);
   this->gps_fix_12_id = XPLMAppendMenuItem(this->gps_fix_menu_id, "12 satellites (3D fix)", (void *)"gps_fix_12", 1);
+  this->gps_timeout_id = XPLMAppendMenuItem(this->gps_fix_menu_id, "Sensor timeout", (void *)"gps_timeout", 1);
+
+  this->mag_id = XPLMAppendMenuItem(this->menu_id, "Compass", (void *)"Compass", 1);
+  this->mag_menu_id = XPLMCreateMenu("Compass", this->menu_id, this->mag_id, static_menu_handler, NULL);
+  this->mag_normal_id = XPLMAppendMenuItem(this->mag_menu_id, "Normal", (void *)"mag_normal", 1);
+  this->mag_failure_id = XPLMAppendMenuItem(this->mag_menu_id, "HW Failure", (void *)"mag_failure", 1);
 
   this->attitude_id = XPLMAppendMenuItem(this->menu_id, "Attitude", (void *)"attitude", 1);
   this->attitude_menu_id = XPLMCreateMenu("Attitude", this->menu_id, this->attitude_id, static_menu_handler, NULL);
@@ -377,6 +417,7 @@ void TMenu::createMenu()
   this->pitot_menu_id = XPLMCreateMenu("Pitot", this->menu_id, this->pitot_id, static_menu_handler, NULL);
   this->pitot_none_id = XPLMAppendMenuItem(this->pitot_menu_id, "None", (void *)"pitot_none", 1);
   this->pitot_simulate_id = XPLMAppendMenuItem(this->pitot_menu_id, "Simulate", (void *)"pitot_simulate", 1);
+  this->pitot_failure_id = XPLMAppendMenuItem(this->pitot_menu_id, "Simulate failure", (void *)"pitot_simulate_failure", 1);
 
   XPLMAppendMenuSeparator(this->menu_id);
 
@@ -427,6 +468,7 @@ void TMenu::createMenu()
 void TMenu::updateAll()
 {
   this->updateGPSMenu();
+  this->updateMagMenu();
   this->updateOSDMenu();
   this->updateBatteryMenu();
   this->updateBeeperMenu();

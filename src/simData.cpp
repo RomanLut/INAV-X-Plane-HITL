@@ -24,6 +24,9 @@ void TSimData::init()
   this->gps_fix = GPS_FIX_3D;
   this->gps_numSat = 12;
   this->gps_spoofing = 0;
+  this->gps_timeout = false;
+
+  this->simulate_mag_failure = false;
 
   this->df_lattitude = XPLMFindDataRef("sim/flightmodel/position/latitude");
   this->df_longitude = XPLMFindDataRef("sim/flightmodel/position/longitude");
@@ -74,6 +77,7 @@ void TSimData::init()
   this->estimated_attitude_yaw = 0;
 
   this->simulatePitot = true;
+  this->simulatePitotFailure = false;
   this->airspeed = 0;
 
 	//---- output ----
@@ -204,9 +208,13 @@ void TSimData::sendToINAV()
     ((this->batEmulation != BATTERY_NONE) ? SIMU_SIMULATE_BATTERY : 0) |
     (this->muteBeeper ? SIMU_MUTE_BEEPER : 0) |
     (this->attitude_use_sensors ? SIMU_USE_SENSORS : 0) |
-    (this->GPSHasNewData ? SIMU_HAS_NEW_GPS_DATA : 0) |
+    (this->GPSHasNewData && !this->gps_timeout ? SIMU_HAS_NEW_GPS_DATA : 0) |
     SIMU_EXT_BATTERY_VOLTAGE |
-    (this->simulatePitot ? SIMU_AIRSPEED : 0 );
+    (this->simulatePitot ? SIMU_AIRSPEED : 0) |
+    SIMU_EXTENDED_FLAGS;
+
+  data.flags2 = (this->gps_timeout ? SIMU2_GPS_TIMEOUT >> 8 : 0) |
+    (this->simulatePitotFailure ? SIMU2_PITOT_FAILURE >> 8 : 0);
 
   this->GPSHasNewData = false;
 
@@ -263,9 +271,18 @@ void TSimData::sendToINAV()
   this->computeQuaternionFromRPY(quat, data.roll, data.pitch, data.yaw );
   this->transformVectorEarthToBody(north, quat);
 
-  data.mag_x = clampToInt16(north[0] * 16000.0f);
-  data.mag_y = clampToInt16(north[1] * 16000.0f);
-  data.mag_z = clampToInt16(north[2] * 16000.0f);
+  if (!this->simulate_mag_failure)
+  {
+    data.mag_x = clampToInt16(north[0] * 16000.0f);
+    data.mag_y = clampToInt16(north[1] * 16000.0f);
+    data.mag_z = clampToInt16(north[2] * 16000.0f);
+  }
+  else
+  {
+    data.mag_x = 0;
+    data.mag_y = 0;
+    data.mag_z = 0;
+  }
 
   this->recalculateBattery();
   data.vbat = (uint8_t)round(this->battery_chargeV * 10);
@@ -445,6 +462,10 @@ void TSimData::loadConfig(mINI::INIStructure& ini)
     }
   }
 
+  this->gps_timeout = ini[SETTINGS_SECTION].has(SETTINGS_GPS_TIMEOUT) && (ini[SETTINGS_SECTION][SETTINGS_GPS_TIMEOUT] == "1");
+
+  this->simulate_mag_failure = ini[SETTINGS_SECTION].has(SETTINGS_MAG_FAILURE) && (ini[SETTINGS_SECTION][SETTINGS_MAG_FAILURE] == "1");
+
   this->attitude_use_sensors = ini[SETTINGS_SECTION].has(SETTINGS_ATTITUDE_USE_SENSORS) && (ini[SETTINGS_SECTION][SETTINGS_ATTITUDE_USE_SENSORS] == "1");
 
   if (ini[SETTINGS_SECTION].has(SETTINGS_BATTERY_EMULATION))
@@ -458,6 +479,7 @@ void TSimData::loadConfig(mINI::INIStructure& ini)
 
   this->muteBeeper = !ini[SETTINGS_SECTION].has(SETTINGS_MUTE_BEEPER) || (ini[SETTINGS_SECTION][SETTINGS_MUTE_BEEPER] != "0");
   this->simulatePitot = !ini[SETTINGS_SECTION].has(SETTINGS_SIMULATE_PITOT) || (ini[SETTINGS_SECTION][SETTINGS_SIMULATE_PITOT] != "0");
+  this->simulatePitotFailure = !ini[SETTINGS_SECTION].has(SETTINGS_SIMULATE_PITOT) || (ini[SETTINGS_SECTION][SETTINGS_SIMULATE_PITOT_FAILURE] != "0");
 }
 
 //==============================================================
@@ -466,8 +488,11 @@ void TSimData::saveConfig(mINI::INIStructure& ini)
 {
   ini[SETTINGS_SECTION][SETTINGS_GPS_NUMSAT] = std::to_string(this->gps_numSat);
   ini[SETTINGS_SECTION][SETTINGS_ATTITUDE_USE_SENSORS] = std::to_string(this->attitude_use_sensors ? 1 : 0);
+  ini[SETTINGS_SECTION][SETTINGS_GPS_TIMEOUT] = std::to_string(this->gps_timeout ? 1 : 0);
+  ini[SETTINGS_SECTION][SETTINGS_MAG_FAILURE] = std::to_string(this->simulate_mag_failure ? 1 : 0);
   ini[SETTINGS_SECTION][SETTINGS_BATTERY_EMULATION] = std::to_string(this->batEmulation);
   ini[SETTINGS_SECTION][SETTINGS_MUTE_BEEPER] = std::to_string(this->muteBeeper);
   ini[SETTINGS_SECTION][SETTINGS_SIMULATE_PITOT] = std::to_string(this->simulatePitot);
+  ini[SETTINGS_SECTION][SETTINGS_SIMULATE_PITOT_FAILURE] = std::to_string(this->simulatePitotFailure);
 }
 

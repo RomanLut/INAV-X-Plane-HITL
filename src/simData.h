@@ -38,6 +38,9 @@ public:
   int gps_fix;
 	int gps_numSat;
   int gps_spoofing;
+  bool gps_timeout;
+
+  bool simulate_mag_failure;
 
   //degrees, the latitude of the aircraft
 	XPLMDataRef df_lattitude;
@@ -118,6 +121,7 @@ public:
 	float baro;
 
   bool simulatePitot;
+  bool simulatePitotFailure;
 
   //meters/sec, the ground speed of the aircraft
   XPLMDataRef df_airspeed;

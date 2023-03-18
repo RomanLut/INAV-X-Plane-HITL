@@ -22,6 +22,7 @@ public:
 	XPLMMenuID gps_fix_menu_id;
 	int gps_fix_0_id;
 	int gps_fix_12_id;
+  int gps_timeout_id;
 
   XPLMMenuID osd_menu_id;
   int osd_id;
@@ -52,10 +53,16 @@ public:
   int beeper_default_id;
   int beeper_mute_id;
 
+  XPLMMenuID mag_menu_id;
+  int mag_id;
+  int mag_normal_id;
+  int mag_failure_id;
+
   XPLMMenuID pitot_menu_id;
   int pitot_id;
   int pitot_none_id;
   int pitot_simulate_id;
+  int pitot_failure_id;
 
   XPLMMenuID graph_menu_id;
   int graph_id;
@@ -95,6 +102,7 @@ public:
   void destroyMenu();
   void _cbConnect(TCBConnectParm state);
   void updateGPSMenu();
+  void updateMagMenu();
   void updateOSDMenu();
   void updateBatteryMenu();
   void updateBeeperMenu();
