@@ -70,6 +70,8 @@ This action will add **INAV Surfwing** flying wing model with this plugin.
 # Setup (Linux)
 
  For Linux, all steps are analogous to Windows.
+ 
+ Make usre you have OpenAL library installed; otherwise run **sudo apt install libopenal1**
 
 # Setup (MacOs)
 
