@@ -149,6 +149,8 @@ For convience, it is possible to simulate 3S battery presense:
 
 ![](doc/battery.png)
 
+*Select voltage meter type: "FAKE" in configurator*
+
 ## Pitot
 
 If enabled in menu, airspeed from X-Plane will replace readings of pitot. 
