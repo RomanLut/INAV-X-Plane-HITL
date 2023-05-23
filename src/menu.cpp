@@ -334,6 +334,10 @@ void TMenu::menu_handler(void * in_menu_ref, void * in_item_ref)
   {
     g_map.setMarkingType(MMT_DEBUG_0_1);
   }
+  else if (!strcmp((const char *)in_item_ref, "map_clear_tracks"))
+  {
+    g_map.clearTracks();
+  }
   else if (!strcmp((const char *)in_item_ref, "map_download_waypoints"))
   {
     g_map.startDownloadWaypoints();
@@ -401,7 +405,7 @@ void TMenu::createMenu()
 
   this->battery_id = XPLMAppendMenuItem(this->menu_id, "Battery", (void *)"Battery", 1);
   this->battery_menu_id = XPLMCreateMenu("Battery", this->menu_id, this->battery_id, static_menu_handler, NULL);
-  this->battery_none_id = XPLMAppendMenuItem(this->battery_menu_id, "No emulation", (void *)"battery_none", 1);
+  this->battery_none_id = XPLMAppendMenuItem(this->battery_menu_id, "Do not simulate", (void *)"battery_none", 1);
   this->battery_infinite_id = XPLMAppendMenuItem(this->battery_menu_id, "Infinite 3s", (void *)"battery_infinite", 1);
   this->battery_discharged_id = XPLMAppendMenuItem(this->battery_menu_id, "Discharged 3s", (void *)"battery_discharged", 1);
   this->battery_3min_id = XPLMAppendMenuItem(this->battery_menu_id, "3 minutes 3s", (void *)"battery_3min", 1);
@@ -415,7 +419,7 @@ void TMenu::createMenu()
 
   this->pitot_id = XPLMAppendMenuItem(this->menu_id, "Pitot", (void *)"Pitot", 1);
   this->pitot_menu_id = XPLMCreateMenu("Pitot", this->menu_id, this->pitot_id, static_menu_handler, NULL);
-  this->pitot_none_id = XPLMAppendMenuItem(this->pitot_menu_id, "None", (void *)"pitot_none", 1);
+  this->pitot_none_id = XPLMAppendMenuItem(this->pitot_menu_id, "Do not simulate", (void *)"pitot_none", 1);
   this->pitot_simulate_id = XPLMAppendMenuItem(this->pitot_menu_id, "Simulate", (void *)"pitot_simulate", 1);
   this->pitot_failure_id = XPLMAppendMenuItem(this->pitot_menu_id, "Simulate failure", (void *)"pitot_simulate_failure", 1);
 
@@ -439,6 +443,7 @@ void TMenu::createMenu()
   this->map_lat_lon_osd_id = XPLMAppendMenuItem(this->map_menu_id, "Latitude/Longitude from OSD", (void *)"map_lat_lon_osd", 1);
   this->map_debug_0_1_id = XPLMAppendMenuItem(this->map_menu_id, "debug[0]/debug[1] as Latitude/Longitude", (void *)"map_debug_0_1", 1);
   XPLMAppendMenuSeparator(this->map_menu_id);
+  this->map_clear_tracks = XPLMAppendMenuItem(this->map_menu_id, "Clear tracks", (void *)"map_clear_tracks", 1);
   this->map_download_waypoints = XPLMAppendMenuItem(this->map_menu_id, "Download waypoints from FC", (void *)"map_download_waypoints", 1);
   this->map_teleport = XPLMAppendMenuItem(this->map_menu_id, "Teleport to location (from clipboard)", (void *)"map_teleport", 1);
 

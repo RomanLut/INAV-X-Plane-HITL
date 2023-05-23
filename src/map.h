@@ -31,6 +31,7 @@ public:
   void setMarkingType(TMapMarkType type);
   TMapMarkType getMarkingType();
 
+  void clearTracks();
   void startDownloadWaypoints();
   void onWPInfo(const TMSPWPInfo* messageBuffer);
   void onWP(const TMSPWP* messageBuffer);
@@ -46,6 +47,7 @@ private:
   {
     float lat;
     float lon;
+    uint8_t flags;  //1-action waypoint
   } TCoords;
 
   XPLMMapLayerID layer = NULL;

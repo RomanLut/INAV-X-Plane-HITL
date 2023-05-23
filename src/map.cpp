@@ -119,6 +119,7 @@ void TMap::drawMarkings(XPLMMapLayerID layer, const float * inMapBoundsLeftTopRi
     glBegin(GL_LINE_STRIP);
     for (int i = 0; i < this->waypointsCount; i++)
     {
+      if (waypoints[i].flags & 1) continue;
       XPLMMapProject(projection, waypoints[i].lat, waypoints[i].lon, &x, &y);
       glVertex2f(x, y);
     }
@@ -126,6 +127,7 @@ void TMap::drawMarkings(XPLMMapLayerID layer, const float * inMapBoundsLeftTopRi
 
     for (int i = 0; i < this->waypointsCount; i++)
     {
+      if (waypoints[i].flags & 1) continue;
       const float width = XPLMMapScaleMeter(projection, this->crossLat, this->crossLon) * 10;
       XPLMMapProject(projection, waypoints[i].lat, waypoints[i].lon, &x, &y);
       glBegin(GL_LINE_LOOP);
@@ -237,6 +239,15 @@ void TMap::addLatLonOSD(float lat, float lon)
 
 //==============================================================
 //==============================================================
+void TMap::clearTracks()
+{
+  this->pHead = 0;
+  this->pTail = 0;
+  this->waypointsCount = 0;
+}
+
+//==============================================================
+//==============================================================
 void TMap::startDownloadWaypoints()
 {
   this->waypointsDownloadState = 0;
@@ -280,8 +291,9 @@ void TMap::onWP(const TMSPWP* messageBuffer)
 
   if ((messageBuffer->index < 1) || (messageBuffer->index > this->waypointsCount)) return;
 
-  this->waypoints[messageBuffer->index-1].lat = messageBuffer->lat / INAV_LAT_LON_SCALE;
-  this->waypoints[messageBuffer->index-1].lon = messageBuffer->lon / INAV_LAT_LON_SCALE;
+  this->waypoints[messageBuffer->index - 1].lat = messageBuffer->lat / INAV_LAT_LON_SCALE;
+  this->waypoints[messageBuffer->index - 1].lon = messageBuffer->lon / INAV_LAT_LON_SCALE;
+  this->waypoints[messageBuffer->index - 1].flags = messageBuffer->flags;
   this->waypointsDownloadState++;
   if (this->waypointsDownloadState <= this->waypointsCount )
   {
