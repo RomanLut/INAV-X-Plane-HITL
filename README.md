@@ -33,7 +33,7 @@ FC sends back **yaw/pitch/roll** controls which are passed to X-Plane.
 
 ## X-Plane 11 or X-Plane 12?
 
-Simulation requires at least 60 solid FPS without freezing. While **X-Plane 12** has better visual appearance, **X-Plane 11** is till recommented due to better performance. Also **INAV Surfwing** flying characteristic seems to be worse in **X-Plane 12**.
+Simulation requires at least 50, or even better 100, solid FPS without freezing. While **X-Plane 12** has better visual appearance, **X-Plane 11** is still recommented choice due to better performance. Also **INAV Surfwing** flying characteristic seems to be worse in **X-Plane 12**.
 
 # Setup (Windows)
 
@@ -49,7 +49,7 @@ This action will add **INAV Surfwing** flying wing model with this plugin.
 
 ## Installation steps
 
-- Install **X-Plane 11 demo** from: https://www.x-plane.com/desktop/try-it/older/ **Select X-Plane 11. X-Plane 12 is supported but not recommended.** Demo allows to fly for 15 minutes in Seattle region. Than you have to restart the game.
+- Install **X-Plane 11 demo** from: https://www.x-plane.com/desktop/try-it/older/ .  Demo allows to fly for 15 minutes in Seattle region. Than you have to restart the game.
 - download **Aircraft.zip** from last release https://github.com/RomanLut/INAV-X-Plane-HITL/releases/
 - If upgrading from previous  version, delete folder `X-Plane 11\Aircraft\Extra Aircraft\NK_FPVSurfwing\`
 - Unzip, copy `Aircraft` folder to `X-Plane 11\Aircraft` folder in **X-Plane** installation location. 
@@ -70,6 +70,8 @@ This action will add **INAV Surfwing** flying wing model with this plugin.
 # Setup (Linux)
 
  For Linux, all steps are analogous to Windows.
+ 
+ Make usre you have OpenAL library installed; otherwise run **sudo apt install libopenal1**
 
 # Setup (MacOs)
 
@@ -146,6 +148,8 @@ For convience, it is possible to simulate 3S battery presense:
 - a battery which lasts a period of time on full throtle, 2x time on 50% throtle etc.
 
 ![](doc/battery.png)
+
+*Select voltage meter type: "FAKE" in configurator*
 
 ## Pitot
 
