@@ -1,6 +1,8 @@
 #include "util.h"
 #include "sound.h"
 
+#include <string>
+#include <filesystem>
 #include <math.h>
 #include <stdarg.h>
 
@@ -8,6 +10,15 @@
 #include <dlfcn.h>
 #include <gtk/gtk.h>
 #endif
+
+//==============================================================
+//==============================================================
+void destroyTexture(int textureId)
+{
+  XPLMBindTexture2d(textureId, 0);
+  GLuint t = textureId;
+  glDeleteTextures(1, &t);
+}
 
 //==============================================================
 //==============================================================
@@ -31,6 +42,26 @@ void buildAssetFilename(char pName[MAX_PATH], const char* pFileName)
     if (*slash == '\\') *slash = dirchar;
     ++slash;
   }
+}
+
+std::vector<std::string> getAvaiableFonts(void)
+{
+  static std::vector<std::string> fontList (0);
+  if (fontList.size() > 0)
+    return fontList;
+
+  char dir[MAX_PATH];
+  buildAssetFilename(dir, "assets\\fonts\\");
+
+  std::filesystem::path path = std::filesystem::weakly_canonical(dir);
+  if (std::filesystem::exists(path)) {
+    for (auto dirEntry = std::filesystem::recursive_directory_iterator(path); dirEntry != std::filesystem::recursive_directory_iterator(); ++dirEntry) {
+      dirEntry.disable_recursion_pending();
+      if (dirEntry->is_directory())
+        fontList.push_back(dirEntry->path().filename().string());
+    }
+  }
+  return fontList;
 }
 
 //==============================================================

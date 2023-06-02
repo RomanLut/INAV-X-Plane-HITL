@@ -16,16 +16,16 @@ extern void cbMessage(int code, const uint8_t* messageBuffer, int length);
 //==============================================================
 void TMenu::_cbConnect(TCBConnectParm state)
 {
-  if (state == CBC_CONNECTED)                             
+  if (state == CBC_CONNECTED)
   {
     XPLMSetMenuItemName(this->connect_menu_id, this->connect_disconnect_id, "Disconnect from Flight Controller", 0);
     playSound("assets\\connected.wav");
   }
-  else 
+  else
   {
     XPLMSetMenuItemName(this->connect_menu_id, this->connect_disconnect_id, "Connect to Flight Controller", 0);
     if (state == CBC_CONNECTION_FAILED)
-    {                                                  
+    {
       playSound("assets\\connection_failed.wav");
       LOG("cbConnect(): Connection failed");
     }
@@ -37,11 +37,18 @@ void TMenu::_cbConnect(TCBConnectParm state)
   }
 }
 
+void TMenu::updateFontMenu()
+{
+  for (auto& fId : this->hd_font_Ids) {
+    XPLMCheckMenuItem(this->hd_font_menu_id, fId.first, fId.second == g_osd.getFont() ? xplm_Menu_Checked : xplm_Menu_Unchecked);
+  }
+}
+
 //==============================================================
 //==============================================================
 void TMenu::updateGPSMenu()
 {
-  XPLMCheckMenuItem(this->gps_fix_menu_id, this->gps_fix_0_id, (g_simData.gps_numSat == 0) && !g_simData.gps_timeout? xplm_Menu_Checked : xplm_Menu_Unchecked);
+  XPLMCheckMenuItem(this->gps_fix_menu_id, this->gps_fix_0_id, (g_simData.gps_numSat == 0) && !g_simData.gps_timeout ? xplm_Menu_Checked : xplm_Menu_Unchecked);
   XPLMCheckMenuItem(this->gps_fix_menu_id, this->gps_fix_12_id, (g_simData.gps_numSat == 12) && !g_simData.gps_timeout ? xplm_Menu_Checked : xplm_Menu_Unchecked);
   XPLMCheckMenuItem(this->gps_fix_menu_id, this->gps_timeout_id, g_simData.gps_timeout ? xplm_Menu_Checked : xplm_Menu_Unchecked);
 }
@@ -129,17 +136,17 @@ void TMenu::updateMapMenu()
 
 //==============================================================
 //==============================================================
-void TMenu::updateNoiseMenu()
+void TMenu::updateVideoLinkMenu()
 {
-  XPLMCheckMenuItem(this->noise_menu_id, this->noise_none_id, g_osd.videoLink == VS_NONE ? xplm_Menu_Checked : xplm_Menu_Unchecked);
-  XPLMCheckMenuItem(this->noise_menu_id, this->noise_2KM_id, g_osd.videoLink == VS_2KM ? xplm_Menu_Checked : xplm_Menu_Unchecked);
-  XPLMCheckMenuItem(this->noise_menu_id, this->noise_10KM_id, g_osd.videoLink == VS_10KM ? xplm_Menu_Checked : xplm_Menu_Unchecked);
-  XPLMCheckMenuItem(this->noise_menu_id, this->noise_50KM_id, g_osd.videoLink == VS_50KM ? xplm_Menu_Checked : xplm_Menu_Unchecked);
+  XPLMCheckMenuItem(this->video_link_menu_id, this->noise_none_id, g_osd.videoLink == VS_NONE ? xplm_Menu_Checked : xplm_Menu_Unchecked);
+  XPLMCheckMenuItem(this->video_link_menu_id, this->noise_2KM_id, g_osd.videoLink == VS_2KM ? xplm_Menu_Checked : xplm_Menu_Unchecked);
+  XPLMCheckMenuItem(this->video_link_menu_id, this->noise_10KM_id, g_osd.videoLink == VS_10KM ? xplm_Menu_Checked : xplm_Menu_Unchecked);
+  XPLMCheckMenuItem(this->video_link_menu_id, this->noise_50KM_id, g_osd.videoLink == VS_50KM ? xplm_Menu_Checked : xplm_Menu_Unchecked);
 }
 
 //==============================================================
 //==============================================================
-void TMenu::static_menu_handler(void * in_menu_ref, void * in_item_ref)
+void TMenu::static_menu_handler(void* in_menu_ref, void* in_item_ref)
 {
   g_menu.menu_handler(in_menu_ref, in_item_ref);
 }
@@ -155,20 +162,20 @@ void TMenu::actionDisconnect()
 
 //==============================================================
 //==============================================================
-void TMenu::menu_handler(void * in_menu_ref, void * in_item_ref)
+void TMenu::menu_handler(void* in_menu_ref, void* in_item_ref)
 {
   /*
-	if (!strcmp((const char *)in_item_ref, "Menu Item 1"))
-	{
-		XPLMCommandOnce(XPLMFindCommand("sim/operation/toggle_settings_window"));
-	}
-	else if (!strcmp((const char *)in_item_ref, "Menu Item 2"))
-	{
-		XPLMCommandOnce(XPLMFindCommand("sim/operation/toggle_key_shortcuts_window"));
-	}
+  if (!strcmp((const char *)in_item_ref, "Menu Item 1"))
+  {
+    XPLMCommandOnce(XPLMFindCommand("sim/operation/toggle_settings_window"));
+  }
+  else if (!strcmp((const char *)in_item_ref, "Menu Item 2"))
+  {
+    XPLMCommandOnce(XPLMFindCommand("sim/operation/toggle_key_shortcuts_window"));
+  }
   */
 
-  if (!strcmp((const char *)in_item_ref, "connect_disconnect"))
+  if (!strcmp((const char*)in_item_ref, "connect_disconnect"))
   {
     if (!g_msp.isConnecting())
     {
@@ -182,187 +189,201 @@ void TMenu::menu_handler(void * in_menu_ref, void * in_item_ref)
       }
     }
   }
-  else if (!strcmp((const char *)in_item_ref, "gps_fix_0"))
+  else if (!strcmp((const char*)in_item_ref, "gps_fix_0"))
   {
     g_simData.gps_numSat = GPS_NO_FIX;
     g_simData.gps_fix = 0;
     g_simData.gps_spoofing = 0;
     g_simData.gps_timeout = false;
   }
-  else if (!strcmp((const char *)in_item_ref, "gps_fix_12"))
+  else if (!strcmp((const char*)in_item_ref, "gps_fix_12"))
   {
     g_simData.gps_numSat = 12;
     g_simData.gps_fix = GPS_FIX_3D;
     g_simData.gps_spoofing = 0;
     g_simData.gps_timeout = false;
   }
-  else if (!strcmp((const char *)in_item_ref, "gps_timeout"))
+  else if (!strcmp((const char*)in_item_ref, "gps_timeout"))
   {
     g_simData.gps_numSat = GPS_NO_FIX;
     g_simData.gps_fix = 0;
     g_simData.gps_spoofing = 0;
     g_simData.gps_timeout = true;
   }
-  else if (!strcmp((const char *)in_item_ref, "mag_normal"))
+  else if (!strcmp((const char*)in_item_ref, "mag_normal"))
   {
     g_simData.simulate_mag_failure = false;
   }
-  else if (!strcmp((const char *)in_item_ref, "mag_failure"))
+  else if (!strcmp((const char*)in_item_ref, "mag_failure"))
   {
     g_simData.simulate_mag_failure = true;
   }
-  else if (!strcmp((const char *)in_item_ref, "osd_none"))
+  else if (!strcmp((const char*)in_item_ref, "osd_none"))
   {
     g_osd.osd_type = OSD_NONE;
   }
-  else if (!strcmp((const char *)in_item_ref, "osd_auto"))
+  else if (!strcmp((const char*)in_item_ref, "osd_auto"))
   {
     g_osd.osd_type = OSD_AUTO;
+    g_osd.setHDMode(false);
   }
-  else if (!strcmp((const char *)in_item_ref, "osd_pal"))
+  else if (!strcmp((const char*)in_item_ref, "osd_pal"))
   {
     g_osd.osd_type = OSD_PAL;
+    g_osd.setHDMode(false);
   }
-  else if (!strcmp((const char *)in_item_ref, "osd_ntsc"))
+  else if (!strcmp((const char*)in_item_ref, "osd_ntsc"))
   {
     g_osd.osd_type = OSD_NTSC;
+    g_osd.setHDMode(false);
   }
-  else if (!strcmp((const char *)in_item_ref, "osd_nearest"))
+  else if (!strcmp((const char*)in_item_ref, "osd_nearest"))
   {
     g_osd.smoothed = false;
   }
-  else if (!strcmp((const char *)in_item_ref, "osd_linear"))
+  else if (!strcmp((const char*)in_item_ref, "osd_linear"))
   {
     g_osd.smoothed = true;
   }
-  else if (!strcmp((const char *)in_item_ref, "battery_none"))
+  else if (!strcmp((const char*)in_item_ref, "battery_none"))
   {
     g_simData.setBateryEmulation(BATTERY_NONE);
   }
-  else if (!strcmp((const char *)in_item_ref, "battery_infinite"))
+  else if (!strcmp((const char*)in_item_ref, "battery_infinite"))
   {
     g_simData.setBateryEmulation(BATTERY_INFINITE);
   }
-  else if (!strcmp((const char *)in_item_ref, "battery_discharged"))
+  else if (!strcmp((const char*)in_item_ref, "battery_discharged"))
   {
     g_simData.setBateryEmulation(BATTERY_DISCHAGED);
   }
-  else if (!strcmp((const char *)in_item_ref, "battery_3min"))
+  else if (!strcmp((const char*)in_item_ref, "battery_3min"))
   {
     g_simData.setBateryEmulation(BATTERY_3MIN);
   }
-  else if (!strcmp((const char *)in_item_ref, "battery_10min"))
+  else if (!strcmp((const char*)in_item_ref, "battery_10min"))
   {
     g_simData.setBateryEmulation(BATTERY_10MIN);
   }
-  else if (!strcmp((const char *)in_item_ref, "battery_30min"))
+  else if (!strcmp((const char*)in_item_ref, "battery_30min"))
   {
     g_simData.setBateryEmulation(BATTERY_30MIN);
   }
-  else if (!strcmp((const char *)in_item_ref, "beeper_default"))
+  else if (!strcmp((const char*)in_item_ref, "beeper_default"))
   {
     g_simData.muteBeeper = false;
   }
-  else if (!strcmp((const char *)in_item_ref, "beeper_mute"))
+  else if (!strcmp((const char*)in_item_ref, "beeper_mute"))
   {
     g_simData.muteBeeper = true;
   }
-  else if (!strcmp((const char *)in_item_ref, "pitot_none"))
+  else if (!strcmp((const char*)in_item_ref, "pitot_none"))
   {
     g_simData.simulatePitot = false;
     g_simData.simulatePitotFailure = false;
   }
-  else if (!strcmp((const char *)in_item_ref, "pitot_simulate"))
+  else if (!strcmp((const char*)in_item_ref, "pitot_simulate"))
   {
     g_simData.simulatePitot = true;
     g_simData.simulatePitotFailure = false;
   }
-  else if (!strcmp((const char *)in_item_ref, "pitot_simulate_failure"))
+  else if (!strcmp((const char*)in_item_ref, "pitot_simulate_failure"))
   {
     g_simData.simulatePitot = true;
     g_simData.simulatePitotFailure = true;
   }
-  else if (!strcmp((const char *)in_item_ref, "attitude_force"))
+  else if (!strcmp((const char*)in_item_ref, "attitude_force"))
   {
     g_simData.attitude_use_sensors = false;
   }
-  else if (!strcmp((const char *)in_item_ref, "attitude_sensors"))
+  else if (!strcmp((const char*)in_item_ref, "attitude_sensors"))
   {
     g_simData.attitude_use_sensors = true;
   }
-  else if (!strcmp((const char *)in_item_ref, "graph_none"))
+  else if (!strcmp((const char*)in_item_ref, "graph_none"))
   {
     g_graph.setGraphType(GRAPH_NONE);
   }
-  else if (!strcmp((const char *)in_item_ref, "graph_updates"))
+  else if (!strcmp((const char*)in_item_ref, "graph_updates"))
   {
     g_graph.setGraphType(GRAPH_UPDATES);
   }
-  else if (!strcmp((const char *)in_item_ref, "graph_attitude_estimation"))
+  else if (!strcmp((const char*)in_item_ref, "graph_attitude_estimation"))
   {
     g_graph.setGraphType(GRAPH_ATTITUDE_ESTIMATION);
   }
-  else if (!strcmp((const char *)in_item_ref, "graph_attitude_output"))
+  else if (!strcmp((const char*)in_item_ref, "graph_attitude_output"))
   {
     g_graph.setGraphType(GRAPH_ATTITUDE_OUTPUT);
   }
-  else if (!strcmp((const char *)in_item_ref, "graph_accelerometer"))
+  else if (!strcmp((const char*)in_item_ref, "graph_accelerometer"))
   {
     g_graph.setGraphType(GRAPH_ACC);
   }
-  else if (!strcmp((const char *)in_item_ref, "graph_gyroscope"))
+  else if (!strcmp((const char*)in_item_ref, "graph_gyroscope"))
   {
     g_graph.setGraphType(GRAPH_GYRO);
   }
-  else if (!strcmp((const char *)in_item_ref, "graph_debug_altitude"))
+  else if (!strcmp((const char*)in_item_ref, "graph_debug_altitude"))
   {
     g_graph.setGraphType(GRAPH_DEBUG_ALTITUDE);
   }
-  else if (!strcmp((const char *)in_item_ref, "graph_debug_custom"))
+  else if (!strcmp((const char*)in_item_ref, "graph_debug_custom"))
   {
     g_graph.setGraphType(GRAPH_DEBUG_CUSTOM);
   }
-  else if (!strcmp((const char *)in_item_ref, "map_none"))
+  else if (!strcmp((const char*)in_item_ref, "map_none"))
   {
     g_map.setMarkingType(MMT_NONE);
   }
-  else if (!strcmp((const char *)in_item_ref, "map_lat_lon_osd"))
+  else if (!strcmp((const char*)in_item_ref, "map_lat_lon_osd"))
   {
     g_map.setMarkingType(MMT_LAT_LON_OSD);
   }
-  else if (!strcmp((const char *)in_item_ref, "map_debug_0_1"))
+  else if (!strcmp((const char*)in_item_ref, "map_debug_0_1"))
   {
     g_map.setMarkingType(MMT_DEBUG_0_1);
   }
-  else if (!strcmp((const char *)in_item_ref, "map_clear_tracks"))
+  else if (!strcmp((const char*)in_item_ref, "map_clear_tracks"))
   {
     g_map.clearTracks();
   }
-  else if (!strcmp((const char *)in_item_ref, "map_download_waypoints"))
+  else if (!strcmp((const char*)in_item_ref, "map_download_waypoints"))
   {
     g_map.startDownloadWaypoints();
   }
-  else if (!strcmp((const char *)in_item_ref, "map_teleport"))
+  else if (!strcmp((const char*)in_item_ref, "map_teleport"))
   {
     g_map.teleport();
   }
-  else if (!strcmp((const char *)in_item_ref, "noise_none"))
+  else if (!strcmp((const char*)in_item_ref, "noise_none"))
   {
     g_osd.videoLink = VS_NONE;
   }
-  else if (!strcmp((const char *)in_item_ref, "noise_2km"))
+  else if (!strcmp((const char*)in_item_ref, "noise_2km"))
   {
     g_osd.videoLink = VS_2KM;
   }
-  else if (!strcmp((const char *)in_item_ref, "noise_10km"))
+  else if (!strcmp((const char*)in_item_ref, "noise_10km"))
   {
     g_osd.videoLink = VS_10KM;
   }
-  else if (!strcmp((const char *)in_item_ref, "noise_50km"))
+  else if (!strcmp((const char*)in_item_ref, "noise_50km"))
   {
     g_osd.videoLink = VS_50KM;
   }
-
+  else
+  {
+    std::string ref = std::string((char*)in_item_ref);
+    for (auto& font : getAvaiableFonts())
+    {
+      if (font == ref)
+      {
+        g_osd.setFont(font);
+        break;
+      }
+    }
+  }
   this->updateAll();
   saveIniFile();
 }
@@ -374,89 +395,105 @@ void TMenu::createMenu()
   this->menu_container_idx = XPLMAppendMenuItem(XPLMFindPluginsMenu(), "INAV HITL", 0, 0);
 
   this->menu_id = XPLMCreateMenu("INAV HITL", XPLMFindPluginsMenu(), this->menu_container_idx, static_menu_handler, NULL);
-  this->connect_id = XPLMAppendMenuItem(this->menu_id, "Link", (void *)"Menu Item 1", 1);
+  this->connect_id = XPLMAppendMenuItem(this->menu_id, "Link", (void*)"Menu Item 1", 1);
   this->connect_menu_id = XPLMCreateMenu("Link", this->menu_id, this->connect_id, static_menu_handler, NULL);
-  this->connect_disconnect_id = XPLMAppendMenuItem(this->connect_menu_id, "Connect to Flight Controller", (void *)"connect_disconnect", 1);
+  this->connect_disconnect_id = XPLMAppendMenuItem(this->connect_menu_id, "Connect to Flight Controller", (void*)"connect_disconnect", 1);
 
   XPLMAppendMenuSeparator(this->menu_id);
 
-  this->gps_fix_id = XPLMAppendMenuItem(this->menu_id, "GPS Fix", (void *)"gps_fix", 1);
+  this->gps_fix_id = XPLMAppendMenuItem(this->menu_id, "GPS Fix", (void*)"gps_fix", 1);
   this->gps_fix_menu_id = XPLMCreateMenu("GPS Fix", this->menu_id, this->gps_fix_id, static_menu_handler, NULL);
-  this->gps_fix_0_id = XPLMAppendMenuItem(this->gps_fix_menu_id, "0 satellites (No fix)", (void *)"gps_fix_0", 1);
-  this->gps_fix_12_id = XPLMAppendMenuItem(this->gps_fix_menu_id, "12 satellites (3D fix)", (void *)"gps_fix_12", 1);
-  this->gps_timeout_id = XPLMAppendMenuItem(this->gps_fix_menu_id, "Sensor timeout", (void *)"gps_timeout", 1);
+  this->gps_fix_0_id = XPLMAppendMenuItem(this->gps_fix_menu_id, "0 satellites (No fix)", (void*)"gps_fix_0", 1);
+  this->gps_fix_12_id = XPLMAppendMenuItem(this->gps_fix_menu_id, "12 satellites (3D fix)", (void*)"gps_fix_12", 1);
+  this->gps_timeout_id = XPLMAppendMenuItem(this->gps_fix_menu_id, "Sensor timeout", (void*)"gps_timeout", 1);
 
-  this->mag_id = XPLMAppendMenuItem(this->menu_id, "Compass", (void *)"Compass", 1);
+  this->mag_id = XPLMAppendMenuItem(this->menu_id, "Compass", (void*)"Compass", 1);
   this->mag_menu_id = XPLMCreateMenu("Compass", this->menu_id, this->mag_id, static_menu_handler, NULL);
-  this->mag_normal_id = XPLMAppendMenuItem(this->mag_menu_id, "Normal", (void *)"mag_normal", 1);
-  this->mag_failure_id = XPLMAppendMenuItem(this->mag_menu_id, "HW Failure", (void *)"mag_failure", 1);
+  this->mag_normal_id = XPLMAppendMenuItem(this->mag_menu_id, "Normal", (void*)"mag_normal", 1);
+  this->mag_failure_id = XPLMAppendMenuItem(this->mag_menu_id, "HW Failure", (void*)"mag_failure", 1);
 
-  this->attitude_id = XPLMAppendMenuItem(this->menu_id, "Attitude", (void *)"attitude", 1);
+  this->attitude_id = XPLMAppendMenuItem(this->menu_id, "Attitude", (void*)"attitude", 1);
   this->attitude_menu_id = XPLMCreateMenu("Attitude", this->menu_id, this->attitude_id, static_menu_handler, NULL);
-  this->attitude_force_id = XPLMAppendMenuItem(this->attitude_menu_id, "Copy from X-Plane", (void *)"attitude_force", 1);
-  this->attitude_sensors_id = XPLMAppendMenuItem(this->attitude_menu_id, "Estimate from sensors", (void *)"attitude_sensors", 1);
+  this->attitude_force_id = XPLMAppendMenuItem(this->attitude_menu_id, "Copy from X-Plane", (void*)"attitude_force", 1);
+  this->attitude_sensors_id = XPLMAppendMenuItem(this->attitude_menu_id, "Estimate from sensors", (void*)"attitude_sensors", 1);
 
-  this->osd_id = XPLMAppendMenuItem(this->menu_id, "OSD", (void *)"OSD", 1);
+  this->osd_id = XPLMAppendMenuItem(this->menu_id, "OSD", (void*)"OSD", 1);
   this->osd_menu_id = XPLMCreateMenu("OSD", this->menu_id, this->osd_id, static_menu_handler, NULL);
-  this->osd_none_id = XPLMAppendMenuItem(this->osd_menu_id, "None", (void *)"osd_none", 1);
-  this->osd_auto_id = XPLMAppendMenuItem(this->osd_menu_id, "Auto", (void *)"osd_auto", 1);
-  this->osd_pal_id = XPLMAppendMenuItem(this->osd_menu_id, "PAL", (void *)"osd_pal", 1);
-  this->osd_ntsc_id = XPLMAppendMenuItem(this->osd_menu_id, "NTSC", (void *)"osd_ntsc", 1);
+  this->osd_none_id = XPLMAppendMenuItem(this->osd_menu_id, "None", (void*)"osd_none", 1);
+  this->osd_auto_id = XPLMAppendMenuItem(this->osd_menu_id, "Auto", (void*)"osd_auto", 1);
+  this->osd_pal_id = XPLMAppendMenuItem(this->osd_menu_id, "PAL", (void*)"osd_pal", 1);
+  this->osd_ntsc_id = XPLMAppendMenuItem(this->osd_menu_id, "NTSC", (void*)"osd_ntsc", 1);
+  XPLMAppendMenuSeparator(this->osd_menu_id);
 
-  this->battery_id = XPLMAppendMenuItem(this->menu_id, "Battery", (void *)"Battery", 1);
+  this->font_id = XPLMAppendMenuItem(this->osd_menu_id, "HD Font", (void*)"hd_font", 1);
+  this->hd_font_menu_id = XPLMCreateMenu("HD Font", this->osd_menu_id, this->font_id, static_menu_handler, NULL);
+  for (std::string font : getAvaiableFonts())
+  {
+    char* ref;
+    ref = (char*)calloc(sizeof(char), font.size() + 1);
+    if (ref)
+    {
+      ref[font.size()] = '\0';
+      strncpy(ref, font.c_str(), font.size());
+      this->hd_font_Ids[XPLMAppendMenuItem(this->hd_font_menu_id, font.c_str(), (void*)ref, 1)] = font;
+    }
+  }
+
+  this->osd_nearest_id = XPLMAppendMenuItem(this->osd_menu_id, "Smoothing: Nearest", (void*)"osd_nearest", 1);
+  this->osd_linear_id = XPLMAppendMenuItem(this->osd_menu_id, "Smoothing: Linear", (void*)"osd_linear", 1);
+
+  this->battery_id = XPLMAppendMenuItem(this->menu_id, "Battery", (void*)"Battery", 1);
   this->battery_menu_id = XPLMCreateMenu("Battery", this->menu_id, this->battery_id, static_menu_handler, NULL);
-  this->battery_none_id = XPLMAppendMenuItem(this->battery_menu_id, "Do not simulate", (void *)"battery_none", 1);
-  this->battery_infinite_id = XPLMAppendMenuItem(this->battery_menu_id, "Infinite 3s", (void *)"battery_infinite", 1);
-  this->battery_discharged_id = XPLMAppendMenuItem(this->battery_menu_id, "Discharged 3s", (void *)"battery_discharged", 1);
-  this->battery_3min_id = XPLMAppendMenuItem(this->battery_menu_id, "3 minutes 3s", (void *)"battery_3min", 1);
-  this->battery_10min_id = XPLMAppendMenuItem(this->battery_menu_id, "10 minutes 3s", (void *)"battery_10min", 1);
-  this->battery_30min_id = XPLMAppendMenuItem(this->battery_menu_id, "30 minutes 3s", (void *)"battery_30min", 1);
+  this->battery_none_id = XPLMAppendMenuItem(this->battery_menu_id, "Do not simulate", (void*)"battery_none", 1);
+  this->battery_infinite_id = XPLMAppendMenuItem(this->battery_menu_id, "Infinite 3s", (void*)"battery_infinite", 1);
+  this->battery_discharged_id = XPLMAppendMenuItem(this->battery_menu_id, "Discharged 3s", (void*)"battery_discharged", 1);
+  this->battery_3min_id = XPLMAppendMenuItem(this->battery_menu_id, "3 minutes 3s", (void*)"battery_3min", 1);
+  this->battery_10min_id = XPLMAppendMenuItem(this->battery_menu_id, "10 minutes 3s", (void*)"battery_10min", 1);
+  this->battery_30min_id = XPLMAppendMenuItem(this->battery_menu_id, "30 minutes 3s", (void*)"battery_30min", 1);
 
-  this->beeper_id = XPLMAppendMenuItem(this->menu_id, "Beeper", (void *)"Beeper", 1);
+  this->beeper_id = XPLMAppendMenuItem(this->menu_id, "Beeper", (void*)"Beeper", 1);
   this->beeper_menu_id = XPLMCreateMenu("Battery", this->menu_id, this->beeper_id, static_menu_handler, NULL);
-  this->beeper_default_id = XPLMAppendMenuItem(this->beeper_menu_id, "Default", (void *)"beeper_default", 1);
-  this->beeper_mute_id = XPLMAppendMenuItem(this->beeper_menu_id, "Mute", (void *)"beeper_mute", 1);
+  this->beeper_default_id = XPLMAppendMenuItem(this->beeper_menu_id, "Default", (void*)"beeper_default", 1);
+  this->beeper_mute_id = XPLMAppendMenuItem(this->beeper_menu_id, "Mute", (void*)"beeper_mute", 1);
 
-  this->pitot_id = XPLMAppendMenuItem(this->menu_id, "Pitot", (void *)"Pitot", 1);
+  this->pitot_id = XPLMAppendMenuItem(this->menu_id, "Pitot", (void*)"Pitot", 1);
   this->pitot_menu_id = XPLMCreateMenu("Pitot", this->menu_id, this->pitot_id, static_menu_handler, NULL);
-  this->pitot_none_id = XPLMAppendMenuItem(this->pitot_menu_id, "Do not simulate", (void *)"pitot_none", 1);
-  this->pitot_simulate_id = XPLMAppendMenuItem(this->pitot_menu_id, "Simulate", (void *)"pitot_simulate", 1);
-  this->pitot_failure_id = XPLMAppendMenuItem(this->pitot_menu_id, "Simulate failure", (void *)"pitot_simulate_failure", 1);
+  this->pitot_none_id = XPLMAppendMenuItem(this->pitot_menu_id, "Do not simulate", (void*)"pitot_none", 1);
+  this->pitot_simulate_id = XPLMAppendMenuItem(this->pitot_menu_id, "Simulate", (void*)"pitot_simulate", 1);
+  this->pitot_failure_id = XPLMAppendMenuItem(this->pitot_menu_id, "Simulate failure", (void*)"pitot_simulate_failure", 1);
 
   XPLMAppendMenuSeparator(this->menu_id);
 
-  this->osd_nearest_id = XPLMAppendMenuItem(this->osd_menu_id, "Smoothing: Nearest", (void *)"osd_nearest", 1);
-  this->osd_linear_id = XPLMAppendMenuItem(this->osd_menu_id, "Smoothing: Linear", (void *)"osd_linear", 1);
 
-  this->noise_id = XPLMAppendMenuItem(this->menu_id, "Analog Video", (void *)"Analog Video", 1);
-  this->noise_menu_id = XPLMCreateMenu("Video", this->menu_id, this->noise_id, static_menu_handler, NULL);
-  this->noise_none_id = XPLMAppendMenuItem(this->noise_menu_id, "No simulation", (void *)"noise_none", 1);
-  this->noise_2KM_id = XPLMAppendMenuItem(this->noise_menu_id, "Link up to 2km", (void *)"noise_2km", 1);
-  this->noise_10KM_id = XPLMAppendMenuItem(this->noise_menu_id, "Link up to 10km", (void *)"noise_10km", 1);
-  this->noise_50KM_id = XPLMAppendMenuItem(this->noise_menu_id, "Link up to 50km", (void *)"noise_50km", 1);
+  this->noise_id = XPLMAppendMenuItem(this->menu_id, "Video", (void*)"Video", 1);
+  this->video_link_menu_id = XPLMCreateMenu("Video", this->menu_id, this->noise_id, static_menu_handler, NULL);
+  this->noise_none_id = XPLMAppendMenuItem(this->video_link_menu_id, "Inifinty link", (void*)"noise_none", 1);
+  this->noise_2KM_id = XPLMAppendMenuItem(this->video_link_menu_id, "Link up to 2km", (void*)"noise_2km", 1);
+  this->noise_10KM_id = XPLMAppendMenuItem(this->video_link_menu_id, "Link up to 10km", (void*)"noise_10km", 1);
+  this->noise_50KM_id = XPLMAppendMenuItem(this->video_link_menu_id, "Link up to 50km", (void*)"noise_50km", 1);
 
   XPLMAppendMenuSeparator(this->menu_id);
 
-  this->map_id = XPLMAppendMenuItem(this->menu_id, "Map", (void *)"Map", 1);
+  this->map_id = XPLMAppendMenuItem(this->menu_id, "Map", (void*)"Map", 1);
   this->map_menu_id = XPLMCreateMenu("Map", this->menu_id, this->map_id, static_menu_handler, NULL);
-  this->map_none_id = XPLMAppendMenuItem(this->map_menu_id, "None", (void *)"map_none", 1);
-  this->map_lat_lon_osd_id = XPLMAppendMenuItem(this->map_menu_id, "Latitude/Longitude from OSD", (void *)"map_lat_lon_osd", 1);
-  this->map_debug_0_1_id = XPLMAppendMenuItem(this->map_menu_id, "debug[0]/debug[1] as Latitude/Longitude", (void *)"map_debug_0_1", 1);
+  this->map_none_id = XPLMAppendMenuItem(this->map_menu_id, "None", (void*)"map_none", 1);
+  this->map_lat_lon_osd_id = XPLMAppendMenuItem(this->map_menu_id, "Latitude/Longitude from OSD", (void*)"map_lat_lon_osd", 1);
+  this->map_debug_0_1_id = XPLMAppendMenuItem(this->map_menu_id, "debug[0]/debug[1] as Latitude/Longitude", (void*)"map_debug_0_1", 1);
   XPLMAppendMenuSeparator(this->map_menu_id);
-  this->map_clear_tracks = XPLMAppendMenuItem(this->map_menu_id, "Clear tracks", (void *)"map_clear_tracks", 1);
-  this->map_download_waypoints = XPLMAppendMenuItem(this->map_menu_id, "Download waypoints from FC", (void *)"map_download_waypoints", 1);
-  this->map_teleport = XPLMAppendMenuItem(this->map_menu_id, "Teleport to location (from clipboard)", (void *)"map_teleport", 1);
+  this->map_clear_tracks = XPLMAppendMenuItem(this->map_menu_id, "Clear tracks", (void*)"map_clear_tracks", 1);
+  this->map_download_waypoints = XPLMAppendMenuItem(this->map_menu_id, "Download waypoints from FC", (void*)"map_download_waypoints", 1);
+  this->map_teleport = XPLMAppendMenuItem(this->map_menu_id, "Teleport to location (from clipboard)", (void*)"map_teleport", 1);
 
-  this->graph_id = XPLMAppendMenuItem(this->menu_id, "Graph", (void *)"Graph", 1);
+  this->graph_id = XPLMAppendMenuItem(this->menu_id, "Graph", (void*)"Graph", 1);
   this->graph_menu_id = XPLMCreateMenu("Graph", this->menu_id, this->graph_id, static_menu_handler, NULL);
-  this->graph_none_id = XPLMAppendMenuItem(this->graph_menu_id, "None", (void *)"graph_none", 1);
-  this->graph_updates_id = XPLMAppendMenuItem(this->graph_menu_id, "Update period, MS", (void *)"graph_updates", 1);
-  this->graph_attitude_estimation_id = XPLMAppendMenuItem(this->graph_menu_id, "Attitude estimation", (void *)"graph_attitude_estimation", 1);
-  this->graph_attitude_output_id = XPLMAppendMenuItem(this->graph_menu_id, "Attitude, output", (void *)"graph_attitude_output", 1);
-  this->graph_acc_id = XPLMAppendMenuItem(this->graph_menu_id, "Accelerometer", (void *)"graph_accelerometer", 1);
-  this->graph_gyro_id = XPLMAppendMenuItem(this->graph_menu_id, "Gyroscope", (void *)"graph_gyroscope", 1);
-  this->graph_debug_altitude_id = XPLMAppendMenuItem(this->graph_menu_id, "debug_mode = altitude", (void *)"graph_debug_altitude", 1);
-  this->graph_debug_custom_id = XPLMAppendMenuItem(this->graph_menu_id, "debug[8] array", (void *)"graph_debug_custom", 1);
+  this->graph_none_id = XPLMAppendMenuItem(this->graph_menu_id, "None", (void*)"graph_none", 1);
+  this->graph_updates_id = XPLMAppendMenuItem(this->graph_menu_id, "Update period, MS", (void*)"graph_updates", 1);
+  this->graph_attitude_estimation_id = XPLMAppendMenuItem(this->graph_menu_id, "Attitude estimation", (void*)"graph_attitude_estimation", 1);
+  this->graph_attitude_output_id = XPLMAppendMenuItem(this->graph_menu_id, "Attitude, output", (void*)"graph_attitude_output", 1);
+  this->graph_acc_id = XPLMAppendMenuItem(this->graph_menu_id, "Accelerometer", (void*)"graph_accelerometer", 1);
+  this->graph_gyro_id = XPLMAppendMenuItem(this->graph_menu_id, "Gyroscope", (void*)"graph_gyroscope", 1);
+  this->graph_debug_altitude_id = XPLMAppendMenuItem(this->graph_menu_id, "debug_mode = altitude", (void*)"graph_debug_altitude", 1);
+  this->graph_debug_custom_id = XPLMAppendMenuItem(this->graph_menu_id, "debug[8] array", (void*)"graph_debug_custom", 1);
 
   /*
     this->gps_spoofing_1_id = XPLMAppendMenuItem(this->gps_fix_menu_id, "Spoofing: Freeze", (void *)"gps_spoofing_1", 1);
@@ -479,9 +516,10 @@ void TMenu::updateAll()
   this->updateBeeperMenu();
   this->updatePitotMenu();
   this->updateAttitudeMenu();
-  this->updateNoiseMenu();
+  this->updateVideoLinkMenu();
   this->updateGraphMenu();
   this->updateMapMenu();
+  this->updateFontMenu();
 }
 
 //==============================================================

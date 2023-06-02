@@ -95,7 +95,7 @@ void TSimData::init()
   this->isAirplane = false;
   this->isArmed = false;
   this->isOSDDisabled = false;
-  this->isOSDAnalogOSDNotFound = false;
+  this->isOSDAnalog = false;
 
   this->setBateryEmulation(BATTERY_INFINITE);
 }
@@ -164,7 +164,8 @@ void TSimData::updateFromINAV(const TMSPSimulatorFromINAV* data)
   bool prevArmed = this->isArmed;
   this->isArmed = (data->debugIndex & FIF_ARMED) != 0;
   this->isOSDDisabled = (data->debugIndex & FIF_OSD_DISABLED) != 0;
-  this->isOSDAnalogOSDNotFound = (data->debugIndex & FIF_ANALOG_OSD_NOT_FOUND) != 0;
+  this->isOSDAnalog = (data->debugIndex & FIF_ANALOG_OSD) != 0;
+  this->isOSDHD = (data->debugIndex & FIF_HD_OSD) != 0;
 
   if (this->isArmed && !prevArmed)
   {
@@ -211,10 +212,11 @@ void TSimData::sendToINAV()
     (this->GPSHasNewData && !this->gps_timeout ? SIMU_HAS_NEW_GPS_DATA : 0) |
     SIMU_EXT_BATTERY_VOLTAGE |
     (this->simulatePitot ? SIMU_AIRSPEED : 0) |
-    SIMU_EXTENDED_FLAGS;
+    SIMU_EXTENDED_FLAGS; 
 
   data.flags2 = (this->gps_timeout ? SIMU2_GPS_TIMEOUT >> 8 : 0) |
-    (this->simulatePitotFailure ? SIMU2_PITOT_FAILURE >> 8 : 0);
+    (this->simulatePitotFailure ? SIMU2_PITOT_FAILURE >> 8 : 0) |
+    (SIMU2_HD_OSD >> 8); // Don't change MSP Version, just signal that HD osd is supported
 
   this->GPSHasNewData = false;
 
@@ -377,7 +379,7 @@ void TSimData::quaternionMultiply(float* result, const float* a, const float* b)
 void TSimData::disconnect()
 {
   TMSPSimulatorToINAV data;
-  data.version = 1;
+  data.version = MSP_SIMULATOR_VERSION;
   data.flags = 0;
   g_msp.sendCommand(MSP_SIMULATOR, &data, sizeof(data));
 

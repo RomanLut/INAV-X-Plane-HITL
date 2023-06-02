@@ -9,7 +9,7 @@
 #define MSP_DEBUGMSG      253
 #define MSP_WP_GETINFO    20
 #define MSP_WP            118    //out message         get a WP, WP# is in the payload, returns (WP#, lat, lon, alt, flags) WP#0-home, WP#16-poshold
-
+#define MAX_OSD_ROW_SIZE  200
 
 #define MAX_MSP_MESSAGE 1024
 
@@ -20,7 +20,8 @@ typedef enum
   FIF_ARMED                   = 64,
   FIF_IS_AIRPLANE             = 128,
   FIF_OSD_DISABLED            = 32,
-  FIF_ANALOG_OSD_NOT_FOUND    = 16
+  FIF_ANALOG_OSD              = 16,
+  FIF_HD_OSD                  = 8
 } TFromINAVFlags;
 
 //======================================================
@@ -80,7 +81,8 @@ typedef enum
   SIMU_EXTENDED_FLAGS       = (1 << 7), //extend MSP_SIMULATOR format 2: extra flags
 
   SIMU2_GPS_TIMEOUT         = (1 << 8),
-  SIMU2_PITOT_FAILURE       = (1 << 9)
+  SIMU2_PITOT_FAILURE       = (1 << 9),
+  SIMU2_HD_OSD              = (1 << 10)
 } TSimulatorFlags;
 
 //======================================================
@@ -143,9 +145,19 @@ struct TMSPSimulatorFromINAV
   int16_t estimated_attitude_pitch;
   int16_t estimated_attitude_yaw;
 
-  uint8_t osdRow;  //255 - not osd data. |128 - 16 rows, otherwise 13 rows.
-  uint8_t osdCol;
-  uint8_t osdRowData[200];
+  union 
+  {
+    // Analog OSD
+    struct
+    {  
+      uint8_t osdRow;  //255 - not osd data. |128 - 16 rows, otherwise 13 rows.
+      uint8_t osdCol;
+    } analog;
+    // HD payload
+    uint16_t payLoadLength;
+  } osdInfo;
+
+  uint8_t osdRowData[MAX_OSD_ROW_SIZE];
 };
 #pragma pack()
 

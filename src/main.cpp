@@ -21,6 +21,8 @@ XPLMFlightLoopID loopId;
 
 mINI::INIStructure ini;
 
+bool loadIniFile();
+
 //==============================================================
 //==============================================================
 void cbConnect(TCBConnectParm state)
@@ -62,13 +64,14 @@ void cbMessage(int code, const uint8_t* messageBuffer, int length)
         {
           g_osd.showMsg("OSD IS DISABLED:\n\nCONFIURATION\n->OTHER FEATURES\n->OSD");
         }
-        else if (g_simData.isOSDAnalogOSDNotFound)
+        else if (!g_simData.isOSDAnalog && !g_simData.isOSDHD)
         {
           g_osd.showMsg("SUPPORTED OSD TYPE\nNOT FOUND OR DISABLED\n\nCHECK REQUIREMENTS\nON PROJECT PAGE");
         }
 
         g_simData.sendToXPlane();
 
+        g_osd.setHDMode(g_simData.isOSDHD && !g_simData.isOSDAnalog);
         g_osd.updateFromINAV((const TMSPSimulatorFromINAV*)messageBuffer);
 
         wait = false;
@@ -145,6 +148,7 @@ PLUGIN_API int XPluginStart(
 	strcpy(outSig, "https://github.com/RomanLut/INAV-X-Plane-HITL");
 	strcpy(outDesc, "INAV Hardware In The Loop");
 
+  loadIniFile();
   g_osd.init();
 
   XPLMRegisterDrawCallback(&drawCallback, xplm_Phase_Window/*xplm_Phase_LastCockpit*/, 0, NULL);
@@ -246,8 +250,7 @@ PLUGIN_API int XPluginEnable(void)
 
   playSound("assets\\ready_to_connect.wav");
 
-  loadIniFile();
-
+ 
   return 1;
 }
 

@@ -1,7 +1,7 @@
 #pragma once
 
+#include <map>
 #include "config.h"
-
 #include "msp.h"
 
 //=======================================================
@@ -30,6 +30,10 @@ public:
   int osd_auto_id;
   int osd_pal_id;
   int osd_ntsc_id;
+
+  XPLMMenuID hd_font_menu_id;
+  int font_id;
+  std::map<int, std::string> hd_font_Ids;
 
   int osd_nearest_id;
   int osd_linear_id;
@@ -84,7 +88,7 @@ public:
   int map_clear_tracks;
   int map_teleport;
 
-  XPLMMenuID noise_menu_id;
+  XPLMMenuID video_link_menu_id;
   int noise_id;
   int noise_none_id;
   int noise_2KM_id;
@@ -111,7 +115,8 @@ public:
   void updateAttitudeMenu();
   void updateGraphMenu();
   void updateMapMenu();
-  void updateNoiseMenu();
+  void updateVideoLinkMenu();
+  void updateFontMenu();
   void updateAll();
 
   void actionDisconnect();

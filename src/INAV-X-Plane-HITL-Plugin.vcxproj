@@ -121,6 +121,7 @@
       <BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>
       <StructMemberAlignment>Default</StructMemberAlignment>
       <WarningLevel>Level3</WarningLevel>
+      <LanguageStandard>stdcpp17</LanguageStandard>
     </ClCompile>
     <Midl>
       <SuppressStartupBanner>true</SuppressStartupBanner>
@@ -207,6 +208,9 @@
     <ClInclude Include="menu.h" />
     <ClInclude Include="msp.h" />
     <ClInclude Include="osd.h" />
+    <ClInclude Include="osd_analog.h" />
+    <ClInclude Include="osd_base.h" />
+    <ClInclude Include="osd_hd.h" />
     <ClInclude Include="serial.h" />
     <ClInclude Include="simData.h" />
     <ClInclude Include="stats.h" />
@@ -221,12 +225,25 @@
     <ClCompile Include="menu.cpp" />
     <ClCompile Include="msp.cpp" />
     <ClCompile Include="osd.cpp" />
+    <ClCompile Include="osd_analog.cpp" />
+    <ClCompile Include="osd_base.cpp" />
+    <ClCompile Include="osd_hd.cpp" />
     <ClCompile Include="serial.cpp" />
     <ClCompile Include="simData.cpp" />
     <ClCompile Include="stats.cpp" />
     <ClCompile Include="sound.cpp" />
     <ClCompile Include="util.cpp" />
     <ClCompile Include="map.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="assets\fonts\SNEAKY_FPV_INAV_V2.1_WTFOSD_Blinder\font_inav.bin" />
+    <None Include="assets\fonts\SNEAKY_FPV_INAV_V2.1_WTFOSD_Blinder\font_inav_2.bin" />
+    <None Include="assets\fonts\SNEAKY_FPV_INAV_V2.1_WTFOSD_Conthrax\font_inav.bin" />
+    <None Include="assets\fonts\SNEAKY_FPV_INAV_V2.1_WTFOSD_Conthrax\font_inav_2.bin" />
+    <None Include="assets\fonts\SNEAKY_FPV_INAV_V2.1_WTFOSD_Sphere\font_inav.bin" />
+    <None Include="assets\fonts\SNEAKY_FPV_INAV_V2.1_WTFOSD_Sphere\font_inav_2.bin" />
+    <None Include="assets\fonts\WTFOSD_Original\font_inav.bin" />
+    <None Include="assets\fonts\WTFOSD_Original\font_inav_2.bin" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

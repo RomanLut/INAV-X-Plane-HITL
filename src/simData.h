@@ -147,7 +147,8 @@ public:
   bool isAirplane;
   bool isArmed;
   bool isOSDDisabled;
-  bool isOSDAnalogOSDNotFound;
+  bool isOSDAnalog;
+  bool isOSDHD;
 
   //-- state --
   bool muteBeeper;

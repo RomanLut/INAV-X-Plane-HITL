@@ -22,6 +22,15 @@
     <ClCompile Include="sound.cpp" />
     <ClCompile Include="util.cpp" />
     <ClCompile Include="map.cpp" />
+    <ClCompile Include="osd_analog.cpp">
+      <Filter>OSD</Filter>
+    </ClCompile>
+    <ClCompile Include="osd_base.cpp">
+      <Filter>OSD</Filter>
+    </ClCompile>
+    <ClCompile Include="osd_hd.cpp">
+      <Filter>OSD</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="graph.h" />
@@ -45,10 +54,37 @@
     <ClInclude Include="util.h" />
     <ClInclude Include="sound.h" />
     <ClInclude Include="map.h" />
+    <ClInclude Include="osd_base.h">
+      <Filter>OSD</Filter>
+    </ClInclude>
+    <ClInclude Include="osd_analog.h">
+      <Filter>OSD</Filter>
+    </ClInclude>
+    <ClInclude Include="osd_hd.h">
+      <Filter>OSD</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="assets">
       <UniqueIdentifier>{9bab09ae-5265-4bc6-b538-f1d0d671df0a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="OSD">
+      <UniqueIdentifier>{c9c41203-62c3-4d25-901f-23692983ee3c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="assets\fonts">
+      <UniqueIdentifier>{23910375-c875-409a-8f2e-90de66cc2133}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="assets\fonts\SNEAKY_FPV_INAV_V2.1_WTFOSD_Blinder">
+      <UniqueIdentifier>{e8fd1f40-2a38-4615-a27b-fdd3b01eeb88}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="assets\fonts\SNEAKY_FPV_INAV_V2.1_WTFOSD_Conthrax">
+      <UniqueIdentifier>{5a5a2e29-2864-4b92-a492-42053b58d387}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="assets\fonts\SNEAKY_FPV_INAV_V2.1_WTFOSD_Sphere">
+      <UniqueIdentifier>{abe640d1-ae6a-4db7-965d-265ffada4b89}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="assets\fonts\WTFOSD_Original">
+      <UniqueIdentifier>{cf007956-c996-49f8-b8d4-ef82f7e320c3}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -79,5 +115,31 @@
     <Media Include="assets\unsupported_firmware.wav">
       <Filter>assets</Filter>
     </Media>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="assets\fonts\SNEAKY_FPV_INAV_V2.1_WTFOSD_Blinder\font_inav.bin">
+      <Filter>assets\fonts\SNEAKY_FPV_INAV_V2.1_WTFOSD_Blinder</Filter>
+    </None>
+    <None Include="assets\fonts\SNEAKY_FPV_INAV_V2.1_WTFOSD_Blinder\font_inav_2.bin">
+      <Filter>assets\fonts\SNEAKY_FPV_INAV_V2.1_WTFOSD_Blinder</Filter>
+    </None>
+    <None Include="assets\fonts\SNEAKY_FPV_INAV_V2.1_WTFOSD_Conthrax\font_inav.bin">
+      <Filter>assets\fonts\SNEAKY_FPV_INAV_V2.1_WTFOSD_Conthrax</Filter>
+    </None>
+    <None Include="assets\fonts\SNEAKY_FPV_INAV_V2.1_WTFOSD_Conthrax\font_inav_2.bin">
+      <Filter>assets\fonts\SNEAKY_FPV_INAV_V2.1_WTFOSD_Conthrax</Filter>
+    </None>
+    <None Include="assets\fonts\SNEAKY_FPV_INAV_V2.1_WTFOSD_Sphere\font_inav.bin">
+      <Filter>assets\fonts\SNEAKY_FPV_INAV_V2.1_WTFOSD_Sphere</Filter>
+    </None>
+    <None Include="assets\fonts\SNEAKY_FPV_INAV_V2.1_WTFOSD_Sphere\font_inav_2.bin">
+      <Filter>assets\fonts\SNEAKY_FPV_INAV_V2.1_WTFOSD_Sphere</Filter>
+    </None>
+    <None Include="assets\fonts\WTFOSD_Original\font_inav.bin">
+      <Filter>assets\fonts\WTFOSD_Original</Filter>
+    </None>
+    <None Include="assets\fonts\WTFOSD_Original\font_inav_2.bin">
+      <Filter>assets\fonts\WTFOSD_Original</Filter>
+    </None>
   </ItemGroup>
 </Project>

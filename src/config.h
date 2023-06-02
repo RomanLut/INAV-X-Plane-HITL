@@ -23,6 +23,9 @@
 #include <windows.h>
 //do not use OpanAL on windows to avoid requirements of OpenAL installation
 //#define USE_OPENAL
+
+// Not defined in Windows, no need for a big header file for just one constant
+#define GL_CLAMP_TO_EDGE 0x812F
 #elif LIN
 #include <unistd.h>
 #define USE_OPENAL

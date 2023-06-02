@@ -2,6 +2,9 @@
 
 #include "config.h"
 
+extern void destroyTexture(int textureId);
+extern std::vector<std::string> getAvaiableFonts(void); 
+
 extern void setView();
 
 extern void buildAssetFilename(char pName[MAX_PATH], const char* pFileName);
@@ -42,4 +45,7 @@ extern uint32_t GetTickCount();
 #define SETTINGS_GRAPH_TYPE             "graph_type"
 #define SETTINGS_MAP_MARKING_TYPE       "map_markings_type"
 #define SETTINGS_VIDEOLINK_SIMULATION   "videolink_simulation"
+#define SETTINGS_USE_HD_OSD             "HD-OSD"
+#define SETTINGS_HD_FONT                "HD-Font"
+#define SETTINGS_IS_HD                  "IS-HD"
 
