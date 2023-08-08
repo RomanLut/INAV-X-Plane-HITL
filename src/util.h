@@ -2,6 +2,8 @@
 
 #include "config.h"
 
+#define CONST_PI 3.14159265358979323846
+
 extern void setView();
 
 extern void buildAssetFilename(char pName[MAX_PATH], const char* pFileName);
@@ -31,6 +33,7 @@ extern uint32_t GetTickCount();
 #define SETTINGS_SECTION                "settings"
 #define SETTINGS_GPS_NUMSAT             "gps_numSat"
 #define SETTINGS_GPS_TIMEOUT            "gps_timeout"
+#define SETTINGS_GPS_GLITCH             "gps_glitch"
 #define SETTINGS_MAG_FAILURE            "mag_failure"
 #define SETTINGS_ATTITUDE_USE_SENSORS   "attitude_use_sensors"
 #define SETTINGS_OSD_TYPE               "osd_type"

@@ -9,6 +9,13 @@
 #define GPS_FIX_2D  1
 #define GPS_FIX_3D  2
 
+#define GPS_GLITCH_NONE     0
+#define GPS_GLITCH_FREEZE   1
+#define GPS_GLITCH_OFFSET   2
+#define GPS_GLITCH_LINEAR   3
+#define GPS_GLITCH_CIRCLE   4
+#define GPS_GLITCH_ALTITUDE 5
+
 #define DEBUG_U32_COUNT 8
 
 
@@ -37,7 +44,7 @@ public:
 
   int gps_fix;
 	int gps_numSat;
-  int gps_spoofing;
+  int gps_glitch;
   bool gps_timeout;
 
   bool simulate_mag_failure;
@@ -126,6 +133,10 @@ public:
   //meters/sec, the ground speed of the aircraft
   XPLMDataRef df_airspeed;
   float airspeed;
+
+  double glitch_lattitude = 0;
+  double glitch_longitude = 0;
+  double glitch_elevation = 0;
 
 	//---- from inav --------  
 

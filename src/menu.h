@@ -23,6 +23,11 @@ public:
 	int gps_fix_0_id;
 	int gps_fix_12_id;
   int gps_timeout_id;
+  int gps_freeze_id;
+  int gps_offset_id;
+  int gps_linear_id;
+  int gps_circle_id;
+  int gps_altitude_id;
 
   XPLMMenuID osd_menu_id;
   int osd_id;
