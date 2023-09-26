@@ -175,7 +175,9 @@ The following requirements should be met to have OSD drawn in **X-Plane**:
 
 - OSD should be configured as `AUTO`, `PAL` or `NTSC` type in "OSD" tab in **INAV Configurator**.
 - OSD should be enabled in "Configuration->Other features->OSD" in **INAV Configurator**.
-- OSD chip should be present on Flight Controller (MAX7456). OSD will not work without MAX7456 compatible chip. OSD will not work if HD Zero, DJI or Pixel OSD selected in configuration.
+- OSD chip should be present on Flight Controller (MAX7456).
+
+OSD will not work without MAX7456 compatible chip. OSD will not work if HD Zero, DJI or Pixel OSD is selected in configuration.
 
 The following options are present in menu:
 
