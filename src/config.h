@@ -34,6 +34,15 @@
 #include <stdint.h>
 #include <string.h>
 
+#include <string>
+#include <vector>
+//#include <iterator>
+//#include <map>
+#include <filesystem>
+#include <fstream>
+//#include <functional>
+
+
 #include <GL/gl.h>
 #include <GL/glu.h>
 

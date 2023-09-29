@@ -47,7 +47,11 @@ void cbMessage(int code, const uint8_t* messageBuffer, int length)
     }
     else
     {
-      g_simData.updateFromINAV((const TMSPSimulatorFromINAV*)messageBuffer);
+      TMSPSimulatorFromINAV msg;
+      memset(&msg, 0, sizeof(msg));
+      if (length > sizeof(msg)) return;
+      memcpy(&msg, messageBuffer, length);
+      g_simData.updateFromINAV(&msg);
 
       if (!g_simData.isAirplane)
       {

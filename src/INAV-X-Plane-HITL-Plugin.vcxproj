@@ -78,6 +78,7 @@
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <FavorSizeOrSpeed>Speed</FavorSizeOrSpeed>
       <EnableParallelCodeGeneration>true</EnableParallelCodeGeneration>
+      <LanguageStandard>stdcpp17</LanguageStandard>
     </ClCompile>
     <Midl>
       <SuppressStartupBanner>true</SuppressStartupBanner>
@@ -121,6 +122,7 @@
       <BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>
       <StructMemberAlignment>Default</StructMemberAlignment>
       <WarningLevel>Level3</WarningLevel>
+      <LanguageStandard>stdcpp17</LanguageStandard>
     </ClCompile>
     <Midl>
       <SuppressStartupBanner>true</SuppressStartupBanner>
@@ -147,61 +149,15 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <Media Include="assets\connected.wav" />
-    <Content Include="assets\connected.wav">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-  </ItemGroup>
-  <ItemGroup>
-    <Media Include="assets\connection_failed.wav" />
-    <Content Include="assets\connection_failed.wav">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-  </ItemGroup>
-  <ItemGroup>
-    <Media Include="assets\connection_lost.wav" />
-    <Content Include="assets\connection_lost.wav">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-  </ItemGroup>
-  <ItemGroup>
-    <Media Include="assets\ready_to_connect.wav" />
-    <Content Include="assets\ready_to_connect.wav">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-  </ItemGroup>
-  <ItemGroup>
-    <Media Include="assets\unsupported.wav" />
-    <Content Include="assets\unsupported.wav">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-  </ItemGroup>
-  <ItemGroup>
-    <Media Include="assets\unsupported_firmware.wav" />
-    <Content Include="assets\unsupported_firmware.wav">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-  </ItemGroup>
-  <ItemGroup>
-    <Media Include="assets\osd_font.png" />
-    <Content Include="assets\osd_font.png">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-  </ItemGroup>
-  <ItemGroup>
-    <Media Include="assets\noise.png" />
-    <Content Include="assets\noise.png">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-  </ItemGroup>
-  <ItemGroup>
-    <Media Include="assets\interference.png" />
-    <Content Include="assets\interference.png">
+    <Media Include="assets\**" />
+    <Content Include="assets\**">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="config.h" />
+    <ClInclude Include="fontbase.h" />
+    <ClInclude Include="fontanalog.h" />
     <ClInclude Include="graph.h" />
     <ClInclude Include="lodepng.h" />
     <ClInclude Include="menu.h" />
@@ -215,6 +171,8 @@
     <ClInclude Include="map.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="fontbase.cpp" />
+    <ClCompile Include="fontanalog.cpp" />
     <ClCompile Include="graph.cpp" />
     <ClCompile Include="lodepng.cpp" />
     <ClCompile Include="main.cpp" />

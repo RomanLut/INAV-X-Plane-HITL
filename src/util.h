@@ -25,6 +25,12 @@ extern void getClipboardText(char str[1024]);
 
 extern bool saveIniFile();
 
+extern int smallestPowerOfTwo(int value, int minValue);
+
+extern std::vector<std::filesystem::path> getFontPaths(const char* subPath, bool directories);
+
+extern std::string toLower(const std::string& str);
+
 #ifdef LIN
 extern bool IsDebuggerPresent();
 extern uint32_t GetTickCount();
@@ -45,4 +51,6 @@ extern uint32_t GetTickCount();
 #define SETTINGS_GRAPH_TYPE             "graph_type"
 #define SETTINGS_MAP_MARKING_TYPE       "map_markings_type"
 #define SETTINGS_VIDEOLINK_SIMULATION   "videolink_simulation"
+#define SETTINGS_ANALOG_OSD_FONT        "analog_osd_font"
+#define SETTINGS_DIGITAL_OSD_FONT       "digital_osd_font"
 

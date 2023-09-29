@@ -4,16 +4,39 @@
 
 #include "msp.h"
 
-#define OSD_COLS      30
-#define OSD_ROWS      16 // PAL
-#define OSD_ROWS_NTSC 13 // NTSC
+#include "fontbase.h"
+
+#include <vector>
+
+
+// PAL screen size
+#define PAL_COLS 30
+#define PAL_ROWS 16
+
+// NTSC screen size
+#define NTSC_COLS 30
+#define NTSC_ROWS 13
+
+// HDZERO screen size
+#define HDZERO_COLS 50
+#define HDZERO_ROWS 18
+
+// Avatar screen size
+#define AVATAR_COLS 53
+#define AVATAR_ROWS 20
+
+// DJIWTF screen size
+#define DJI_COLS 60
+#define DJI_ROWS 22
+
+#define OSD_MAX_COLS      DJI_COLS
+#define OSD_MAX_ROWS      DJI_ROWS
 
 typedef enum
 {
-  OSD_NONE,
-  OSD_AUTO,
-  OSD_PAL,
-  OSD_NTSC
+  OSD_AUTO = 1,
+  OSD_PAL = 2,
+  OSD_NTSC = 3
 } TOSDType;
 
 typedef enum
@@ -30,8 +53,8 @@ class TOSD
 {
 public:
 
+  bool visible = true;
   TOSDType osd_type = OSD_AUTO;
-  int auto_rows = 16;
   bool smoothed = true;
 
   TVideoLinkSimulation videoLink = VS_50KM;
@@ -42,6 +65,8 @@ public:
   void drawCallback();
 
   void updateFromINAV(const TMSPSimulatorFromINAV* message);
+  void updateFromINAVOld(const TMSPSimulatorFromINAV* message);
+  void updateFromINAVRowData(int osdRow, int osdCol, const uint8_t* data, int decodeRowsCount);
 
   void cbConnect(TCBConnectParm state);
 
@@ -53,11 +78,21 @@ public:
 
   void setHomeLocation(double home_lattitude, double home_longitude, double home_elevation);
 
+  void disconnect();
+
   void loadConfig(mINI::INIStructure& ini);
   void saveConfig(mINI::INIStructure& ini);
 
+  void addFontsToMenu();
+
+  int getFontIndexByName(const char* name);
+
+  void setActiveFontByIndex(int index);
+
 private:
-  int fontTextureId = 0;
+  int rows;
+  int cols;
+
   int noiseTextureId = 0;
   int interferenceTextureId = 0;
 
@@ -66,12 +101,17 @@ private:
   double home_elevation;
   float roll;
 
-  uint16_t osdData[OSD_ROWS*OSD_COLS];
+  uint16_t osdData[OSD_MAX_ROWS*OSD_MAX_COLS];
 
-  void loadFont();
+  int activeAnalogFontIndex = 0;
+  int activeDigitalFontIndex = 0;
+  int analogFontsCount = 0;
+  std::vector<FontBase*> fonts;
+
+  void loadFonts();
   int loadTexture(const char* pFileName);
 
-  void drawChar(uint16_t code, float x1, float y1, float width, float height);
+  FontBase* getActiveFont();
 
   void clear();
 
@@ -85,6 +125,8 @@ private:
   float getNoiseAmount();
 
   float extractFloat(int index);
+
+  bool isAnalogOSD();
 };
 
 extern TOSD g_osd;

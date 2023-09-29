@@ -71,13 +71,15 @@ void TMenu::updateAttitudeMenu()
 //==============================================================
 void TMenu::updateOSDMenu()
 {
-  XPLMCheckMenuItem(this->osd_menu_id, this->osd_none_id, g_osd.osd_type == OSD_NONE ? xplm_Menu_Checked : xplm_Menu_Unchecked);
-  XPLMCheckMenuItem(this->osd_menu_id, this->osd_auto_id, g_osd.osd_type == OSD_AUTO ? xplm_Menu_Checked : xplm_Menu_Unchecked);
-  XPLMCheckMenuItem(this->osd_menu_id, this->osd_pal_id, g_osd.osd_type == OSD_PAL ? xplm_Menu_Checked : xplm_Menu_Unchecked);
-  XPLMCheckMenuItem(this->osd_menu_id, this->osd_ntsc_id, g_osd.osd_type == OSD_NTSC ? xplm_Menu_Checked : xplm_Menu_Unchecked);
+  XPLMCheckMenuItem(this->osd_visibility_menu_id, this->osd_visibility_on_id, g_osd.visible ? xplm_Menu_Checked : xplm_Menu_Unchecked);
+  XPLMCheckMenuItem(this->osd_visibility_menu_id, this->osd_visibility_off_id, !g_osd.visible ? xplm_Menu_Checked : xplm_Menu_Unchecked);
 
-  XPLMCheckMenuItem(this->osd_menu_id, this->osd_nearest_id, g_osd.smoothed == false ? xplm_Menu_Checked : xplm_Menu_Unchecked);
-  XPLMCheckMenuItem(this->osd_menu_id, this->osd_linear_id, g_osd.smoothed == true ? xplm_Menu_Checked : xplm_Menu_Unchecked);
+  XPLMCheckMenuItem(this->osd_rows_menu_id, this->osd_rows_auto_id, g_osd.osd_type == OSD_AUTO ? xplm_Menu_Checked : xplm_Menu_Unchecked);
+  XPLMCheckMenuItem(this->osd_rows_menu_id, this->osd_rows_pal_id, g_osd.osd_type == OSD_PAL ? xplm_Menu_Checked : xplm_Menu_Unchecked);
+  XPLMCheckMenuItem(this->osd_rows_menu_id, this->osd_rows_ntsc_id, g_osd.osd_type == OSD_NTSC ? xplm_Menu_Checked : xplm_Menu_Unchecked);
+
+  XPLMCheckMenuItem(this->osd_filtering_menu_id, this->osd_filtering_nearest_id, g_osd.smoothed == false ? xplm_Menu_Checked : xplm_Menu_Unchecked);
+  XPLMCheckMenuItem(this->osd_filtering_menu_id, this->osd_filtering_linear_id, g_osd.smoothed == true ? xplm_Menu_Checked : xplm_Menu_Unchecked);
 }
 
 //==============================================================
@@ -251,9 +253,13 @@ void TMenu::menu_handler(void * in_menu_ref, void * in_item_ref)
   {
     g_simData.simulate_mag_failure = true;
   }
-  else if (!strcmp((const char *)in_item_ref, "osd_none"))
+  else if (!strcmp((const char *)in_item_ref, "osd_enabled"))
   {
-    g_osd.osd_type = OSD_NONE;
+    g_osd.visible = true;
+  }
+  else if (!strcmp((const char *)in_item_ref, "osd_disabled"))
+  {
+    g_osd.visible = false;
   }
   else if (!strcmp((const char *)in_item_ref, "osd_auto"))
   {
@@ -402,6 +408,14 @@ void TMenu::menu_handler(void * in_menu_ref, void * in_item_ref)
   {
     g_osd.videoLink = VS_50KM;
   }
+  else
+  {
+    int index = g_osd.getFontIndexByName((const char *)in_item_ref);
+    if (index >= 0)
+    {
+      g_osd.setActiveFontByIndex(index);
+    }
+  }
 
   this->updateAll();
   saveIniFile();
@@ -443,10 +457,32 @@ void TMenu::createMenu()
 
   this->osd_id = XPLMAppendMenuItem(this->menu_id, "OSD", (void *)"OSD", 1);
   this->osd_menu_id = XPLMCreateMenu("OSD", this->menu_id, this->osd_id, static_menu_handler, NULL);
-  this->osd_none_id = XPLMAppendMenuItem(this->osd_menu_id, "None", (void *)"osd_none", 1);
-  this->osd_auto_id = XPLMAppendMenuItem(this->osd_menu_id, "Auto", (void *)"osd_auto", 1);
-  this->osd_pal_id = XPLMAppendMenuItem(this->osd_menu_id, "PAL", (void *)"osd_pal", 1);
-  this->osd_ntsc_id = XPLMAppendMenuItem(this->osd_menu_id, "NTSC", (void *)"osd_ntsc", 1);
+
+  this->osd_visibility_id = XPLMAppendMenuItem(this->osd_menu_id, "Visibility", (void *)"OSD VISIBILITY", 1);
+  this->osd_visibility_menu_id = XPLMCreateMenu("Visibility", this->osd_menu_id, this->osd_visibility_id, static_menu_handler, NULL);
+  this->osd_visibility_on_id = XPLMAppendMenuItem(this->osd_visibility_menu_id, "OSD Enabled", (void *)"osd_enabled", 1);
+  this->osd_visibility_off_id = XPLMAppendMenuItem(this->osd_visibility_menu_id, "OSD Disabled", (void *)"osd_disabled", 1);
+
+  this->osd_fonts_id = XPLMAppendMenuItem(this->osd_menu_id, "Font", (void *)"Font", 1);
+  this->osd_fonts_menu_id = XPLMCreateMenu("Font", this->osd_menu_id, this->osd_fonts_id, static_menu_handler, NULL);
+
+  this->osd_analog_fonts_id = XPLMAppendMenuItem(this->osd_fonts_menu_id, "Analog OSD", (void *)"Analog OSD", 1);
+  this->osd_analog_fonts_menu_id = XPLMCreateMenu("Analog OSD", this->osd_fonts_menu_id, this->osd_analog_fonts_id, static_menu_handler, NULL);
+
+  this->osd_digital_fonts_id = XPLMAppendMenuItem(this->osd_fonts_menu_id, "Digital OSD", (void *)"Digital OSD", 1);
+  this->osd_digital_fonts_menu_id = XPLMCreateMenu("Digital OSD", this->osd_fonts_menu_id, this->osd_digital_fonts_id, static_menu_handler, NULL);
+
+  this->osd_rows_id = XPLMAppendMenuItem(this->osd_menu_id, "Analog OSD Rows", (void *)"OSD ROWS", 1);
+  this->osd_rows_menu_id = XPLMCreateMenu("Analog OSD Rows", this->osd_menu_id, this->osd_rows_id, static_menu_handler, NULL);
+  this->osd_rows_auto_id = XPLMAppendMenuItem(this->osd_rows_menu_id, "Auto", (void *)"osd_auto", 1);
+  this->osd_rows_pal_id = XPLMAppendMenuItem(this->osd_rows_menu_id, "PAL", (void *)"osd_pal", 1);
+  this->osd_rows_ntsc_id = XPLMAppendMenuItem(this->osd_rows_menu_id, "NTSC", (void *)"osd_ntsc", 1);
+
+  this->osd_filtering_id = XPLMAppendMenuItem(this->osd_menu_id, "Font Rendering", (void *)"FontRendering", 1);
+  this->osd_filtering_menu_id = XPLMCreateMenu("Font Rendering", this->osd_menu_id, this->osd_filtering_id, static_menu_handler, NULL);
+  this->osd_filtering_nearest_id = XPLMAppendMenuItem(this->osd_filtering_menu_id, "Smoothing: Nearest", (void *)"osd_nearest", 1);
+  this->osd_filtering_linear_id = XPLMAppendMenuItem(this->osd_filtering_menu_id, "Smoothing: Linear", (void *)"osd_linear", 1);
+
 
   this->battery_id = XPLMAppendMenuItem(this->menu_id, "Battery", (void *)"Battery", 1);
   this->battery_menu_id = XPLMCreateMenu("Battery", this->menu_id, this->battery_id, static_menu_handler, NULL);
@@ -468,10 +504,7 @@ void TMenu::createMenu()
   this->pitot_simulate_id = XPLMAppendMenuItem(this->pitot_menu_id, "Simulate", (void *)"pitot_simulate", 1);
   this->pitot_failure_id = XPLMAppendMenuItem(this->pitot_menu_id, "Simulate failure", (void *)"pitot_simulate_failure", 1);
 
-  XPLMAppendMenuSeparator(this->menu_id);
-
-  this->osd_nearest_id = XPLMAppendMenuItem(this->osd_menu_id, "Smoothing: Nearest", (void *)"osd_nearest", 1);
-  this->osd_linear_id = XPLMAppendMenuItem(this->osd_menu_id, "Smoothing: Linear", (void *)"osd_linear", 1);
+  //XPLMAppendMenuSeparator(this->menu_id);
 
   this->noise_id = XPLMAppendMenuItem(this->menu_id, "Analog Video", (void *)"Analog Video", 1);
   this->noise_menu_id = XPLMCreateMenu("Video", this->menu_id, this->noise_id, static_menu_handler, NULL);
@@ -503,6 +536,8 @@ void TMenu::createMenu()
   this->graph_debug_altitude_id = XPLMAppendMenuItem(this->graph_menu_id, "debug_mode = altitude", (void *)"graph_debug_altitude", 1);
   this->graph_debug_custom_id = XPLMAppendMenuItem(this->graph_menu_id, "debug[8] array", (void *)"graph_debug_custom", 1);
 
+  g_osd.addFontsToMenu();
+
   this->updateAll();
 }
 
@@ -529,4 +564,32 @@ void TMenu::destroyMenu()
   XPLMDestroyMenu(g_menu.menu_id);
 }
 
+//==============================================================
+//==============================================================
+void TMenu::addFontEntry(bool analog, const char* fontName)
+{
+  if (analog)
+  {
+    this->analogFontMenuItems.push_back(XPLMAppendMenuItem(this->osd_analog_fonts_menu_id, fontName, (void *)fontName, 1));
+  }
+  else
+  {
+    this->digitalFontMenuItems.push_back(XPLMAppendMenuItem( this->osd_digital_fonts_menu_id, fontName, (void *)fontName, 1));
+  }
+}
 
+//==============================================================
+//==============================================================
+void TMenu::updateFontsMenu(int activeAnalogFontIndex, int activeDigitalFontIndex)
+{
+  for (int i = 0; i < this->analogFontMenuItems.size(); i++)
+  {
+    XPLMCheckMenuItem(this->osd_analog_fonts_menu_id, this->analogFontMenuItems[i], i == activeAnalogFontIndex ? xplm_Menu_Checked : xplm_Menu_Unchecked);
+  }
+
+  for (int i = 0; i < this->digitalFontMenuItems.size(); i++)
+  {
+    XPLMCheckMenuItem(this->osd_digital_fonts_menu_id, this->analogFontMenuItems[i], i == (activeDigitalFontIndex - analogFontMenuItems.size()) ? xplm_Menu_Checked : xplm_Menu_Unchecked);
+  }
+
+}
