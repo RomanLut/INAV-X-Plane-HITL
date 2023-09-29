@@ -149,7 +149,6 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <Media Include="assets\**" />
     <Content Include="assets\**">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
@@ -158,6 +157,7 @@
     <ClInclude Include="config.h" />
     <ClInclude Include="fontbase.h" />
     <ClInclude Include="fontanalog.h" />
+    <ClInclude Include="fonthdzero.h" />
     <ClInclude Include="fontwalksnail.h" />
     <ClInclude Include="graph.h" />
     <ClInclude Include="lodepng.h" />
@@ -170,10 +170,9 @@
     <ClInclude Include="util.h" />
     <ClInclude Include="sound.h" />
     <ClInclude Include="map.h" />
-  </ItemGroup>
-  <ItemGroup>
     <ClCompile Include="fontbase.cpp" />
     <ClCompile Include="fontanalog.cpp" />
+    <ClCompile Include="fonthdzero.cpp" />
     <ClCompile Include="fontwalksnail.cpp" />
     <ClCompile Include="graph.cpp" />
     <ClCompile Include="lodepng.cpp" />

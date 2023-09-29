@@ -30,6 +30,7 @@ FontWalksnail::FontWalksnail(const char* fileName, const char* fontName) : FontB
   if ((width != OSD_CHAR_WIDTH_24) && (width != OSD_CHAR_WIDTH_36))
   {
     LOG("Unexpected image size: %s\n", fileName);
+    return;
   }
 
   this->charWidth = width;
@@ -38,11 +39,13 @@ FontWalksnail::FontWalksnail(const char* fileName, const char* fontName) : FontB
   if ((this->charWidth == OSD_CHAR_WIDTH_24) && (this->charHeight != OSD_CHAR_HEIGHT_24))
   {
     LOG("Unexpected image size: %s\n", fileName);
+    return;
   }
 
   if ((this->charWidth == OSD_CHAR_WIDTH_36) && (this->charHeight != OSD_CHAR_HEIGHT_36))
   {
     LOG("Unexpected image size: %s\n", fileName);
+    return;
   }
 
   this->calculateTextureHeight(this->charWidth * CHARS_PER_TEXTURE_ROW, this->charHeight * (512 + CHARS_PER_TEXTURE_ROW - 1) / CHARS_PER_TEXTURE_ROW);

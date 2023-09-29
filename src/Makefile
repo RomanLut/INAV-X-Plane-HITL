@@ -16,7 +16,9 @@ SOURCES = \
 	sound.cpp \
 	map.cpp \
     fontbase.cpp \
-    fontanalog.cpp
+    fontanalog.cpp \
+    fontwalksnail.cpp \
+    fonthdzero.cpp
 
 LIBS = -lopenal 
 

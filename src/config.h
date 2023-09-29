@@ -54,4 +54,4 @@
 #include <cmath>
 #endif
 
-#define HITL_VERSION_STRING "V1.3.1"
+#define HITL_VERSION_STRING "V1.4.0"

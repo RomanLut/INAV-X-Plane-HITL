@@ -11,6 +11,7 @@
 
 #include "fontanalog.h"
 #include "fontwalksnail.h"
+#include "fonthdzero.h"
 
 TOSD g_osd;
 
@@ -306,6 +307,20 @@ void TOSD::loadFonts()
 
   this->analogFontsCount = (unsigned int)this->fonts.size();
 
+  //load hdzero fonts
+  fontPaths = getFontPaths("assets\\fonts\\digital\\hdzero\\", false);
+  for (auto fontEntry : fontPaths)
+  {
+    if (toLower(fontEntry.extension().string()) == ".bmp")
+    {
+      buildAssetFilename(assetFileName, ("assets\\fonts\\digital\\hdzero\\" + fontEntry.filename().string()).c_str());
+      char fontName[64];
+      strcpy(fontName, ("HDZero: " + fontEntry.filename().string()).c_str());
+      *strstr(fontName, ".") = 0;
+      this->fonts.push_back(new FontHDZero(assetFileName, fontName));
+    }
+  }
+
   //load walksnail fonts
   fontPaths = getFontPaths("assets\\fonts\\digital\\walksnail\\", false);
   for (auto fontEntry : fontPaths)
@@ -314,7 +329,7 @@ void TOSD::loadFonts()
     {
       buildAssetFilename(assetFileName, ("assets\\fonts\\digital\\walksnail\\" + fontEntry.filename().string()).c_str());
       char fontName[64];
-      strcpy(fontName, ("walksnail:" + fontEntry.filename().string()).c_str());
+      strcpy(fontName, ("Walksnail: " + fontEntry.filename().string()).c_str());
       *strstr(fontName, ".") = 0;
       this->fonts.push_back(new FontWalksnail(assetFileName, fontName));
     }
@@ -748,6 +763,16 @@ void TOSD::loadConfig(mINI::INIStructure& ini)
   }
 
   this->activeDigitalFontIndex = this->analogFontsCount;
+
+  for (int i = this->analogFontsCount; i < this->fonts.size(); i++)
+  {
+    if (strcmp(this->fonts[i]->name, "Walksnail: INAV_default_36") == 0)
+    {
+      this->activeDigitalFontIndex = i;
+      break;
+    }
+  }
+
   c = ini[SETTINGS_SECTION][SETTINGS_DIGITAL_OSD_FONT].c_str();
   for (int i = this->analogFontsCount; i < this->fonts.size(); i++)
   {
