@@ -103,9 +103,9 @@ private:
 
   uint16_t osdData[OSD_MAX_ROWS*OSD_MAX_COLS];
 
-  int activeAnalogFontIndex = 0;
-  int activeDigitalFontIndex = 0;
-  int analogFontsCount = 0;
+  unsigned int activeAnalogFontIndex = 0;
+  unsigned int activeDigitalFontIndex = 0;
+  unsigned int analogFontsCount = 0;
   std::vector<FontBase*> fonts;
 
   void loadFonts();
@@ -127,6 +127,8 @@ private:
   float extractFloat(int index);
 
   bool isAnalogOSD();
+  float getModeAspectRatio();
+  int getForcedRowsCount();
 };
 
 extern TOSD g_osd;

@@ -10,6 +10,7 @@
 #include "menu.h"
 
 #include "fontanalog.h"
+#include "fontwalksnail.h"
 
 TOSD g_osd;
 
@@ -26,8 +27,7 @@ TOSD g_osd;
 #define CHAR_IS_BLANK(x)        ((CHAR_BYTE(x) == 0x20 || CHAR_BYTE(x) == 0x00) && !CHAR_MODE_IS_EXT(MODE_BYTE(x)))
 #define CHAR_MODE_IS_EXT(m)     ((m) & CHAR_MODE_EXT)
 
-#define OSD_MARGIN_HOR_PERCENT      10
-#define OSD_MARGIN_VERT_PERCENT     3
+#define OSD_MARGIN_PERCENT      1
 
 #define NOISE_TEXTURE_WIDTH   1024
 #define NOISE_TEXTURE_HEIGHT  1024
@@ -84,39 +84,45 @@ void TOSD::drawOSD()
   glEnd();
   */
 
-  int rowsCount = this->rows;
+  int rowsCount = this->getForcedRowsCount();
+  float modeAspectRatio = this->getModeAspectRatio();
 
-  if (isAnalogOSD())
+  float screenAspectRatio = sx * 1.0f / sy;
+
+  float marginX = 0;
+  float marginY = 0;
+
+  if (screenAspectRatio >= modeAspectRatio)
   {
-    if (this->osd_type == OSD_NTSC)
-    {
-      rowsCount = NTSC_ROWS;
-    }
-    else if (this->osd_type == OSD_PAL)
-    {
-      rowsCount = PAL_ROWS;
-    }
+    //screen is wider then necessary
+    float w = sy * modeAspectRatio;
+    marginX = (sx - w) / 2.0f;
+  }
+  else
+  {
+    float h = sx / modeAspectRatio;
+    marginY = (sy - h) / 2.0f;
   }
 
-  float marginX = sx * OSD_MARGIN_HOR_PERCENT / 100.0f;
-  float marginY = sy * OSD_MARGIN_VERT_PERCENT / 100.0f;
-
-  /*
-  if (rowsCount == NTSC_ROWS)
-  {
-    marginY += (sy - marginY * 2) / rowsCount;
-  }
-  */
-
-  float x0 = marginX;
-  float y0 = marginY;
+  marginX += sx * OSD_MARGIN_PERCENT / 100.0f * 2;
+  marginY += sx * OSD_MARGIN_PERCENT / 100.0f * 2 / screenAspectRatio;
 
   float cw = ( sx - marginX * 2 ) / this->cols;
   float ch = ( sy - marginY * 2 ) / rowsCount;
 
+  float x0 = marginX;
+  float y0 = marginY;
+
+  /*
   //a cross on 30 cols osd does not aling ok to the center of the screen
   //shift half charwidth to the left to aling crosss to screen center
-  x0 -= cw / 2; 
+  if ((this->cols & 1) == 0)
+  {
+    marginX += (sx - marginX * 2) / (this->cols + 1) / 2.0f;
+    cw = (sx - marginX * 2) / this->cols;
+    x0 -= cw / 2; 
+  }
+  */
 
   glBegin(GL_QUADS);
 
@@ -298,7 +304,22 @@ void TOSD::loadFonts()
     }
   }
 
-  this->analogFontsCount = (int)this->fonts.size();
+  this->analogFontsCount = (unsigned int)this->fonts.size();
+
+  //load walksnail fonts
+  fontPaths = getFontPaths("assets\\fonts\\digital\\walksnail\\", false);
+  for (auto fontEntry : fontPaths)
+  {
+    if (toLower(fontEntry.extension().string()) == ".png")
+    {
+      buildAssetFilename(assetFileName, ("assets\\fonts\\digital\\walksnail\\" + fontEntry.filename().string()).c_str());
+      char fontName[64];
+      strcpy(fontName, ("walksnail:" + fontEntry.filename().string()).c_str());
+      *strstr(fontName, ".") = 0;
+      this->fonts.push_back(new FontWalksnail(assetFileName, fontName));
+    }
+  }
+
 }
 
 //==============================================================
@@ -717,7 +738,7 @@ void TOSD::loadConfig(mINI::INIStructure& ini)
 
   this->activeAnalogFontIndex = 0;
   const char* c = ini[SETTINGS_SECTION][SETTINGS_ANALOG_OSD_FONT].c_str();
-  for (int i = 0; i < this->analogFontsCount; i++)
+  for (unsigned int i = 0; i < this->analogFontsCount; i++)
   {
     if (strcmp( this->fonts[i]->name, c) == 0)
     {
@@ -728,7 +749,7 @@ void TOSD::loadConfig(mINI::INIStructure& ini)
 
   this->activeDigitalFontIndex = this->analogFontsCount;
   c = ini[SETTINGS_SECTION][SETTINGS_DIGITAL_OSD_FONT].c_str();
-  for (int i = analogFontsCount; i < this->fonts.size(); i++)
+  for (int i = this->analogFontsCount; i < this->fonts.size(); i++)
   {
     if (strcmp(this->fonts[i]->name, c) == 0)
     {
@@ -749,7 +770,7 @@ void TOSD::saveConfig(mINI::INIStructure& ini)
   ini[SETTINGS_SECTION][SETTINGS_VIDEOLINK_SIMULATION] = std::to_string(this->videoLink);
 
   ini[SETTINGS_SECTION][SETTINGS_ANALOG_OSD_FONT] = std::string(this->fonts[this->activeAnalogFontIndex]->name);
-  ini[SETTINGS_SECTION][SETTINGS_DIGITAL_OSD_FONT] = std::string(this->fonts[this->activeAnalogFontIndex]->name);
+  ini[SETTINGS_SECTION][SETTINGS_DIGITAL_OSD_FONT] = std::string(this->fonts[this->activeDigitalFontIndex]->name);
 }
 
 //==============================================================
@@ -802,4 +823,46 @@ void TOSD::setActiveFontByIndex(int index)
   }
 
   g_menu.updateFontsMenu(this->activeAnalogFontIndex, this->activeDigitalFontIndex);
+}
+
+//==============================================================
+//==============================================================
+float TOSD::getModeAspectRatio()
+{
+  int rowCount = this->getForcedRowsCount();
+
+  if ((this->cols == PAL_COLS) && (rowCount == PAL_ROWS))
+  {
+    return 4 / 3.0f;
+  }
+  else if ((this->cols == NTSC_COLS) && (rowCount == NTSC_ROWS))
+  {
+    return 1.48f;
+  }
+  else
+  {
+    return 16 / 9.0f;
+  }
+}
+
+
+//==============================================================
+//==============================================================
+int TOSD::getForcedRowsCount()
+{
+  int rowsCount = this->rows;
+
+  if (isAnalogOSD())
+  {
+    if (this->osd_type == OSD_NTSC)
+    {
+      rowsCount = NTSC_ROWS;
+    }
+    else if (this->osd_type == OSD_PAL)
+    {
+      rowsCount = PAL_ROWS;
+    }
+  }
+
+  return rowsCount;
 }

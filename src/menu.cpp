@@ -589,7 +589,7 @@ void TMenu::updateFontsMenu(int activeAnalogFontIndex, int activeDigitalFontInde
 
   for (int i = 0; i < this->digitalFontMenuItems.size(); i++)
   {
-    XPLMCheckMenuItem(this->osd_digital_fonts_menu_id, this->analogFontMenuItems[i], i == (activeDigitalFontIndex - analogFontMenuItems.size()) ? xplm_Menu_Checked : xplm_Menu_Unchecked);
+    XPLMCheckMenuItem(this->osd_digital_fonts_menu_id, this->digitalFontMenuItems[i], i == (activeDigitalFontIndex - analogFontMenuItems.size()) ? xplm_Menu_Checked : xplm_Menu_Unchecked);
   }
 
 }

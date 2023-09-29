@@ -6,7 +6,7 @@
 #include <fcntl.h>
 #endif
 
-#define MAX_FONT_NAME 64
+#define MAX_FONT_NAME MAX_PATH
 
 //======================================================
 //======================================================
@@ -27,7 +27,7 @@ public:
 
   char name[MAX_FONT_NAME];
 
-	FontBase(unsigned  int charWidth, unsigned  int charHeight);
+	FontBase(const char* fontName);
 	~FontBase();
 
   virtual void drawChar(uint16_t code, float x1, float y1, float width, float height) = 0;

@@ -4,10 +4,9 @@
 
 //======================================================
 //======================================================
-FontBase::FontBase(unsigned int charWidth, unsigned int charHeight)
+FontBase::FontBase(const char* fontName)
 {
-  this->charWidth = charWidth;
-  this->charHeight = charHeight;
+  strcpy(this->name, fontName);
 }
 
 //======================================================

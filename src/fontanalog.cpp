@@ -14,9 +14,10 @@
 
 //======================================================
 //======================================================
-FontAnalog::FontAnalog(const char* fileName, const char* fontName) : FontBase(OSD_CHAR_WIDTH, OSD_CHAR_HEIGHT)
+FontAnalog::FontAnalog(const char* fileName, const char* fontName) : FontBase( fontName )
 {
-  strcpy(this->name, fontName);
+  this->charWidth = OSD_CHAR_WIDTH;
+  this->charHeight = OSD_CHAR_HEIGHT;
 
   unsigned char* image = 0;
   unsigned width, height;
@@ -28,7 +29,6 @@ FontAnalog::FontAnalog(const char* fileName, const char* fontName) : FontBase(OS
     return;
   }
 
-  //todo: calculate character width and height. Check if image size is correct.
   if (width != FONT_IMAGE_WIDTH || height != FONT_IMAGE_HEIGHT)
   {
     LOG("Unexpected image size: %s\n", fileName);
@@ -42,7 +42,7 @@ FontAnalog::FontAnalog(const char* fileName, const char* fontName) : FontBase(OS
 
   memset((void*)buffer, 0, this->fontTextureWidth * this->fontTextureHeight * 4);
 
-  for (unsigned int cy = 0; cy < width; cy++)
+  for (unsigned int cy = 0; cy < height; cy++)
   {
     if ((cy % (OSD_CHAR_HEIGHT + 1)) == 0) continue;
 

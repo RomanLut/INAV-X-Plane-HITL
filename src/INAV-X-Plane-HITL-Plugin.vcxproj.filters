@@ -24,6 +24,7 @@
     <ClCompile Include="map.cpp" />
     <ClCompile Include="fontbase.cpp" />
     <ClCompile Include="fontanalog.cpp" />
+    <ClCompile Include="fontwalksnail.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="graph.h" />
@@ -49,6 +50,7 @@
     <ClInclude Include="map.h" />
     <ClInclude Include="fontbase.h" />
     <ClInclude Include="fontanalog.h" />
+    <ClInclude Include="fontwalksnail.h" />
   </ItemGroup>
   <ItemGroup>
     <Media Include="assets\fonts\analog\clarity.png" />
