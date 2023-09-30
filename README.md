@@ -43,7 +43,9 @@ The contents of `release\Aircraft` folder should be placed in the Aircraft folde
 
 This action will add **INAV Surfwing** flying wing model with this plugin.
 
-**IMPORTANT:: You have to flash Simulator-enabled INAV firmware. Take precompiled binaries from release https://github.com/RomanLut/INAV-X-Plane-HITL/releases/ (INAV 5.0.0 with simulator support), or build yourself from branch: https://github.com/RomanLut/inav/tree/simulator_v1.0 (INAV 5.0.0 with simulator support), or build yourself from master branch of official INAV repository . Official INAV firmware releases do not include simulator support currently. It will be included in INAV 6.**
+**IMPORTANT: You have to flash Simulator-enabled INAV firmware. Simulator is supported since INAV 6.**
+
+**Also precompiled binaries of inav 5.0.0 with simulator support are available in early releases of plugin: https://github.com/RomanLut/INAV-X-Plane-HITL/releases/.**
 
 ![](doc/menu.png)
 
