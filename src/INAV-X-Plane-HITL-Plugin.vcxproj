@@ -159,6 +159,7 @@
     <ClInclude Include="fontanalog.h" />
     <ClInclude Include="fonthdzero.h" />
     <ClInclude Include="fontwalksnail.h" />
+    <ClInclude Include="fontwtfos.h" />
     <ClInclude Include="graph.h" />
     <ClInclude Include="lodepng.h" />
     <ClInclude Include="menu.h" />
@@ -174,6 +175,7 @@
     <ClCompile Include="fontanalog.cpp" />
     <ClCompile Include="fonthdzero.cpp" />
     <ClCompile Include="fontwalksnail.cpp" />
+    <ClCompile Include="fontwtfos.cpp" />
     <ClCompile Include="graph.cpp" />
     <ClCompile Include="lodepng.cpp" />
     <ClCompile Include="main.cpp" />

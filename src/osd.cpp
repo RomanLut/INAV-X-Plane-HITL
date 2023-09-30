@@ -12,6 +12,7 @@
 #include "fontanalog.h"
 #include "fontwalksnail.h"
 #include "fonthdzero.h"
+#include "fontwtfos.h"
 
 TOSD g_osd;
 
@@ -298,7 +299,7 @@ void TOSD::loadFonts()
     if (toLower(fontEntry.extension().string()) == ".png")
     {
       buildAssetFilename(assetFileName, ("assets\\fonts\\analog\\" + fontEntry.filename().string()).c_str());
-      char fontName[64];
+      char fontName[MAX_PATH];
       strcpy(fontName, fontEntry.filename().string().c_str());
       *strstr(fontName, ".") = 0;
       this->fonts.push_back(new FontAnalog(assetFileName, fontName));
@@ -314,7 +315,7 @@ void TOSD::loadFonts()
     if (toLower(fontEntry.extension().string()) == ".bmp")
     {
       buildAssetFilename(assetFileName, ("assets\\fonts\\digital\\hdzero\\" + fontEntry.filename().string()).c_str());
-      char fontName[64];
+      char fontName[MAX_PATH];
       strcpy(fontName, ("HDZero: " + fontEntry.filename().string()).c_str());
       *strstr(fontName, ".") = 0;
       this->fonts.push_back(new FontHDZero(assetFileName, fontName));
@@ -328,11 +329,21 @@ void TOSD::loadFonts()
     if (toLower(fontEntry.extension().string()) == ".png")
     {
       buildAssetFilename(assetFileName, ("assets\\fonts\\digital\\walksnail\\" + fontEntry.filename().string()).c_str());
-      char fontName[64];
+      char fontName[MAX_PATH];
       strcpy(fontName, ("Walksnail: " + fontEntry.filename().string()).c_str());
       *strstr(fontName, ".") = 0;
       this->fonts.push_back(new FontWalksnail(assetFileName, fontName));
     }
+  }
+
+  //load wtfos fonts
+  fontPaths = getFontPaths("assets\\fonts\\digital\\wtfos\\", true);
+  for (auto fontEntry : fontPaths)
+  {
+    std::string s = "assets\\fonts\\digital\\wtfos\\" + fontEntry.filename().string();
+    char fontName[MAX_PATH];
+    strcpy(fontName, ("Wtfos: " + fontEntry.filename().string()).c_str());
+    this->fonts.push_back(new FontWtfos(s.c_str(), fontName));
   }
 
 }

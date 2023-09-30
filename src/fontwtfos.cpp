@@ -1,70 +1,71 @@
 #include "lodepng.h"
 
-#include "fontwalksnail.h"
+#include "fontwtfos.h"
 #include "util.h"
 
-#define OSD_CHAR_WIDTH_24 24
-#define OSD_CHAR_HEIGHT_24 36
+#define CHAR_WIDTH			  36
+#define CHAR_HEIGHT			  54
+#define CHARS_PER_FILE		256
+#define BYTES_PER_PIXEL		4
 
-#define OSD_CHAR_WIDTH_36 36
-#define OSD_CHAR_HEIGHT_36 54
+#define CHAR_SIZE (CHAR_HEIGHT * CHAR_WIDTH * BYTES_PER_PIXEL)
+#define FONT_FILE_SIZE (CHAR_SIZE * CHARS_PER_FILE)
 
 #define CHARS_PER_TEXTURE_ROW 14
 
 //======================================================
 //======================================================
-FontWalksnail::FontWalksnail(const char* fileName, const char* fontName) : FontBase(fontName)
+FontWtfos::FontWtfos(const char* dirName, const char* fontName) : FontBase(fontName)
 {
   strcpy(this->name, fontName);
 
-  unsigned char* image = 0;
-  unsigned width, height;
+  char s[MAX_PATH];
+  char filePartName[MAX_PATH];
 
-  unsigned int error = lodepng_decode32_file(&image, &width, &height, fileName);
-  if (error)
+  strcpy(s, dirName);
+  strcat(s, "\\font_inav.bin");
+  buildAssetFilename(filePartName, s);
+  unsigned char* part1 = this->loadFontFile(filePartName);
+  if (!part1) return;
+
+  strcpy(s, dirName);
+  strcat(s, "\\font_inav_2.bin");
+  buildAssetFilename(filePartName, s);
+  unsigned char* part2 = this->loadFontFile(filePartName);
+  if (!part2)
   {
-    LOG("error %u: %s\n", error, lodepng_error_text(error));
+    free(part1);
     return;
   }
 
-  if ((width != OSD_CHAR_WIDTH_24) && (width != OSD_CHAR_WIDTH_36))
-  {
-    LOG("Unexpected image size: %s\n", fileName);
-    return;
-  }
-
-  this->charWidth = width;
-  this->charHeight = height / 512;
-
-  if ((this->charWidth == OSD_CHAR_WIDTH_24) && (this->charHeight != OSD_CHAR_HEIGHT_24))
-  {
-    LOG("Unexpected image size: %s\n", fileName);
-    return;
-  }
-
-  if ((this->charWidth == OSD_CHAR_WIDTH_36) && (this->charHeight != OSD_CHAR_HEIGHT_36))
-  {
-    LOG("Unexpected image size: %s\n", fileName);
-    return;
-  }
+  this->charWidth = CHAR_WIDTH;
+  this->charHeight = CHAR_HEIGHT;
 
   this->calculateTextureHeight(this->charWidth * CHARS_PER_TEXTURE_ROW, this->charHeight * (512 + CHARS_PER_TEXTURE_ROW - 1) / CHARS_PER_TEXTURE_ROW);
 
   uint8_t* buffer = new uint8_t[this->fontTextureWidth * this->fontTextureHeight * 4];
-
   memset((void*)buffer, 0, this->fontTextureWidth * this->fontTextureHeight * 4);
 
   for (int charIndex = 0; charIndex < 512; charIndex++)
   {
     int ix = 0;
     int iy = charIndex * this->charHeight;
+    if (charIndex >= 256)
+    {
+      iy = (charIndex-256) * this->charHeight;
+    }
 
     int tx = (charIndex % CHARS_PER_TEXTURE_ROW) * this->charWidth;
     int ty = (charIndex / CHARS_PER_TEXTURE_ROW) * this->charHeight;
 
     for (unsigned int y = 0; y < this->charHeight; y++)
     {
-      const uint8_t* pi = image + (iy+y) * width * 4 + ix * 4;
+      uint8_t* pi = part1 + (iy+y) * CHAR_WIDTH * 4 + ix * 4;
+      if (charIndex >= 256)
+      {
+        pi = part2 + (iy + y) * CHAR_WIDTH * 4 + ix * 4;
+      }
+
       uint8_t* pt = buffer + (ty+y) * this->fontTextureWidth * 4 + tx * 4;
 
       for (unsigned int x = 0; x < this->charWidth; x++)
@@ -81,10 +82,10 @@ FontWalksnail::FontWalksnail(const char* fileName, const char* fontName) : FontB
   }
 
   /*
-  char fname[MAX_PATH];
-  strcpy(fname, fileName);
-  strcpy(fname + strlen(fname)-4 , "_texture.png");
-  lodepng_encode_file(fname, buffer, this->fontTextureWidth, this->fontTextureHeight, LCT_RGBA, 8);
+  strcpy(s, dirName);
+  strcat(s, "\\texture.png");
+  buildAssetFilename(filePartName, s);
+  lodepng_encode_file(filePartName, buffer, this->fontTextureWidth, this->fontTextureHeight, LCT_RGBA, 8);
   */
 
   XPLMGenerateTextureNumbers(&this->fontTextureId, 1);
@@ -100,19 +101,51 @@ FontWalksnail::FontWalksnail(const char* fileName, const char* fontName) : FontB
     GL_UNSIGNED_BYTE,    // encoding of our data
     buffer);
 
-  free(image);
+  free(part1);
+  free(part2);
 }
 
 
+//==============================================================
+//==============================================================
+unsigned char* FontWtfos::loadFontFile(const char* fileName)
+{
+  unsigned char* buffer = (unsigned char*)malloc(FONT_FILE_SIZE);
+
+  std::fstream file(fileName, std::fstream::in | std::fstream::binary | std::fstream::ate);
+  int size = 0;
+
+  if (!file.is_open())
+  {
+    LOG("Unable to open file: %s\n", fileName);
+    return NULL;
+  }
+
+  size = static_cast<int>(file.tellg());
+  if (size != FONT_FILE_SIZE)
+  {
+    LOG("Incorrect file size: %s\n", fileName);
+    file.close();
+    return NULL;
+  }
+
+  file.seekg(0);
+  file.read((char*)buffer, size);
+
+  file.close();
+
+  return buffer;
+}
+
 //======================================================
 //======================================================
-FontWalksnail::~FontWalksnail()
+FontWtfos::~FontWtfos()
 {
 }
 
 //======================================================
 //======================================================
-void FontWalksnail::drawChar(uint16_t code, float x1, float y1, float width, float height)
+void FontWtfos::drawChar(uint16_t code, float x1, float y1, float width, float height)
 {
   if (this->fontTextureId == 0) return;
 

@@ -18,7 +18,8 @@ SOURCES = \
     fontbase.cpp \
     fontanalog.cpp \
     fontwalksnail.cpp \
-    fonthdzero.cpp
+    fonthdzero.cpp \
+    fontwtfos.cpp
 
 LIBS = -lopenal 
 

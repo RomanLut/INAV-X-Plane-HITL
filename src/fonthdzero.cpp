@@ -39,7 +39,7 @@ struct BMPFileHeader {
 //======================================================
 static bool decodeBMP( unsigned char** image, unsigned* width, unsigned* height, const char* fileName)
 {
-  std::ifstream file(fileName, std::ios::binary);
+  std::ifstream file(fileName, std::fstream::in | std::fstream::binary);
 
   if (!file)
   {
