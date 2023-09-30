@@ -6,7 +6,7 @@ Build with Microsoft Visual Studio 2017.
 
 # Building for Linux
 
-Check Dockerfile for building requiremens on Linux https://github.com/RomanLut/INAV-X-Plane-HITL/blob/main/Dockerfile
+Check Dockerfile for building requirements on Linux https://github.com/RomanLut/INAV-X-Plane-HITL/blob/main/Dockerfile
 
 Can be built on Windows using docker:
 
@@ -32,13 +32,13 @@ INAV can handle 100 MSP commands per second. By the way, this is the reason why 
 
 X-Plane renders 40-100 FPS ( physics and rendering ) per second. 
 
-We send new MSP_SIMULATOR command every frame, but not earlier than 10us from last command. This allows to have update rate similar to FPS.
+We send new MSP_SIMULATOR command every frame, but not earlier than 10us from the last command. This allows to have update rate similar to FPS.
 
 # Debugging
 
 ## Plugin->Data Ref Editor->Show Datarefs
 
-Some other datarefs are available under **inav_hitl/** node.
+Datarefs are available under **inav_hitl/** node.
 
 To enable Dataref editor, download plugin from https://developer.x-plane.com/tools/datarefeditor/
 
@@ -67,12 +67,12 @@ Search INAV code to find out how debug[] array is filled in selected mode:
     DEBUG_SET(DEBUG_ALTITUDE, 7, accGetClipCount());            // Clip count
 ```
 
-Check `main\build\debug.h', 'debugType_e` for more modes.
+Check inav sources `main\build\debug.h', 'debugType_e` for more modes.
 
 
 ## Developer->Show dev console
 
-INAV serial logging ( see https://github.com/iNavFlight/inav/blob/master/docs/development/serial_printf_debugging.md ) messages are output to Developer console with "INAV: " prefix:
+INAV serial logging ( see https://github.com/iNavFlight/inav/blob/master/docs/development/serial_printf_debugging.md ) messages are output to Developer console with "INAVHITL: " prefix:
 
 ![](devconsole.png)
 
@@ -82,7 +82,7 @@ INAV serial logging ( see https://github.com/iNavFlight/inav/blob/master/docs/de
 
 ![](graph.jpg)
 
-Plugin can draw number of graphs for debugging:
+Plugin can draw a number of graphs for debugging:
 - **Updates period:** First graph shows period between updates from FC in ms. Second graph shows number of updates per second.
 - **Attitude estimation:** First 3 graphs: real Yaw/Pitch/Roll angles. Next 3 graphs: attitude estimated by FC. In **"Attitude: Copy From X-Plane"** mode, angles are equal. 
 - **Attitude, output:** First 3 graphs: Yaw/Pitch/Roll. Next 3 graphs: **"Output Yaw/Pitch/Roll"** = **"Stabilized Yaw/Pitch/Roll"** outputs from FC. Graph is usefull for PID tuning.
@@ -96,5 +96,5 @@ Plugin can draw number of graphs for debugging:
   
 # Assitance
 
-Assistance required to implement some tasks. Pelase check **Issues** tab. Please leave a note in issue if you are working on this task to avoid collisions. Please provide timing.
+Assistance required to implement some tasks. Pelase check **Issues** tab. Please leave a note in the issue if you are working on this task to avoid collisions. Please provide timing.
 
