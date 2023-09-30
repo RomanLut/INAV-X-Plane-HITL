@@ -515,7 +515,8 @@ void TOSD::updateFromINAVRowData(int osdRow, int osdCol, const uint8_t* data, in
     else if (c == 255)
     {
       highBank = !highBank;
-      count = 0;
+      c = data[byteCount++];
+      count = 1;
     }
     else
     {
