@@ -159,7 +159,7 @@ The following options are present in menu:
 - **Smoothing: Nearest:** Use nearest pixels for characters rendering
 - **Smoothing: Linear:** Use linear smoothing for characters rendering
 
-OSD is using **Bold** font from **INAV Configurator**. It is possible to replace font `(\plugins\INAV-X-Plane-HITL\64\assets\osd_font.png)` with other font from **INAV Configurator** https://github.com/iNavFlight/inav-configurator/tree/master/resources/osd
+OSD is using **Bold** font from **INAV Configurator**. It is possible to replace font `(\plugins\INAV-X-Plane-HITL\64\assets\osd_font.png)` with other font from **INAV Configurator** https://github.com/iNavFlight/inav-configurator/tree/master/resources/osd/analogue
 
 # Beeper
 
