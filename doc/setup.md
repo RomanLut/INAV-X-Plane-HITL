@@ -1,5 +1,3 @@
-# Seup and usage
-
 # Setup (Windows)
 
 Plugin is **Aircraft** plugin.
