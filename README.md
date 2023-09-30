@@ -33,7 +33,9 @@ FC sends back **yaw/pitch/roll** controls which are passed to X-Plane.
 
 ## X-Plane 11 or X-Plane 12?
 
-Simulation requires at least 50, or even better 100, solid FPS without freezing. While **X-Plane 12** has better visual appearance, **X-Plane 11** is still recommented choice due to better performance. Also **INAV Surfwing** flying characteristic seems to be worse in **X-Plane 12**.
+Simulation requires at least 50, or even better 100, solid FPS without freezing. 
+
+While **X-Plane 12** has better visual appearance, **X-Plane 11** is still recommented choice due to better performance. 
 
 # Setup and usage
 
