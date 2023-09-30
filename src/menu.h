@@ -8,6 +8,10 @@
 //=======================================================
 class TMenu
 {
+private:
+  std::vector<int> analogFontMenuItems;
+  std::vector<int> digitalFontMenuItems;
+
 public:
 	int menu_container_idx; // The index of our menu item in the Plugins menu
 
@@ -31,13 +35,30 @@ public:
 
   XPLMMenuID osd_menu_id;
   int osd_id;
-  int osd_none_id;
-  int osd_auto_id;
-  int osd_pal_id;
-  int osd_ntsc_id;
 
-  int osd_nearest_id;
-  int osd_linear_id;
+  XPLMMenuID osd_visibility_menu_id;
+  int osd_visibility_id;
+  int osd_visibility_on_id;
+  int osd_visibility_off_id;
+
+  XPLMMenuID osd_fonts_menu_id;
+  int osd_fonts_id;
+  XPLMMenuID osd_analog_fonts_menu_id;
+  int osd_analog_fonts_id;
+  XPLMMenuID osd_digital_fonts_menu_id;
+  int osd_digital_fonts_id;
+
+
+  XPLMMenuID osd_rows_menu_id;
+  int osd_rows_id;
+  int osd_rows_auto_id;
+  int osd_rows_pal_id;
+  int osd_rows_ntsc_id;
+
+  XPLMMenuID osd_filtering_menu_id;
+  int osd_filtering_id;
+  int osd_filtering_nearest_id;
+  int osd_filtering_linear_id;
 
   XPLMMenuID attitude_menu_id;
   int attitude_id;
@@ -119,7 +140,11 @@ public:
   void updateNoiseMenu();
   void updateAll();
 
+  void updateFontsMenu(int activeAnalogFontIndex, int activeDigitalFontIndex);
+
   void actionDisconnect();
+
+  void addFontEntry( bool analog, const char* fontName);
 };
 
 extern TMenu g_menu;

@@ -262,3 +262,59 @@ extern void getClipboardText(char str[1024])
   }
 }
 #endif
+
+//==============================================================
+//==============================================================
+int smallestPowerOfTwo(int value, int minValue)
+{
+  if (value < minValue)
+  {
+    return minValue; 
+  }
+
+  if (value < 2)
+  {
+    return 2;
+  }
+
+  int powerOfTwo = 1;
+  while (powerOfTwo < value)
+  {
+    powerOfTwo <<= 1;
+  }
+
+  return powerOfTwo;
+}
+
+//==============================================================
+//==============================================================
+//subPath = "assets\\fonts"
+std::vector<std::filesystem::path> getFontPaths(const char* subPath, bool directories)  
+{
+  char dirName[MAX_PATH];
+  buildAssetFilename(dirName, subPath);
+  std::vector<std::filesystem::path> fontList;
+  std::filesystem::path path = std::string(dirName);
+  if (std::filesystem::exists(path)) {
+    for (auto dirEntry = std::filesystem::recursive_directory_iterator(path); dirEntry != std::filesystem::recursive_directory_iterator(); ++dirEntry) {
+      dirEntry.disable_recursion_pending();
+      if (dirEntry->is_directory() && directories)
+        fontList.push_back(dirEntry->path());
+      if (dirEntry->is_regular_file() && !directories)
+        fontList.push_back(dirEntry->path());
+    }
+  }
+  return fontList;
+}
+
+//==============================================================
+//==============================================================
+std::string toLower(const std::string& str)
+{
+  std::string result = str;
+  std::transform(result.begin(), result.end(), result.begin(), [](unsigned char c)
+  {
+    return std::tolower(c);
+  });
+  return result;
+}

@@ -143,9 +143,33 @@ struct TMSPSimulatorFromINAV
   int16_t estimated_attitude_pitch;
   int16_t estimated_attitude_yaw;
 
-  uint8_t osdRow;  //255 - not osd data. |128 - 16 rows, otherwise 13 rows.
-  uint8_t osdCol;
-  uint8_t osdRowData[200];
+  union {
+
+    struct 
+    {
+      //new response format
+      uint8_t newFormatSignature;  // = 255
+
+      //screen size
+      uint8_t osdRows; //three high bits - format version 
+      uint8_t osdCols; //two high bits - reserved
+
+      //starting position of packet
+      uint8_t osdRow; //three high bits - reserved
+      uint8_t osdCol; //two high bits - reserved
+
+      uint8_t osdRowData[400];
+    } newFormat;
+
+    struct
+    {
+      uint8_t osdRow; 
+      uint8_t osdCol; 
+
+      uint8_t osdRowData[400];
+    } oldFormat;
+
+  };
 };
 #pragma pack()
 

@@ -34,6 +34,15 @@
 #include <stdint.h>
 #include <string.h>
 
+#include <string>
+#include <vector>
+//#include <iterator>
+//#include <map>
+#include <filesystem>
+#include <fstream>
+//#include <functional>
+
+
 #include <GL/gl.h>
 #include <GL/glu.h>
 
@@ -45,4 +54,4 @@
 #include <cmath>
 #endif
 
-#define HITL_VERSION_STRING "V1.3.1"
+#define HITL_VERSION_STRING "V1.4.0"

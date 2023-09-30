@@ -1,14 +1,15 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
-    <ClCompile Include="lodepng.cpp" />
-    <ClCompile Include="main.cpp" />
-    <ClCompile Include="menu.cpp" />
-    <ClCompile Include="msp.cpp" />
-    <ClCompile Include="osd.cpp" />
-    <ClCompile Include="serial.cpp" />
-    <ClCompile Include="simData.cpp" />
-    <ClCompile Include="stats.cpp" />
+    <Filter Include="assets">
+      <UniqueIdentifier>{2fab6d33-3ab1-4648-8ac5-6e7ea2956bbf}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="fontbase.cpp" />
+    <ClCompile Include="fontanalog.cpp" />
+    <ClCompile Include="fonthdzero.cpp" />
+    <ClCompile Include="fontwalksnail.cpp" />
     <ClCompile Include="graph.cpp" />
     <ClCompile Include="lodepng.cpp" />
     <ClCompile Include="main.cpp" />
@@ -18,22 +19,17 @@
     <ClCompile Include="serial.cpp" />
     <ClCompile Include="simData.cpp" />
     <ClCompile Include="stats.cpp" />
-    <ClCompile Include="util.cpp" />
     <ClCompile Include="sound.cpp" />
     <ClCompile Include="util.cpp" />
     <ClCompile Include="map.cpp" />
+    <ClCompile Include="fontwtfos.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="graph.h" />
-    <ClInclude Include="lodepng.h" />
-    <ClInclude Include="menu.h" />
-    <ClInclude Include="msp.h" />
-    <ClInclude Include="osd.h" />
-    <ClInclude Include="serial.h" />
-    <ClInclude Include="simData.h" />
-    <ClInclude Include="stats.h" />
-    <ClInclude Include="util.h" />
     <ClInclude Include="config.h" />
+    <ClInclude Include="fontbase.h" />
+    <ClInclude Include="fontanalog.h" />
+    <ClInclude Include="fonthdzero.h" />
+    <ClInclude Include="fontwalksnail.h" />
     <ClInclude Include="graph.h" />
     <ClInclude Include="lodepng.h" />
     <ClInclude Include="menu.h" />
@@ -45,39 +41,6 @@
     <ClInclude Include="util.h" />
     <ClInclude Include="sound.h" />
     <ClInclude Include="map.h" />
-  </ItemGroup>
-  <ItemGroup>
-    <Filter Include="assets">
-      <UniqueIdentifier>{9bab09ae-5265-4bc6-b538-f1d0d671df0a}</UniqueIdentifier>
-    </Filter>
-  </ItemGroup>
-  <ItemGroup>
-    <Media Include="assets\connected.wav">
-      <Filter>assets</Filter>
-    </Media>
-    <Media Include="assets\connection_failed.wav">
-      <Filter>assets</Filter>
-    </Media>
-    <Media Include="assets\ready_to_connect.wav">
-      <Filter>assets</Filter>
-    </Media>
-    <Media Include="assets\osd_font.png">
-      <Filter>assets</Filter>
-    </Media>
-    <Media Include="assets\connection_lost.wav">
-      <Filter>assets</Filter>
-    </Media>
-    <Media Include="assets\unsupported.wav">
-      <Filter>assets</Filter>
-    </Media>
-    <Media Include="assets\noise.png">
-      <Filter>assets</Filter>
-    </Media>
-    <Media Include="assets\interference.png">
-      <Filter>assets</Filter>
-    </Media>
-    <Media Include="assets\unsupported_firmware.wav">
-      <Filter>assets</Filter>
-    </Media>
+    <ClInclude Include="fontwtfos.h" />
   </ItemGroup>
 </Project>

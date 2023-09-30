@@ -7,16 +7,15 @@
 #include "msp.h"
 #include "map.h"
 
+#include "menu.h"
+
+#include "fontanalog.h"
+#include "fontwalksnail.h"
+#include "fonthdzero.h"
+#include "fontwtfos.h"
+
 TOSD g_osd;
 
-#define FONT_IMAGE_WIDTH   209
-#define FONT_IMAGE_HEIGHT  609
-
-#define FONT_TEXTURE_WIDTH   512
-#define FONT_TEXTURE_HEIGHT  1024
-
-#define OSD_CHAR_WIDTH 12
-#define OSD_CHAR_HEIGHT 18
 
 #define MAX7456_MODE_INVERT   (1 << 3)
 #define MAX7456_MODE_BLINK    (1 << 4)
@@ -30,8 +29,7 @@ TOSD g_osd;
 #define CHAR_IS_BLANK(x)        ((CHAR_BYTE(x) == 0x20 || CHAR_BYTE(x) == 0x00) && !CHAR_MODE_IS_EXT(MODE_BYTE(x)))
 #define CHAR_MODE_IS_EXT(m)     ((m) & CHAR_MODE_EXT)
 
-#define OSD_MARGIN_HOR_PERCENT      10
-#define OSD_MARGIN_VERT_PERCENT     3
+#define OSD_MARGIN_PERCENT      1
 
 #define NOISE_TEXTURE_WIDTH   1024
 #define NOISE_TEXTURE_HEIGHT  1024
@@ -48,12 +46,13 @@ TOSD g_osd;
 //==============================================================
 void TOSD::drawOSD()
 {
-  if (this->osd_type == OSD_NONE) return;
+  if (!this->visible) return;
+  if (this->rows == 0) return;
 
   int sx, sy;
   XPLMGetScreenSize(&sx, &sy);
 
-  XPLMBindTexture2d(this->fontTextureId, 0);
+  this->getActiveFont()->bindTexture();
 
   glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, this->smoothed ? GL_LINEAR : GL_NEAREST);
   glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, this->smoothed ? GL_LINEAR : GL_NEAREST);
@@ -87,52 +86,63 @@ void TOSD::drawOSD()
   glEnd();
   */
 
-  int rowsCount = OSD_ROWS;
+  int rowsCount = this->getForcedRowsCount();
+  float modeAspectRatio = this->getModeAspectRatio();
 
-  if (this->osd_type == OSD_NTSC)
+  float screenAspectRatio = sx * 1.0f / sy;
+
+  float marginX = 0;
+  float marginY = 0;
+
+  if (screenAspectRatio >= modeAspectRatio)
   {
-    rowsCount = OSD_ROWS_NTSC;
+    //screen is wider then necessary
+    float w = sy * modeAspectRatio;
+    marginX = (sx - w) / 2.0f;
   }
-  else if (this->osd_type == OSD_AUTO)
+  else
   {
-    rowsCount = this->auto_rows;
+    float h = sx / modeAspectRatio;
+    marginY = (sy - h) / 2.0f;
   }
 
-  float marginX = sx * OSD_MARGIN_HOR_PERCENT / 100.0f;
-  float marginY = sy * OSD_MARGIN_VERT_PERCENT / 100.0f;
+  marginX += sx * OSD_MARGIN_PERCENT / 100.0f * 2;
+  marginY += sx * OSD_MARGIN_PERCENT / 100.0f * 2 / screenAspectRatio;
 
-  if (rowsCount == 13)
-  {
-    marginY += (sy - marginY * 2) / rowsCount;
-  }
+  float cw = ( sx - marginX * 2 ) / this->cols;
+  float ch = ( sy - marginY * 2 ) / rowsCount;
 
   float x0 = marginX;
   float y0 = marginY;
 
-  float cw = ( sx - marginX * 2 ) / OSD_COLS;
-  float ch = ( sy - marginY * 2 ) / rowsCount;
-
+  /*
   //a cross on 30 cols osd does not aling ok to the center of the screen
   //shift half charwidth to the left to aling crosss to screen center
-  x0 -= cw / 2; 
+  if ((this->cols & 1) == 0)
+  {
+    marginX += (sx - marginX * 2) / (this->cols + 1) / 2.0f;
+    cw = (sx - marginX * 2) / this->cols;
+    x0 -= cw / 2; 
+  }
+  */
 
   glBegin(GL_QUADS);
 
   for (int y = 0; y < rowsCount; y++)
   {
-    for (int x = 0; x < OSD_COLS; x++)
+    for (int x = 0; x < this->cols; x++)
     {
       //int icode = (x*y) & 511;
       //int code = MAKE_CHAR_MODE(icode, 0);
 
-      int code = this->osdData[y * OSD_COLS + x];
+      int code = this->osdData[y * OSD_MAX_COLS + x];
 
       if ( CHAR_IS_BLANK( code )) continue;
 
       if (blink && ((MAX7456_MODE_BLINK & code) != 0) ) continue;
 
       int code9 = CHAR_BYTE(code) | (code & CHAR_MODE_EXT ? 0x100 : 0);
-      this->drawChar(code9, x0 + x * cw, sy - (y0 + y * ch), cw, ch);
+      this->getActiveFont()->drawChar(code9, x0 + x * cw, sy - (y0 + y * ch), cw, ch);
     }
   }
 
@@ -254,7 +264,7 @@ void TOSD::drawCallback()
 {
   this->drawOSD();
 
-  if (this->videoLink != VS_NONE && g_msp.isConnected())
+  if ((this->videoLink != VS_NONE) && g_msp.isConnected() && this->isAnalogOSD())
   {
     float amount = this->getNoiseAmount();
     this->drawNoise(amount);
@@ -264,91 +274,78 @@ void TOSD::drawCallback()
 
 //==============================================================
 //==============================================================
-void TOSD::drawChar(uint16_t code, float x1, float y1, float width, float height)
+FontBase* TOSD::getActiveFont()
 {
-  int code9 = code % 0xff;
-
-  int px = 1 + (code % 16) * (OSD_CHAR_WIDTH + 1);
-  int py = 1 + (code / 16) * (OSD_CHAR_HEIGHT + 1);
-
-  float u1 = (float)px;
-  float u2 = u1 + OSD_CHAR_WIDTH;
-
-  float v1 = (float)py;
-  float v2 = v1 + OSD_CHAR_HEIGHT;
-
-  u1 /= FONT_TEXTURE_WIDTH;
-  v1 /= FONT_TEXTURE_HEIGHT;
-  u2 /= FONT_TEXTURE_WIDTH;
-  v2 /= FONT_TEXTURE_HEIGHT;
-
-  float x2 = x1 + width;
-  float y2 = y1 - height;
-
-  glTexCoord2f(u1, v1);        glVertex2f(x1, y1);    
-  glTexCoord2f(u2, v1);        glVertex2f(x2, y1);    
-  glTexCoord2f(u2, v2);        glVertex2f(x2, y2);    
-  glTexCoord2f(u1, v2);        glVertex2f(x1, y2);    
+  if (this->isAnalogOSD())
+  {
+    return this->fonts[this->activeAnalogFontIndex];
+  }
+  else
+  {
+    return this->fonts[this->activeDigitalFontIndex];
+  }
 }
 
 //==============================================================
 //==============================================================
-void TOSD::loadFont()
+void TOSD::loadFonts()
 {
   char assetFileName[MAX_PATH];
 
-  buildAssetFilename( assetFileName,  "assets\\osd_font.png");
-
-  unsigned char* image = 0;
-  unsigned width, height;
-
-  unsigned int error = lodepng_decode32_file(&image, &width, &height, assetFileName);
-  if (error)
+  //load analog fonts
+  std::vector<std::filesystem::path> fontPaths = getFontPaths("assets\\fonts\\analog\\", false);
+  for (auto fontEntry : fontPaths)
   {
-    printf("error %u: %s\n", error, lodepng_error_text(error));
-    return;
-  }
-
-  if (width != FONT_IMAGE_WIDTH || height != FONT_IMAGE_HEIGHT) return;
-
-  uint8_t* buffer = new uint8_t[FONT_TEXTURE_WIDTH * FONT_TEXTURE_HEIGHT * 4];
-
-  memset((void*)buffer, 0, FONT_TEXTURE_WIDTH * FONT_TEXTURE_HEIGHT * 4);
-
-  for (int cy = 0; cy < FONT_IMAGE_HEIGHT; cy++)
-  {
-    if ( (cy % (OSD_CHAR_HEIGHT + 1)) == 0 ) continue;
-
-    const uint8_t* pi = image + cy * FONT_IMAGE_WIDTH * 4;
-    uint8_t* pt = buffer + cy * FONT_TEXTURE_WIDTH * 4;
-
-    for (int cx = 0; cx < FONT_IMAGE_WIDTH; cx++)
+    if (toLower(fontEntry.extension().string()) == ".png")
     {
-      if ( ((cx % (OSD_CHAR_WIDTH + 1)) != 0) && (pi[0] != 128))
-      {
-        pt[0] = pt[1] = pt[2] = pi[0];
-        pt[3] = 255;
-      }
-
-      pi += 4;
-      pt += 4;
+      buildAssetFilename(assetFileName, ("assets\\fonts\\analog\\" + fontEntry.filename().string()).c_str());
+      char fontName[MAX_PATH];
+      strcpy(fontName, fontEntry.filename().string().c_str());
+      *strstr(fontName, ".") = 0;
+      this->fonts.push_back(new FontAnalog(assetFileName, fontName));
     }
   }
 
-  XPLMGenerateTextureNumbers(&this->fontTextureId, 1);
-  XPLMBindTexture2d(this->fontTextureId, 0);
-  glTexImage2D(
-    GL_TEXTURE_2D,
-    0,                   // mipmap level
-    GL_RGBA,             // internal format for the GL to use.  (We could ask for a floating point tex or 16-bit tex if we were crazy!)
-    FONT_TEXTURE_WIDTH,
-    FONT_TEXTURE_HEIGHT,
-    0,                   // border size
-    GL_RGBA,             // format of color we are giving to GL
-    GL_UNSIGNED_BYTE,    // encoding of our data
-    buffer);
+  this->analogFontsCount = (unsigned int)this->fonts.size();
 
-  free(image);
+  //load hdzero fonts
+  fontPaths = getFontPaths("assets\\fonts\\digital\\hdzero\\", false);
+  for (auto fontEntry : fontPaths)
+  {
+    if (toLower(fontEntry.extension().string()) == ".bmp")
+    {
+      buildAssetFilename(assetFileName, ("assets\\fonts\\digital\\hdzero\\" + fontEntry.filename().string()).c_str());
+      char fontName[MAX_PATH];
+      strcpy(fontName, ("HDZero: " + fontEntry.filename().string()).c_str());
+      *strstr(fontName, ".") = 0;
+      this->fonts.push_back(new FontHDZero(assetFileName, fontName));
+    }
+  }
+
+  //load walksnail fonts
+  fontPaths = getFontPaths("assets\\fonts\\digital\\walksnail\\", false);
+  for (auto fontEntry : fontPaths)
+  {
+    if (toLower(fontEntry.extension().string()) == ".png")
+    {
+      buildAssetFilename(assetFileName, ("assets\\fonts\\digital\\walksnail\\" + fontEntry.filename().string()).c_str());
+      char fontName[MAX_PATH];
+      strcpy(fontName, ("Walksnail: " + fontEntry.filename().string()).c_str());
+      *strstr(fontName, ".") = 0;
+      this->fonts.push_back(new FontWalksnail(assetFileName, fontName));
+    }
+  }
+
+  //load wtfos fonts
+  fontPaths = getFontPaths("assets\\fonts\\digital\\wtfos\\", true);
+  for (auto fontEntry : fontPaths)
+  {
+    std::string s = "assets\\fonts\\digital\\wtfos\\" + fontEntry.filename().string();
+    char fontName[MAX_PATH];
+    strcpy(fontName, ("Wtfos: " + fontEntry.filename().string()).c_str());
+    this->fonts.push_back(new FontWtfos(s.c_str(), fontName));
+  }
+
 }
 
 //==============================================================
@@ -365,7 +362,7 @@ void TOSD::loadFont()
   unsigned int error = lodepng_decode32_file(&image, &width, &height, assetFileName);
   if (error)
   {
-    printf("error %u: %s\n", error, lodepng_error_text(error));
+    LOG("error %u: %s\n", error, lodepng_error_text(error));
     return 0;
   }
 
@@ -392,10 +389,13 @@ void TOSD::loadFont()
 //==============================================================
 void TOSD::init()
 {
-  this->loadFont();
+  this->loadFonts();
 
   this->noiseTextureId = this->loadTexture("assets\\noise.png");
   this->interferenceTextureId = this->loadTexture("assets\\interference.png");
+
+  this->rows = PAL_ROWS;
+  this->cols = PAL_COLS;
 
   this->cbConnect(CBC_DISCONNECTED);
 }
@@ -413,7 +413,11 @@ void TOSD::destroyTexture(int textureId)
 //==============================================================
 void TOSD::destroy()
 {
-  this->destroyTexture(this->fontTextureId);
+  for (FontBase* pFont : this->fonts)
+  {
+    pFont->destroy();
+  }
+
   this->destroyTexture(this->noiseTextureId);
 }
 
@@ -421,35 +425,92 @@ void TOSD::destroy()
 //==============================================================
 void TOSD::updateFromINAV(const TMSPSimulatorFromINAV* message)
 {
-  if (message->osdRow == 255)
+  if (message->newFormat.newFormatSignature != 255)
   {
-    return; //no OSD data
+    this->updateFromINAVOld(message);
+    return;
   }
 
-  this->auto_rows = (message->osdRow & 0x80) ? 16 : 13;
+  if (message->newFormat.osdRows == 0 )
+  {
+    return; //old format nodata [255, unfilled] or new format no data [255, 0 ]
+  }
 
-  int osdRow = message->osdRow & 0x7f;
-  int osdCol = message->osdCol;
+  int formatVersion = (message->newFormat.osdRows >> 5) & 7;
+
+  if (formatVersion != 0)
+  {
+    return;
+  }
+
+  int message_osdRows = message->newFormat.osdRows & 0x1f;
+  int message_osdCols = message->newFormat.osdCols & 0x3f;
+
+  if (message_osdRows > OSD_MAX_ROWS)
+  {
+    return; //invalid data
+  }
+
+  if (message_osdCols > OSD_MAX_COLS)
+  {
+    return; //invalid data
+  }
+
+  this->rows = message_osdRows;
+  this->cols = message_osdCols;
+
+  int osdRow = message->newFormat.osdRow & 0x1f;
+  int osdCol = message->newFormat.osdCol & 0x3f;
+
+  this->updateFromINAVRowData(osdRow, osdCol, message->newFormat.osdRowData, this->rows);
+}
+
+//==============================================================
+//==============================================================
+void TOSD::updateFromINAVOld(const TMSPSimulatorFromINAV* message)
+{
+  this->rows = (message->oldFormat.osdRow & 0x80) ? PAL_ROWS : NTSC_ROWS;
+  this->cols = PAL_COLS;
+
+  int osdRow = message->oldFormat.osdRow & 0x7f;
+  int osdCol = message->oldFormat.osdCol;
+
+  this->updateFromINAVRowData(osdRow, osdCol, message->oldFormat.osdRowData, 16);
+}
+
+//==============================================================
+//==============================================================
+void TOSD::updateFromINAVRowData(int osdRow, int osdCol, const uint8_t* data, int decodeRowsCount)
+{
+  if (osdRow >= this->rows)
+  {
+    return; //invalid data
+  }
+
+  if (osdCol >= this->cols)
+  {
+    return; //invalid data
+  }
 
   bool highBank = false;
   bool blink = false;
   int count;
 
   int byteCount = 0;
-  while (byteCount < (200-3-2) )
+  while (byteCount < (400 - 3 - 2))
   {
-    uint8_t c = message->osdRowData[byteCount++];
+    uint8_t c = data[byteCount++];
     if (c == 0)
     {
-      c = message->osdRowData[byteCount++];
+      c = data[byteCount++];
       count = (c & 0x3f);
       if (count == 0)
       {
         break; //stop
       }
-      highBank ^= (c & 64)!=0;
-      blink ^= (c & 128)!=0;
-      c = message->osdRowData[byteCount++];
+      highBank ^= (c & 64) != 0;
+      blink ^= (c & 128) != 0;
+      c = data[byteCount++];
     }
     else if (c == 255)
     {
@@ -463,13 +524,13 @@ void TOSD::updateFromINAV(const TMSPSimulatorFromINAV* message)
 
     while (count > 0)
     {
-      this->osdData[osdRow * 30 + osdCol] = MAKE_CHAR_MODE((c | (highBank ? 0x100 : 0)), (blink ? MAX7456_MODE_BLINK : 0));
+      this->osdData[osdRow * OSD_MAX_COLS + osdCol] = MAKE_CHAR_MODE((c | (highBank ? 0x100 : 0)), (blink ? MAX7456_MODE_BLINK : 0));
       osdCol++;
-      if (osdCol == 30)
+      if (osdCol == this->cols)
       {
         osdCol = 0;
         osdRow++;
-        if (osdRow == 16)
+        if (osdRow == decodeRowsCount)
         {
           this->extractLatLon();
           osdRow = 0;
@@ -485,22 +546,22 @@ void TOSD::updateFromINAV(const TMSPSimulatorFromINAV* message)
 //==============================================================
 void TOSD::clear()
 {
-  memset(this->osdData, 0, OSD_ROWS*OSD_COLS * 2);
+  memset(this->osdData, 0, OSD_MAX_ROWS*OSD_MAX_COLS * 2);
 }
 
 //==============================================================
 //==============================================================
 void TOSD::drawString( int row, int col, const char* str)
 {
-  uint16_t* p = &this->osdData[ row * OSD_COLS + col];
+  uint16_t* p = &this->osdData[ row * OSD_MAX_COLS + col];
 
-  while (*str && p < &this->osdData[OSD_ROWS * OSD_COLS ])
+  while (*str && p < &this->osdData[OSD_MAX_ROWS * OSD_MAX_COLS ])
   {
     char c = *str++;  //avoid macro side effect
     if (c == '\n')
     {
       row++;
-      p = &this->osdData[row * OSD_COLS + col];
+      p = &this->osdData[row * OSD_MAX_COLS + col];
     }
     else
     {
@@ -534,14 +595,17 @@ void TOSD::cbConnect(TCBConnectParm state)
 
   if (state == CBC_CONNECTION_FAILED)
   {
+    g_osd.disconnect();
     g_osd.showMsg("CONNECTION FAILED");
   }
   else if (state == CBC_TIMEOUT_DISCONNECTED)
   {
+    g_osd.disconnect();
     g_osd.showMsg("CONNECTION LOST");
   }
   else  if (state != CBC_CONNECTED)
   {
+    g_osd.disconnect();
     this->drawString(0, 4, "INAV HITL DISCONNECTED");
     this->drawString(1, 15 - (int)(strlen(HITL_VERSION_STRING)) / 2 , HITL_VERSION_STRING);
   }
@@ -589,7 +653,7 @@ void TOSD::showMsg(const char* msg)
 //==============================================================
 float TOSD::extractFloat(int index)
 {
-  int rowEndIndex = (index / OSD_COLS) * OSD_COLS + OSD_COLS;
+  int rowEndIndex = (index / OSD_MAX_COLS) * OSD_MAX_COLS + this->cols;
 
   int res = 0;
   bool neg = false;
@@ -642,7 +706,7 @@ void TOSD::extractLatLon()
 
   int flags = 0;
 
-  for (int i = 0; i < OSD_ROWS*OSD_COLS; i++)
+  for (int i = 0; i < OSD_MAX_ROWS*OSD_MAX_COLS; i++)
   {
     if (CHAR_BYTE(osdData[i]) == SYM_LAT)
     {
@@ -675,10 +739,13 @@ void TOSD::setHomeLocation(double home_lattitude, double home_longitude, double 
 //==============================================================
 void TOSD::loadConfig(mINI::INIStructure& ini)
 {
+  this->visible = !ini[SETTINGS_SECTION].has(SETTINGS_OSD_SMOOTHED) || (ini[SETTINGS_OSD_SMOOTHED][SETTINGS_OSD_SMOOTHED] != "0");
+
+
   if (ini[SETTINGS_SECTION].has(SETTINGS_OSD_TYPE))
   {
     this->osd_type = (TOSDType)atoi(ini[SETTINGS_SECTION][SETTINGS_OSD_TYPE].c_str());
-    if (this->osd_type < OSD_NONE || this->osd_type > OSD_NONE)
+    if (this->osd_type < OSD_AUTO || this->osd_type > OSD_NTSC)
     {
       this->osd_type = OSD_AUTO;
     }
@@ -695,6 +762,39 @@ void TOSD::loadConfig(mINI::INIStructure& ini)
     }
   }
 
+  this->activeAnalogFontIndex = 0;
+  const char* c = ini[SETTINGS_SECTION][SETTINGS_ANALOG_OSD_FONT].c_str();
+  for (unsigned int i = 0; i < this->analogFontsCount; i++)
+  {
+    if (strcmp( this->fonts[i]->name, c) == 0)
+    {
+      this->activeAnalogFontIndex = i;
+      break;
+    }
+  }
+
+  this->activeDigitalFontIndex = this->analogFontsCount;
+
+  for (int i = this->analogFontsCount; i < this->fonts.size(); i++)
+  {
+    if (strcmp(this->fonts[i]->name, "Walksnail: INAV_default_36") == 0)
+    {
+      this->activeDigitalFontIndex = i;
+      break;
+    }
+  }
+
+  c = ini[SETTINGS_SECTION][SETTINGS_DIGITAL_OSD_FONT].c_str();
+  for (int i = this->analogFontsCount; i < this->fonts.size(); i++)
+  {
+    if (strcmp(this->fonts[i]->name, c) == 0)
+    {
+      this->activeDigitalFontIndex = i;
+      break;
+    }
+  }
+
+  g_menu.updateFontsMenu(this->activeAnalogFontIndex, this->activeDigitalFontIndex);
 }
 
 //==============================================================
@@ -704,5 +804,101 @@ void TOSD::saveConfig(mINI::INIStructure& ini)
   ini[SETTINGS_SECTION][SETTINGS_OSD_TYPE] = std::to_string(this->osd_type);
   ini[SETTINGS_SECTION][SETTINGS_OSD_SMOOTHED] = std::to_string(this->smoothed ? 1 : 0);
   ini[SETTINGS_SECTION][SETTINGS_VIDEOLINK_SIMULATION] = std::to_string(this->videoLink);
+
+  ini[SETTINGS_SECTION][SETTINGS_ANALOG_OSD_FONT] = std::string(this->fonts[this->activeAnalogFontIndex]->name);
+  ini[SETTINGS_SECTION][SETTINGS_DIGITAL_OSD_FONT] = std::string(this->fonts[this->activeDigitalFontIndex]->name);
 }
 
+//==============================================================
+//==============================================================
+bool TOSD::isAnalogOSD()
+{
+  return (this->cols == 30) && ((this->rows == 13) || (this->rows == 16));
+}
+
+//==============================================================
+//==============================================================
+void TOSD::disconnect()
+{
+  this->cols = PAL_COLS;
+  this->rows = PAL_ROWS;
+}
+
+//==============================================================
+//==============================================================
+void TOSD::addFontsToMenu()
+{
+  for (auto font : this->fonts)
+  {
+    g_menu.addFontEntry(font->isAnalog(), font->name);
+  }
+}
+
+//==============================================================
+//==============================================================
+int TOSD::getFontIndexByName(const char* name)
+{
+  for (int i = 0; i < this->fonts.size(); i++)
+  {
+    if (strcmp(name, this->fonts[i]->name) == 0) return i;
+  }
+  return -1;
+}
+
+//==============================================================
+//==============================================================
+void TOSD::setActiveFontByIndex(int index)
+{
+  if (this->fonts[index]->isAnalog())
+  {
+    this->activeAnalogFontIndex = index;
+  }
+  else
+  {
+    this->activeDigitalFontIndex = index;
+  }
+
+  g_menu.updateFontsMenu(this->activeAnalogFontIndex, this->activeDigitalFontIndex);
+}
+
+//==============================================================
+//==============================================================
+float TOSD::getModeAspectRatio()
+{
+  int rowCount = this->getForcedRowsCount();
+
+  if ((this->cols == PAL_COLS) && (rowCount == PAL_ROWS))
+  {
+    return 4 / 3.0f;
+  }
+  else if ((this->cols == NTSC_COLS) && (rowCount == NTSC_ROWS))
+  {
+    return 1.48f;
+  }
+  else
+  {
+    return 16 / 9.0f;
+  }
+}
+
+
+//==============================================================
+//==============================================================
+int TOSD::getForcedRowsCount()
+{
+  int rowsCount = this->rows;
+
+  if (isAnalogOSD())
+  {
+    if (this->osd_type == OSD_NTSC)
+    {
+      rowsCount = NTSC_ROWS;
+    }
+    else if (this->osd_type == OSD_PAL)
+    {
+      rowsCount = PAL_ROWS;
+    }
+  }
+
+  return rowsCount;
+}
