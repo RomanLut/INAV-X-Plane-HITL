@@ -2,7 +2,7 @@
 
 **Please do not use plugin from this folder with inav release versions.**
 
-**Do use last last release https://github.com/RomanLut/INAV-X-Plane-HITL/releases/**
+**Do use last release https://github.com/RomanLut/INAV-X-Plane-HITL/releases/**
 
 This folder fontains plugin built from main branch (updated occasionally, manually).
 
