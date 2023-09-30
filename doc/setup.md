@@ -10,7 +10,7 @@ This action will add **INAV Surfwing** flying wing model with this plugin.
 
 **Also precompiled binaries of inav 5.0.0 with simulator support are available in early releases of plugin: https://github.com/RomanLut/INAV-X-Plane-HITL/releases/.**
 
-![](doc/menu.png)
+![](menu.png)
 
 ## Installation steps
 
@@ -18,11 +18,13 @@ This action will add **INAV Surfwing** flying wing model with this plugin.
 - download **Aircraft.zip** from last release https://github.com/RomanLut/INAV-X-Plane-HITL/releases/
 - If upgrading from previous  version, delete folder `X-Plane 11\Aircraft\Extra Aircraft\NK_FPVSurfwing\`
 - Unzip, copy `Aircraft` folder to `X-Plane 11\Aircraft` folder in **X-Plane** installation location. 
-- Connect Flight Controller to PC using USB Cable. **Make sure FC is flashed with simulator-enabled firmware**  https://github.com/RomanLut/INAV-X-Plane-HITL/releases/
+- Connect Flight Controller to PC using USB Cable. **Make sure FC is flashed with simulator-enabled firmware** - either inav 6.0+ or modified inav 5.0 from releases https://github.com/RomanLut/INAV-X-Plane-HITL/releases/
 - Configure FC (see **Flight Controller configuration** below)
 - Start **X-Plane 11**
+- Set **Settings->General->Flight models per frame** to **10** for better support of small aircrafts
+![](flight_models.png)
 - Select **"Show extra aircraft from older versions"** to see **INAV Surfwing**
-![](doc/show_extra_aircraft.jpg)
+![](show_extra_aircraft.jpg)
 - Select **INAV Surfwing**, start flight
 - When scenery is loaded, select **Plugins->INAV HITL->Link->Connect to flight controller**. Plugin should automatically detect serial port.
 - Flight using RC Controller, setup PIDs etc. 
@@ -30,17 +32,17 @@ This action will add **INAV Surfwing** flying wing model with this plugin.
 
 *Note: Use **"Internal View/Forward with No Display"** for full immersion FPV flights:*
 
-![](doc/internalview.png)
+![](internalview.png)
 
 # Setup (Linux)
 
  For Linux, all steps are analogous to Windows.
  
- Make usre you have OpenAL library installed; otherwise run **sudo apt install libopenal1**
+ Make sure you have OpenAL library installed; otherwise run **sudo apt install libopenal1**
 
 # Setup (MacOs)
 
- Sorry, MacOs in not supported currently *(assistance needed to build plugin for MacOs, see [development.md](doc/development.md))*.
+ Sorry, MacOs in not supported currently *(assistance needed to build plugin for MacOs, see [development.md](development.md))*.
 
 # Flight controller configuration
 
@@ -58,7 +60,7 @@ Platforms other than "Airplane" are not supported.
 
 ## Pids and rates
 
-See recommended starting pids for **INAV SurfWing** (Platform: Flying wing) [nkfpvsurfwing.md](doc/nkfpvsufrwing/nkfpvsurfwing.md)
+See recommended starting pids for **INAV SurfWing** (Platform: Flying wing) [nkfpvsurfwing.md](nkfpvsufrwing/nkfpvsurfwing.md)
 
 # Sensors simulation
 
@@ -70,7 +72,7 @@ No real barometer and GPS sensors are required.
 
 FC with analog OSD is highly recommended. If FC does not have OSD chip, there will be no OSD in simulator.
 
-![](doc/attitude.png)
+![](attitude.png)
 
 There are two modes of simulation:
 - **simplified simulation:** attitude is passed from X-Plane.
@@ -88,7 +90,7 @@ Real acceleromerer should be calibrated in **INAV Configurator**. Accelerometer 
 
 Barometer will be simulated if enabled in **INAV Configurator**. If real barometer is not present, select **"FAKE"** type.
 
-![](doc/fakebaro.png)
+![](fakebaro.png)
 
 ## GPS
 
@@ -98,7 +100,7 @@ X-Plane simulated world is build based on real world map data. GPS coordinates i
 
 Simulated GPS Fix can be switched in menu:
 
-![](doc/gpsfix.png)
+![](gpsfix.png)
 
 ## Magnetometer
 
@@ -112,7 +114,7 @@ For convience, it is possible to simulate 3S battery presense:
 - discharged 3s battery
 - a battery which lasts a period of time on full throtle, 2x time on 50% throtle etc.
 
-![](doc/battery.png)
+![](battery.png)
 
 *Select voltage meter type: "FAKE" in configurator*
 
@@ -124,6 +126,8 @@ Pitot should be enabled in INav Configurator.
 
 It is possible to use VIRTUAL pitot device. 
 
+*Virtual pitot measurements will be overwritten by simulator if emulation is selected in the menu. Otherwise, virtual pitot will estimate speed as usual.*
+
 *Note: VIRTUAL pitot is not supported on 411 and 722 CPUs (you will not be able to arm).*
 
 *Note: VIRTUAL pitot will fail initialize if GPS sensor is disabled in configuration.*
@@ -132,7 +136,7 @@ It is possible to use VIRTUAL pitot device.
 
 OSD is rendered in **X-Plane** exactly as configured in **INAV Configurator**. 
 
-![](doc/osd.jpg)
+![](osd.jpg)
 
 It is highly recommended to use Flight Controller with OSD to see system messages on screen.
 
@@ -146,7 +150,7 @@ OSD will not work without MAX7456 compatible chip. OSD will not work if HD Zero,
 
 The following options are present in menu:
 
-![](doc/osdoptions.png) 
+![](osdoptions.png) 
 
 - **None:** disable OSD rendering
 - **AUTO:** number of OSD lines is provided by FC
@@ -161,19 +165,19 @@ OSD is using **Bold** font from **INAV Configurator**. It is possible to replace
 
 For convience, it is possible to mute beeper in simulation mode:
 
-![](doc/beeper.png)
+![](beeper.png)
 
 # Analog Video link quality simulation
 
 Plugin will simulate analog video link quality acccording to setting. Home point is independent from FC home point. Home point is set to position on ARM.
 
-![](doc/noise.jpg)
+![](noise.jpg)
 
 # Flight path drawing 
 
 Plugin can draw flight path on X-Plane map. 
 
-![](doc/menu_map.png)
+![](menu_map.png)
 
 Coordinates can be extracted from:
 - **Latitude/Longitude from OSD** -  extracted from OSD. Note that these number have low accuracy and are not updated synchronously. Path will have jittering under zoom.
@@ -181,10 +185,10 @@ Coordinates can be extracted from:
 
 Other menu options:
 - **Download waypoints from FC** - this option will download Mission waypoints from FC and show on X-Plane map (in pink color)
-- **Teleport to location** - https://github.com/RomanLut/INAV-X-Plane-HITL/edit/main/README.md#teleporting-to-gps-coordinates
+- **Teleport to location** - See [Teleporting to GPS coordinates](setup.md#teleporting-to-gps-coordinates).
 
 Path is drawn on "INAV HITL" layer:
-![](doc/map.png)
+![](map.png)
 
 # Teleporting to GPS coordinates
 
@@ -192,7 +196,7 @@ An option in **Map** menu allows to teleport plane to any GPS location from clip
 
 Right click in Google Maps, then click on the coordinates to copy them to clipboard:
 
-![](doc/googlemaps.png)
+![](googlemaps.png)
 
 Then select **Plugin->INAV HITL->Map->Teleport to location (from clipboard)**
 
