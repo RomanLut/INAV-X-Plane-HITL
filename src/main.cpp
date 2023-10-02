@@ -66,7 +66,7 @@ void cbMessage(int code, const uint8_t* messageBuffer, int length)
         {
           g_osd.showMsg("OSD IS DISABLED:\n\nCONFIURATION\n->OTHER FEATURES\n->OSD");
         }
-        else if (g_simData.isOSDAnalogOSDNotFound)
+        else if (g_simData.isSupportedOSDNotFound)
         {
           g_osd.showMsg("SUPPORTED OSD TYPE\nNOT FOUND OR DISABLED\n\nCHECK REQUIREMENTS\nON PROJECT PAGE");
         }

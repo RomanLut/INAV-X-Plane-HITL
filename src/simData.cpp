@@ -95,7 +95,7 @@ void TSimData::init()
   this->isAirplane = false;
   this->isArmed = false;
   this->isOSDDisabled = false;
-  this->isOSDAnalogOSDNotFound = false;
+  this->isSupportedOSDNotFound = false;
 
   this->setBateryEmulation(BATTERY_INFINITE);
 }
@@ -164,7 +164,7 @@ void TSimData::updateFromINAV(const TMSPSimulatorFromINAV* data)
   bool prevArmed = this->isArmed;
   this->isArmed = (data->debugIndex & FIF_ARMED) != 0;
   this->isOSDDisabled = (data->debugIndex & FIF_OSD_DISABLED) != 0;
-  this->isOSDAnalogOSDNotFound = (data->debugIndex & FIF_ANALOG_OSD_NOT_FOUND) != 0;
+  this->isSupportedOSDNotFound = (data->debugIndex & FIF_ANALOG_OSD_NOT_FOUND) != 0;
 
   if (this->isArmed && !prevArmed)
   {
