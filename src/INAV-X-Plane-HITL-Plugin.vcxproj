@@ -166,8 +166,10 @@
     <ClInclude Include="msp.h" />
     <ClInclude Include="osd.h" />
     <ClInclude Include="serial.h" />
+    <ClInclude Include="serialbase.h" />
     <ClInclude Include="simData.h" />
     <ClInclude Include="stats.h" />
+    <ClInclude Include="tcpserial.h" />
     <ClInclude Include="util.h" />
     <ClInclude Include="sound.h" />
     <ClInclude Include="map.h" />
@@ -183,9 +185,11 @@
     <ClCompile Include="msp.cpp" />
     <ClCompile Include="osd.cpp" />
     <ClCompile Include="serial.cpp" />
+    <ClCompile Include="serialbase.cpp" />
     <ClCompile Include="simData.cpp" />
     <ClCompile Include="stats.cpp" />
     <ClCompile Include="sound.cpp" />
+    <ClCompile Include="tcpserial.cpp" />
     <ClCompile Include="util.cpp" />
     <ClCompile Include="map.cpp" />
   </ItemGroup>

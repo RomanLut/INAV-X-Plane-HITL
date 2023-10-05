@@ -12,13 +12,23 @@ private:
   std::vector<int> analogFontMenuItems;
   std::vector<int> digitalFontMenuItems;
 
+  void setDisconnectedMenuState();
+
 public:
 	int menu_container_idx; // The index of our menu item in the Plugins menu
 
 	XPLMMenuID menu_id;
 	int connect_id;
-	int gps_fix_id;
-	int gps_spoofing_id;
+  int connect_tcp_id[8];
+  int gps_fix_id;
+  int gps_spoofing_id;
+  bool isSITLConnection;
+
+  XPLMMenuID connect_sitl_menu_id;
+  int connect_sitl_id;
+
+  char connect_tcp_name[8][64];
+  char connect_tcp_tag[8][32];
 
 	XPLMMenuID connect_menu_id;
 	int connect_disconnect_id;

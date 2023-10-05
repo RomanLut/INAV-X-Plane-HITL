@@ -14,16 +14,34 @@ extern void cbMessage(int code, const uint8_t* messageBuffer, int length);
 
 //==============================================================
 //==============================================================
+void TMenu::setDisconnectedMenuState()
+{
+  XPLMSetMenuItemName(this->connect_menu_id, this->connect_disconnect_id, "Connect to Flight Controller", 0);
+  for (int i = 0; i < 8; i++)
+  {
+    XPLMEnableMenuItem(this->connect_sitl_menu_id, this->connect_tcp_id[i], true);
+  }
+  XPLMEnableMenuItem(this->connect_menu_id, this->connect_sitl_id, true);
+}
+
+
+//==============================================================
+//==============================================================
 void TMenu::_cbConnect(TCBConnectParm state)
 {
   if (state == CBC_CONNECTED)                             
   {
-    XPLMSetMenuItemName(this->connect_menu_id, this->connect_disconnect_id, "Disconnect from Flight Controller", 0);
+    XPLMSetMenuItemName(this->connect_menu_id, this->connect_disconnect_id, !this->isSITLConnection ? "Disconnect from Flight Controller" : "Disconnect from SITL", 0);
+    for (int i = 0; i < 8; i++)
+    {
+      XPLMEnableMenuItem(this->connect_sitl_menu_id, this->connect_tcp_id[i], false);
+    }
+    XPLMEnableMenuItem(this->connect_menu_id, this->connect_sitl_id, false);
     playSound("assets\\connected.wav");
   }
   else 
   {
-    XPLMSetMenuItemName(this->connect_menu_id, this->connect_disconnect_id, "Connect to Flight Controller", 0);
+    this->setDisconnectedMenuState();
     if (state == CBC_CONNECTION_FAILED)
     {                                                  
       playSound("assets\\connection_failed.wav");
@@ -155,7 +173,7 @@ void TMenu::static_menu_handler(void * in_menu_ref, void * in_item_ref)
 //==============================================================
 void TMenu::actionDisconnect()
 {
-  XPLMSetMenuItemName(this->connect_menu_id, this->connect_disconnect_id, "Connect to Flight Controller", 0);
+  this->setDisconnectedMenuState();
   g_simData.disconnect();
   g_msp.disconnect();
 }
@@ -185,6 +203,7 @@ void TMenu::menu_handler(void * in_menu_ref, void * in_item_ref)
       }
       else
       {
+        this->isSITLConnection = false;
         g_msp.connect(&cbConnect, &cbMessage);
       }
     }
@@ -415,6 +434,25 @@ void TMenu::menu_handler(void * in_menu_ref, void * in_item_ref)
     {
       g_osd.setActiveFontByIndex(index);
     }
+
+    for (int i = 0; i < 8; i++)
+    {
+      if (!strcmp((const char *)in_item_ref, this->connect_tcp_tag[i]))
+      {
+        if (!g_msp.isConnecting())
+        {
+          if (g_msp.isConnected())
+          {
+            this->actionDisconnect();
+          }
+          else
+          {
+            this->isSITLConnection = true;
+            g_msp.connect(&cbConnect, &cbMessage, "127.0.0.1", 5760 + i);
+          }
+        }
+      }
+    }
   }
 
   this->updateAll();
@@ -425,12 +463,25 @@ void TMenu::menu_handler(void * in_menu_ref, void * in_item_ref)
 //==============================================================
 void TMenu::createMenu()
 {
-  this->menu_container_idx = XPLMAppendMenuItem(XPLMFindPluginsMenu(), "INAV HITL", 0, 0);
+  this->menu_container_idx = XPLMAppendMenuItem(XPLMFindPluginsMenu(), "INAV HITL/SITL", 0, 0);
 
   this->menu_id = XPLMCreateMenu("INAV HITL", XPLMFindPluginsMenu(), this->menu_container_idx, static_menu_handler, NULL);
   this->connect_id = XPLMAppendMenuItem(this->menu_id, "Link", (void *)"Menu Item 1", 1);
   this->connect_menu_id = XPLMCreateMenu("Link", this->menu_id, this->connect_id, static_menu_handler, NULL);
   this->connect_disconnect_id = XPLMAppendMenuItem(this->connect_menu_id, "Connect to Flight Controller", (void *)"connect_disconnect", 1);
+
+  this->connect_sitl_id = XPLMAppendMenuItem(this->connect_menu_id, "Connect to SITL", NULL, 1);
+  this->connect_sitl_menu_id = XPLMCreateMenu("Connect to SITL", this->connect_menu_id, this->connect_sitl_id, static_menu_handler, NULL);
+
+  for (int i = 0; i < 8; i++)
+  {
+    strcpy(this->connect_tcp_name[i], "UART1 (127.0.0.1:5760)");
+    this->connect_tcp_name[i][4] += i;
+    this->connect_tcp_name[i][20] += i;
+    strcpy(this->connect_tcp_tag[i], "connect_sitl_0");
+    this->connect_tcp_tag[i][13] += i;
+    this->connect_tcp_id[i] = XPLMAppendMenuItem(this->connect_sitl_menu_id, this->connect_tcp_name[i], (void *)(this->connect_tcp_tag[i]), 1);
+  }
 
   XPLMAppendMenuSeparator(this->menu_id);
 

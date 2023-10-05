@@ -31,7 +31,7 @@ extern std::vector<std::filesystem::path> getFontPaths(const char* subPath, bool
 
 extern std::string toLower(const std::string& str);
 
-#ifdef LIN
+#if LIN
 extern bool IsDebuggerPresent();
 extern uint32_t GetTickCount();
 #endif

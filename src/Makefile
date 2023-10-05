@@ -9,7 +9,9 @@ SOURCES = \
 	menu.cpp \
 	msp.cpp \
 	osd.cpp \
+	serialbase.cpp \
 	serial.cpp \
+	tcpserial.cpp \
 	simData.cpp \
 	stats.cpp \
 	util.cpp \

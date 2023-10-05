@@ -2,7 +2,7 @@
 
 #include "config.h"
 
-#include "serial.h"
+#include "serialbase.h"
 
 #define MSP_API_VERSION   1
 #define MSP_SIMULATOR     0x201F
@@ -195,6 +195,7 @@ public:
   typedef void(*TCBMessage)(int code, const uint8_t* messageBuffer, int length);
 
   void connect(TCBConnect cbConnect, TCBMessage cbMessage);
+  void connect(TCBConnect cbConnect, TCBMessage cbMessage, const char* ip, int port);
   void disconnect();
   void loop();
 
@@ -211,6 +212,8 @@ private:
     STATE_ENUMERATE_WAIT,
     STATE_CONNECTED,
     STATE_TIMEOUT,
+    STATE_CONNECT_TCP,
+    STATE_CONNECT_TCP_WAIT
   } TState;
 
   TState state = STATE_DISCONNECTED;
@@ -239,12 +242,15 @@ private:
 
   TDecoderState decoderState = DS_IDLE;
 
+  char tcpIp[64];
+  unsigned int tcpPort;
+
   uint32_t lastUpdate;
 
   uint8_t crc8_dvb_s2(uint8_t crc, unsigned char a);
   bool probeNextPort();
 
-  Serial* serial;
+  SerialBase* serial;
   int portId;
   unsigned long probeTime;
   TCBConnect cbConnect;
@@ -261,6 +267,7 @@ private:
   void decode();
   void dispatchMessage(uint8_t expected_checksum);
   void processMessage();
+  bool connectTCP();
 };
 
 extern MSP g_msp;

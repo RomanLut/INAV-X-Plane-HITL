@@ -5,6 +5,12 @@
 
 #define ENABLE_LOG
 
+#ifndef WIN32_LEAN_AND_MEAN
+#define WIN32_LEAN_AND_MEAN
+#endif
+
+#define _WINSOCK_DEPRECATED_NO_WARNINGS
+
 #include <XPLMMenus.h>
 #include <XPLMPlugin.h>
 #include <XPLMProcessing.h>
@@ -21,6 +27,7 @@
 
 #if IBM
 #include <windows.h>
+#include <mmsystem.h> // Include mmsystem.h for PlaySound
 //do not use OpanAL on windows to avoid requirements of OpenAL installation
 //#define USE_OPENAL
 #elif LIN
@@ -48,7 +55,7 @@
 
 #include "mINI\ini.h"
 
-#ifdef LIN
+#if LIN
 #define MAX_PATH 1260
 #include <time.h>
 #include <cmath>
