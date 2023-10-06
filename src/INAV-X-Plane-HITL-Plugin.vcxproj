@@ -161,6 +161,7 @@
     <ClInclude Include="fontwalksnail.h" />
     <ClInclude Include="fontwtfos.h" />
     <ClInclude Include="graph.h" />
+    <ClInclude Include="ipinputwidget.h" />
     <ClInclude Include="lodepng.h" />
     <ClInclude Include="menu.h" />
     <ClInclude Include="msp.h" />
@@ -179,6 +180,7 @@
     <ClCompile Include="fontwalksnail.cpp" />
     <ClCompile Include="fontwtfos.cpp" />
     <ClCompile Include="graph.cpp" />
+    <ClCompile Include="ipinputwidget.cpp" />
     <ClCompile Include="lodepng.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="menu.cpp" />

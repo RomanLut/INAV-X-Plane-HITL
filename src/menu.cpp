@@ -6,6 +6,7 @@
 #include "osd.h"
 #include "graph.h"
 #include "map.h"
+#include "ipinputwidget.h"
 
 TMenu g_menu;
 
@@ -160,6 +161,22 @@ void TMenu::updateNoiseMenu()
   XPLMCheckMenuItem(this->noise_menu_id, this->noise_2KM_id, g_osd.videoLink == VS_2KM ? xplm_Menu_Checked : xplm_Menu_Unchecked);
   XPLMCheckMenuItem(this->noise_menu_id, this->noise_10KM_id, g_osd.videoLink == VS_10KM ? xplm_Menu_Checked : xplm_Menu_Unchecked);
   XPLMCheckMenuItem(this->noise_menu_id, this->noise_50KM_id, g_osd.videoLink == VS_50KM ? xplm_Menu_Checked : xplm_Menu_Unchecked);
+}
+
+//==============================================================
+//==============================================================
+void TMenu::updateSITLMenu()
+{
+
+  for (int i = 0; i < 8; i++)
+  {
+    strcpy(this->connect_tcp_name[i], "UART1 (");
+    this->connect_tcp_name[i][4] += i;
+    strcat(this->connect_tcp_name[i], this->SITLIP.c_str());
+    strcat(this->connect_tcp_name[i], ":5760)");
+    this->connect_tcp_name[i][strlen(this->connect_tcp_name[i])-2] += i;
+    XPLMSetMenuItemName(this->connect_sitl_menu_id, this->connect_tcp_id[i], this->connect_tcp_name[i], 0);
+  }
 }
 
 //==============================================================
@@ -427,6 +444,11 @@ void TMenu::menu_handler(void * in_menu_ref, void * in_item_ref)
   {
     g_osd.videoLink = VS_50KM;
   }
+  else if (!strcmp((const char*)in_item_ref, "sitl_ip"))
+  {
+    g_IPInputWidget.setValue(this->SITLIP);
+    g_IPInputWidget.show();
+  }
   else
   {
     int index = g_osd.getFontIndexByName((const char *)in_item_ref);
@@ -448,7 +470,7 @@ void TMenu::menu_handler(void * in_menu_ref, void * in_item_ref)
           else
           {
             this->isSITLConnection = true;
-            g_msp.connect(&cbConnect, &cbMessage, "127.0.0.1", 5760 + i);
+            g_msp.connect(&cbConnect, &cbMessage, this->SITLIP.c_str(), 5760 + i);
           }
         }
       }
@@ -475,13 +497,12 @@ void TMenu::createMenu()
 
   for (int i = 0; i < 8; i++)
   {
-    strcpy(this->connect_tcp_name[i], "UART1 (127.0.0.1:5760)");
-    this->connect_tcp_name[i][4] += i;
-    this->connect_tcp_name[i][20] += i;
+    strcpy(this->connect_tcp_name[i], "UARTN");
     strcpy(this->connect_tcp_tag[i], "connect_sitl_0");
     this->connect_tcp_tag[i][13] += i;
     this->connect_tcp_id[i] = XPLMAppendMenuItem(this->connect_sitl_menu_id, this->connect_tcp_name[i], (void *)(this->connect_tcp_tag[i]), 1);
   }
+  this->updateSITLMenu();
 
   XPLMAppendMenuSeparator(this->menu_id);
 
@@ -589,6 +610,12 @@ void TMenu::createMenu()
 
   g_osd.addFontsToMenu();
 
+  g_IPInputWidget.create(300, 100, 300, 105, "IP Address", "IP Address");
+  g_IPInputWidget.registerValueChangedCb(TMenu::ipChangedHandlerStatic);
+
+  XPLMAppendMenuSeparator(this->connect_sitl_menu_id);
+  XPLMAppendMenuItem(this->connect_sitl_menu_id, "Edit SITL IP address", (void*)"sitl_ip", 1);
+
   this->updateAll();
 }
 
@@ -606,6 +633,7 @@ void TMenu::updateAll()
   this->updateNoiseMenu();
   this->updateGraphMenu();
   this->updateMapMenu();
+  this->updateSITLMenu();
 }
 
 //==============================================================
@@ -642,5 +670,43 @@ void TMenu::updateFontsMenu(int activeAnalogFontIndex, int activeDigitalFontInde
   {
     XPLMCheckMenuItem(this->osd_digital_fonts_menu_id, this->digitalFontMenuItems[i], i == (activeDigitalFontIndex - analogFontMenuItems.size()) ? xplm_Menu_Checked : xplm_Menu_Unchecked);
   }
+}
 
+//==============================================================
+//==============================================================
+void TMenu::ipChangedHandlerStatic(std::string ip)
+{
+  if (!validateIpAddress(ip))
+  {
+    XPLMSpeakString("Invalid IP Address");
+    LOG("Invalid IP Address");
+    g_IPInputWidget.setValue(g_menu.SITLIP);
+    return;
+  }
+
+  g_menu.SITLIP = ip;
+  g_menu.updateSITLMenu();
+  saveIniFile();
+}
+
+
+//==============================================================
+//==============================================================
+void TMenu::saveConfig(mINI::INIStructure& ini)
+{
+  ini[SETTINGS_SECTION][SETTINGS_SITL_IP] = this->SITLIP;
+}
+
+//==============================================================
+//==============================================================
+void TMenu::loadConfig(mINI::INIStructure& ini)
+{
+  if (ini[SETTINGS_SECTION].has(SETTINGS_SITL_IP))
+  {
+    this->SITLIP = ini[SETTINGS_SECTION][SETTINGS_SITL_IP];
+  }
+  else
+  {
+    this->SITLIP = "127.0.0.1";
+  }
 }

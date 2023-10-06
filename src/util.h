@@ -31,6 +31,8 @@ extern std::vector<std::filesystem::path> getFontPaths(const char* subPath, bool
 
 extern std::string toLower(const std::string& str);
 
+extern bool validateIpAddress(const std::string ipAddress);
+
 #if LIN
 extern bool IsDebuggerPresent();
 extern uint32_t GetTickCount();
@@ -53,4 +55,5 @@ extern uint32_t GetTickCount();
 #define SETTINGS_VIDEOLINK_SIMULATION   "videolink_simulation"
 #define SETTINGS_ANALOG_OSD_FONT        "analog_osd_font"
 #define SETTINGS_DIGITAL_OSD_FONT       "digital_osd_font"
+#define SETTINGS_SITL_IP                "sitl_ip"
 

@@ -25,6 +25,7 @@
     <ClCompile Include="fontwtfos.cpp" />
     <ClCompile Include="serialbase.cpp" />
     <ClCompile Include="tcpserial.cpp" />
+    <ClCompile Include="ipinputwidget.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="config.h" />
@@ -46,5 +47,6 @@
     <ClInclude Include="fontwtfos.h" />
     <ClInclude Include="serialbase.h" />
     <ClInclude Include="tcpserial.h" />
+    <ClInclude Include="ipinputwidget.h" />
   </ItemGroup>
 </Project>

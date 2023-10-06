@@ -21,7 +21,8 @@ SOURCES = \
     fontanalog.cpp \
     fontwalksnail.cpp \
     fonthdzero.cpp \
-    fontwtfos.cpp
+    fontwtfos.cpp \
+    ipinputwidget.cpp
 
 LIBS = -lopenal 
 

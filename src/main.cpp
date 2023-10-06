@@ -200,6 +200,7 @@ bool loadIniFile()
   g_osd.loadConfig(ini);
   g_graph.loadConfig(ini);
   g_map.loadConfig(ini);
+  g_menu.loadConfig(ini);
 
   g_menu.updateAll();
 
@@ -215,6 +216,7 @@ bool saveIniFile()
   g_osd.saveConfig(ini);
   g_graph.saveConfig(ini);
   g_map.saveConfig(ini);
+  g_menu.saveConfig(ini);
 
   char iniFileName[MAX_PATH];
   if (!buildIniFileName(iniFileName)) return false;

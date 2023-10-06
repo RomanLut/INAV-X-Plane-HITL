@@ -13,6 +13,7 @@ private:
   std::vector<int> digitalFontMenuItems;
 
   void setDisconnectedMenuState();
+  static void ipChangedHandlerStatic(std::string ip);
 
 public:
 	int menu_container_idx; // The index of our menu item in the Plugins menu
@@ -23,6 +24,8 @@ public:
   int gps_fix_id;
   int gps_spoofing_id;
   bool isSITLConnection;
+
+  std::string SITLIP = "127.0.0.1";
 
   XPLMMenuID connect_sitl_menu_id;
   int connect_sitl_id;
@@ -148,6 +151,7 @@ public:
   void updateGraphMenu();
   void updateMapMenu();
   void updateNoiseMenu();
+  void updateSITLMenu();
   void updateAll();
 
   void updateFontsMenu(int activeAnalogFontIndex, int activeDigitalFontIndex);
@@ -155,6 +159,9 @@ public:
   void actionDisconnect();
 
   void addFontEntry( bool analog, const char* fontName);
+
+  void saveConfig(mINI::INIStructure& ini);
+  void loadConfig(mINI::INIStructure& ini);
 };
 
 extern TMenu g_menu;

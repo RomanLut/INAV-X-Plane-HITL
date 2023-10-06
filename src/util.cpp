@@ -318,3 +318,17 @@ std::string toLower(const std::string& str)
   });
   return result;
 }
+
+//=======================================================
+//=======================================================
+bool validateIpAddress(const std::string ipAddress)
+{
+  struct sockaddr_in sa;
+#if IBM
+  return InetPton(AF_INET, ipAddress.c_str(), &(sa.sin_addr)) == 1;
+#else
+  int result = inet_pton(AF_INET, ipAddress.c_str(), &(sa.sin_addr));
+  return result != 0;
+#endif
+}
+

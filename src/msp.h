@@ -242,7 +242,7 @@ private:
 
   TDecoderState decoderState = DS_IDLE;
 
-  char tcpIp[64];
+  char tcpIp[MAX_PATH];
   unsigned int tcpPort;
 
   uint32_t lastUpdate;

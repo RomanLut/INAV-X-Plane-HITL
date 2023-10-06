@@ -20,6 +20,9 @@
 #include <XPLMUtilities.h>
 #include <XPLMMap.h>
 #include <XPLMScenery.h>
+#include <XPWidgetDefs.h>
+#include <XPWidgets.h>
+#include <XPStandardWidgets.h>
 
 #ifndef XPLM300
 #error This is made to be compiled against the XPLM300 SDK
@@ -60,5 +63,29 @@
 #include <time.h>
 #include <cmath>
 #endif
+
+#if LIN
+#include <sys/types.h>
+#include <fcntl.h>
+#include <errno.h> 
+#include <termios.h> 
+#include <unistd.h>
+
+#include <arpa/inet.h>
+#include <netinet/in.h>
+#include <sys/socket.h>
+#include <unistd.h>
+#define SOCKET int
+#define INVALID_SOCKET -1
+#define SOCKET_ERROR -1
+#endif
+
+#if IBM
+#include <Winsock2.h>
+#include <WS2tcpip.h>
+#pragma comment(lib, "ws2_32.lib")
+#endif
+
+
 
 #define HITL_VERSION_STRING "V1.4.0"
