@@ -84,7 +84,7 @@ Sensors not listed below are not simulated. Please disable in INAV configuration
 
 ## Accelerometer and gyroscope
 
-Real acceleromerer should be calibrated in **INAV Configurator**. Accelerometer orientation settings are not relevant for simulation.
+There is no need to calibrate acceleromerer. Accelerometer orientation settings are not relevant for simulation.
 
 ## Barometer
 
@@ -138,28 +138,31 @@ OSD is rendered in **X-Plane** exactly as configured in **INAV Configurator**.
 
 ![](osd.jpg)
 
-It is highly recommended to use Flight Controller with OSD to see system messages on screen.
+Both analog OSD and HD OSD are supported (HD OSD requires Plugin v1.4.0 and INav 7.0)
 
-The following requirements should be met to have OSD drawn in **X-Plane**:
+The following requirements should be met to have analog OSD drawn in **X-Plane**:
 
 - OSD should be configured as `AUTO`, `PAL` or `NTSC` type in "OSD" tab in **INAV Configurator**.
 - OSD should be enabled in "Configuration->Other features->OSD" in **INAV Configurator**.
 - OSD chip should be present on Flight Controller (MAX7456).
 
-OSD will not work without MAX7456 compatible chip. OSD will not work if HD Zero, DJI or Pixel OSD is selected in configuration.
+Analog OSD will not work without MAX7456 compatible chip. 
+
+The following requirements should be met to have HD OSD drawn in **X-Plane**:
+
+- OSD should be configured as `HDZERO`, `DJIWTF`, `AVATAR`, `BF43COMPAT` or `BFHDCOMPAT` type in "OSD" tab in **INAV Configurator**.
+- OSD should be enabled in "Configuration->Other features->OSD" in **INAV Configurator**.
+- `MSP Displayport` peripheral should be chosen on any UART.
 
 The following options are present in menu:
 
 ![](osdoptions.png) 
 
-- **None:** disable OSD rendering
-- **AUTO:** number of OSD lines is provided by FC
-- **PAL:** force rendering of 16 OSD lines
-- **NTSC:** force rendering of 13 OSD lines
+- **AUTO:** number of analog OSD lines is provided by FC
+- **PAL:** force rendering of 16 OSD lines (analog OSD) 
+- **NTSC:** force rendering of 13 OSD lines (analog OSD)
 - **Smoothing: Nearest:** Use nearest pixels for characters rendering
 - **Smoothing: Linear:** Use linear smoothing for characters rendering
-
-OSD is using **Bold** font from **INAV Configurator**. It is possible to replace font `(\plugins\INAV-X-Plane-HITL\64\assets\osd_font.png)` with other font from **INAV Configurator** https://github.com/iNavFlight/inav-configurator/tree/master/resources/osd/analogue
 
 # Beeper
 
@@ -205,3 +208,10 @@ This works Ok for small distances. If you teleport to the other side of the Eart
 # Servo autotrim
 
 Autotrim and servo autotrim have no effect in simulation (TODO).
+
+# SITL connection 
+
+INAV SITL connection is supported since v 1.4.0.
+
+- start SITL in configurator-only mode ( do not select X-Plane mode)
+- connect using an option in X-Plane menu 
