@@ -39,7 +39,7 @@ While **X-Plane 12** has better visual appearance, **X-Plane 11** is still recom
 
 # Setup and usage
 
-See [setup.md](https://github.com/RomanLut/INAV-X-Plane-HITL/blob/main/doc/setup.md)
+See [setup.md](doc/setup.md)
 
 # Development
 
