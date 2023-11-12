@@ -51,6 +51,7 @@ Many thanks to:
 - Sergii Sevriugin for initial implementation and a lot of testing
 - NKDesign for NK FPV SurfWing RC plane for X-Plane
 - b14ckyy for Surfwing 3D model
+- Scavanger for HD OSD and SITL integration
 
 
 
