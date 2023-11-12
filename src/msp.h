@@ -5,6 +5,7 @@
 #include "serialbase.h"
 
 #define MSP_API_VERSION   1
+#define MSP_FC_VERSION    3
 #define MSP_SIMULATOR     0x201F
 #define MSP_DEBUGMSG      253
 #define MSP_WP_GETINFO    20
@@ -31,6 +32,17 @@ struct TMSPAPIVersion
   uint8_t protocolVersion;
   uint8_t APIMajor;
   uint8_t APIMinor;
+};
+#pragma pack()
+
+//======================================================
+//======================================================
+#pragma pack(1)
+struct TMSPFCVersion
+{
+  uint8_t major;
+  uint8_t minor;
+  uint8_t patchVersion;
 };
 #pragma pack()
 
@@ -190,6 +202,8 @@ class MSP
 public:
 	MSP();
   ~MSP();
+
+  TMSPFCVersion version;
 
   typedef void (*TCBConnect)(TCBConnectParm state);
   typedef void(*TCBMessage)(int code, const uint8_t* messageBuffer, int length);

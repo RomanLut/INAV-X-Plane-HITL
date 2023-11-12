@@ -39,6 +39,7 @@ void TMenu::_cbConnect(TCBConnectParm state)
     }
     XPLMEnableMenuItem(this->connect_menu_id, this->connect_sitl_id, false);
     playSound("assets\\connected.wav");
+    this->setFeatures();
   }
   else 
   {
@@ -674,6 +675,55 @@ void TMenu::updateFontsMenu(int activeAnalogFontIndex, int activeDigitalFontInde
 
 //==============================================================
 //==============================================================
+void TMenu::setFeatures()
+{
+  bool b;
+
+  //GPS timeout 
+  b = g_msp.version.major >= 7;
+  if (!b)
+  {
+    XPLMMenuCheck check;
+    XPLMCheckMenuItemState(this->gps_fix_menu_id, this->gps_timeout_id, &check);
+    if (check == xplm_Menu_Checked)
+    {
+      g_simData.gps_timeout = false;
+      updateGPSMenu();
+    }
+  }
+  XPLMEnableMenuItem(this->gps_fix_menu_id, this->gps_timeout_id, b);
+
+  //mag failure
+  b = g_msp.version.major >= 7;
+  if (!b)
+  {
+    XPLMMenuCheck check;
+    XPLMCheckMenuItemState(this->mag_menu_id, this->mag_failure_id, &check);
+    if (check == xplm_Menu_Checked)
+    {
+      g_simData.simulate_mag_failure = false;
+      this->updateMagMenu();
+    }
+  }
+  XPLMEnableMenuItem(this->mag_menu_id, this->mag_failure_id, b);
+
+  //pitot failure
+  b = g_msp.version.major >= 7;
+  if (!b)
+  {
+    XPLMMenuCheck check;
+    XPLMCheckMenuItemState(this->pitot_menu_id, this->pitot_failure_id, &check);
+    if (check == xplm_Menu_Checked)
+    {
+      g_simData.simulatePitotFailure = false;
+      this->updatePitotMenu();
+    }
+  }
+  XPLMEnableMenuItem(this->pitot_menu_id, pitot_failure_id, b);
+}
+
+//==============================================================
+//==============================================================
 void TMenu::ipChangedHandlerStatic(std::string ip)
 {
   if (!validateIpAddress(ip))
@@ -683,12 +733,10 @@ void TMenu::ipChangedHandlerStatic(std::string ip)
     g_IPInputWidget.setValue(g_menu.SITLIP);
     return;
   }
-
   g_menu.SITLIP = ip;
   g_menu.updateSITLMenu();
   saveIniFile();
 }
-
 
 //==============================================================
 //==============================================================

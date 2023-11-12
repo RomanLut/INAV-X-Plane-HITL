@@ -330,9 +330,9 @@ bool MSP::probeNextPort()
     if (this->serial->IsConnected())
     {
       LOG("Connected");
-      if (this->sendCommand(MSP_API_VERSION, NULL, 0))
+      if (this->sendCommand(MSP_FC_VERSION, NULL, 0))
       {
-        LOG("MSP_VERSION sent");
+        LOG("MSP_FC_VERSION sent");
         this->state = STATE_ENUMERATE_WAIT;
         this->probeTime = GetTickCount();
         this->lastUpdate = GetTickCount();
@@ -357,7 +357,7 @@ bool MSP::connectTCP()
   if (this->serial->IsConnected())
   {
     LOG("Connected");
-    if (this->sendCommand(MSP_API_VERSION, NULL, 0))
+    if (this->sendCommand(MSP_FC_VERSION, NULL, 0))
     {
       LOG("MSP_VERSION sent");
       this->state = STATE_CONNECT_TCP_WAIT;
@@ -430,7 +430,11 @@ void MSP::processMessage()
   {
   case STATE_ENUMERATE_WAIT:
   case STATE_CONNECT_TCP_WAIT:
+
+    this->version = *((const TMSPFCVersion*)(this->message_buffer));
     LOG("Connected");
+    LOG("INAV Version %d.%d.%d", this->version.major, this->version.minor, this->version.patchVersion);
+
     this->state = STATE_CONNECTED;
     this->cbConnect(CBC_CONNECTED);
     break;

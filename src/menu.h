@@ -160,6 +160,8 @@ public:
 
   void addFontEntry( bool analog, const char* fontName);
 
+  void setFeatures();
+
   void saveConfig(mINI::INIStructure& ini);
   void loadConfig(mINI::INIStructure& ini);
 };
