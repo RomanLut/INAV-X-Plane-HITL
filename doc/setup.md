@@ -70,8 +70,6 @@ In minimal case, you need FC with some kind of receiver attached.
 
 No real barometer and GPS sensors are required. 
 
-FC with analog OSD is highly recommended. If FC does not have OSD chip, there will be no OSD in simulator.
-
 ![](attitude.png)
 
 There are two modes of simulation:
@@ -140,7 +138,7 @@ OSD is rendered in **X-Plane** exactly as configured in **INAV Configurator**.
 
 Both analog OSD and HD OSD are supported (HD OSD requires Plugin v1.4.0 and INav 7.0)
 
-The following requirements should be met to have analog OSD drawn in **X-Plane**:
+The following requirements should be met to have **analog OSD** drawn in **X-Plane**:
 
 - OSD should be configured as `AUTO`, `PAL` or `NTSC` type in "OSD" tab in **INAV Configurator**.
 - OSD should be enabled in "Configuration->Other features->OSD" in **INAV Configurator**.
@@ -148,7 +146,7 @@ The following requirements should be met to have analog OSD drawn in **X-Plane**
 
 Analog OSD will not work without MAX7456 compatible chip. 
 
-The following requirements should be met to have HD OSD drawn in **X-Plane**:
+The following requirements should be met to have **HD OSD** drawn in **X-Plane**:
 
 - OSD should be configured as `HDZERO`, `DJIWTF`, `AVATAR`, `BF43COMPAT` or `BFHDCOMPAT` type in "OSD" tab in **INAV Configurator**.
 - OSD should be enabled in "Configuration->Other features->OSD" in **INAV Configurator**.
