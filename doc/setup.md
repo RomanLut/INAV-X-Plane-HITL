@@ -213,7 +213,7 @@ INAV SITL connection is supported since v 1.4.0.
 
 Unfortunatelly, current INav Configurator 7.0.x contains outdated SITL executable, also with critical bug which prevents using it with INav-HTIL-Plugin: https://github.com/iNavFlight/inav/pull/9564.
 
-Please download fixed SITL executable from artefacts of pull request: https://github.com/RomanLut/inav/actions/runs/7996657711?pr=14, unpack and replace **inav_STIL.exe** in the directory
+Please download fixed SITL executable from artefacts of pull request: [https://github.com/RomanLut/inav/actions/runs/7996657711?pr=14](https://github.com/RomanLut/inav/actions/runs/7996865431?pr=15), unpack and replace **inav_STIL.exe** in the directory
 **\resources\sitl\windows\** inside INav Configurator 7.0.x directory (or **\resources\sitl\linux\inav_SITL** for Linux).
 
 Start SITL in configurator-only mode (do not select X-Plane/Realflight simulator).
