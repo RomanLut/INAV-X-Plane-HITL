@@ -219,3 +219,14 @@ Please download fixed SITL executable from artefacts of pull request: https://gi
 Start SITL in configurator-only mode (do not select X-Plane/Realflight simulator).
 
 Connect using an option in X-Plane menu: select virtual **UART** which has MSP connection enabled in configurator.
+
+## Known issues with SITL
+- Configrator stuck while appling presets ("Airplane without tail etc") https://github.com/iNavFlight/inav-configurator/pull/1922. Give it a minute, close, recomment and "Load and apply" mixer settings in Mixer tab manually.
+
+- Serial-to-TCP app may not start. You may need to start it manually, f.e. "\resources\sitl\windows\Ser2TCP.exe --comport=COM7 --baudrate=420000 --stopbits=One --parity=None --ip=127.0.0.1 --tcpport=5762" for ELRS receiver connected to COM7.
+
+- If you see "unable to bind socket" error while starting SITL, kill inav_STIL.exe process in Task Manager.
+
+- It is impossible to calibrate accelerometer - not a problem, it will work with uncalibrated accelerometer.
+
+- SITL does not include "analog OSD" emulation. Enable MSP Display Port on any UART to enable HD OSD.
