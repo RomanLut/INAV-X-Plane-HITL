@@ -70,8 +70,6 @@ In minimal case, you need FC with some kind of receiver attached.
 
 No real barometer and GPS sensors are required. 
 
-FC with analog OSD is highly recommended. If FC does not have OSD chip, there will be no OSD in simulator.
-
 ![](attitude.png)
 
 There are two modes of simulation:
@@ -84,7 +82,7 @@ Sensors not listed below are not simulated. Please disable in INAV configuration
 
 ## Accelerometer and gyroscope
 
-Real acceleromerer should be calibrated in **INAV Configurator**. Accelerometer orientation settings are not relevant for simulation.
+There is no need to calibrate acceleromerer. Accelerometer orientation settings are not relevant for simulation.
 
 ## Barometer
 
@@ -138,28 +136,31 @@ OSD is rendered in **X-Plane** exactly as configured in **INAV Configurator**.
 
 ![](osd.jpg)
 
-It is highly recommended to use Flight Controller with OSD to see system messages on screen.
+Both analog OSD and HD OSD are supported (HD OSD requires Plugin v1.4.0 and INav 7.0)
 
-The following requirements should be met to have OSD drawn in **X-Plane**:
+The following requirements should be met to have **analog OSD** drawn in **X-Plane**:
 
 - OSD should be configured as `AUTO`, `PAL` or `NTSC` type in "OSD" tab in **INAV Configurator**.
 - OSD should be enabled in "Configuration->Other features->OSD" in **INAV Configurator**.
 - OSD chip should be present on Flight Controller (MAX7456).
 
-OSD will not work without MAX7456 compatible chip. OSD will not work if HD Zero, DJI or Pixel OSD is selected in configuration.
+Analog OSD will not work without MAX7456 compatible chip. 
+
+The following requirements should be met to have **HD OSD** drawn in **X-Plane**:
+
+- OSD should be configured as `HDZERO`, `DJIWTF`, `AVATAR`, `BF43COMPAT` or `BFHDCOMPAT` type in "OSD" tab in **INAV Configurator**.
+- OSD should be enabled in "Configuration->Other features->OSD" in **INAV Configurator**.
+- `MSP Displayport` peripheral should be chosen on any UART.
 
 The following options are present in menu:
 
 ![](osdoptions.png) 
 
-- **None:** disable OSD rendering
-- **AUTO:** number of OSD lines is provided by FC
-- **PAL:** force rendering of 16 OSD lines
-- **NTSC:** force rendering of 13 OSD lines
+- **AUTO:** number of analog OSD lines is provided by FC
+- **PAL:** force rendering of 16 OSD lines (analog OSD) 
+- **NTSC:** force rendering of 13 OSD lines (analog OSD)
 - **Smoothing: Nearest:** Use nearest pixels for characters rendering
 - **Smoothing: Linear:** Use linear smoothing for characters rendering
-
-OSD is using **Bold** font from **INAV Configurator**. It is possible to replace font `(\plugins\INAV-X-Plane-HITL\64\assets\osd_font.png)` with other font from **INAV Configurator** https://github.com/iNavFlight/inav-configurator/tree/master/resources/osd/analogue
 
 # Beeper
 
@@ -205,3 +206,27 @@ This works Ok for small distances. If you teleport to the other side of the Eart
 # Servo autotrim
 
 Autotrim and servo autotrim have no effect in simulation (TODO).
+
+# SITL connection 
+
+INAV SITL connection is supported since v 1.4.0.
+
+Unfortunatelly, current INav Configurator 7.0.x contains outdated SITL executable, also with critical bug which prevents using it with INav-HTIL-Plugin: https://github.com/iNavFlight/inav/pull/9564.
+
+Please download fixed SITL executable from artefacts of pull request: https://github.com/RomanLut/inav/actions/runs/7996865564?pr=15, unpack and replace **inav_STIL.exe** in the directory
+**\resources\sitl\windows\** inside INav Configurator 7.0.x directory (or **\resources\sitl\linux\inav_SITL** for Linux).
+
+Start SITL in configurator-only mode (do not select X-Plane/Realflight simulator).
+
+Connect using an option in X-Plane menu: select virtual **UART** which has MSP connection enabled in configurator.
+
+## Known issues with SITL
+- Configrator stuck while appling presets ("Airplane without tail etc") https://github.com/iNavFlight/inav-configurator/pull/1922. Give it a minute, close, recomment and "Load and apply" mixer settings in Mixer tab manually.
+
+- Serial-to-TCP app may not start. You may need to start it manually, f.e. "\resources\sitl\windows\Ser2TCP.exe --comport=COM7 --baudrate=420000 --stopbits=One --parity=None --ip=127.0.0.1 --tcpport=5762" for ELRS receiver connected to COM7.
+
+- If you see "unable to bind socket" error while starting SITL, kill inav_STIL.exe process in Task Manager.
+
+- It is impossible to calibrate accelerometer - not a problem, it will work with uncalibrated accelerometer.
+
+- SITL does not include "analog OSD" emulation. Enable MSP Display Port on any UART to enable HD OSD.

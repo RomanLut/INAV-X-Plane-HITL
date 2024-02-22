@@ -39,7 +39,7 @@ While **X-Plane 12** has better visual appearance, **X-Plane 11** is still recom
 
 # Setup and usage
 
-See [setup.md](https://github.com/RomanLut/INAV-X-Plane-HITL/blob/1.3.1_doc/doc/setup.md)
+See [setup.md](doc/setup.md)
 
 # Development
 
@@ -51,6 +51,7 @@ Many thanks to:
 - Sergii Sevriugin for initial implementation and a lot of testing
 - NKDesign for NK FPV SurfWing RC plane for X-Plane
 - b14ckyy for Surfwing 3D model
+- Scavanger for HD OSD and SITL integration
 
 
 
