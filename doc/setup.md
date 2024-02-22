@@ -136,7 +136,7 @@ OSD is rendered in **X-Plane** exactly as configured in **INAV Configurator**.
 
 ![](osd.jpg)
 
-Both analog OSD and HD OSD are supported (HD OSD requires Plugin v1.4.0 and INav 7.0)
+Both **Analog OSD** and **HD OSD** are supported (HD OSD requires Plugin v1.4.0 and INav 7.0)
 
 The following requirements should be met to have **analog OSD** drawn in **X-Plane**:
 
