@@ -22,7 +22,6 @@ public:
 	int connect_id;
   int connect_tcp_id[8];
   int gps_fix_id;
-  int gps_spoofing_id;
   bool isSITLConnection;
 
   std::string SITLIP = "127.0.0.1";
@@ -38,13 +37,16 @@ public:
 
 	XPLMMenuID gps_fix_menu_id;
 	int gps_fix_0_id;
-	int gps_fix_12_id;
+  int gps_fix_3_id;
+  int gps_fix_5_id;
+  int gps_fix_12_id;
   int gps_timeout_id;
   int gps_freeze_id;
   int gps_offset_id;
   int gps_linear_id;
   int gps_circle_id;
   int gps_altitude_id;
+  int gps_altitude5_id;
 
   XPLMMenuID osd_menu_id;
   int osd_id;
@@ -101,7 +103,8 @@ public:
   int pitot_id;
   int pitot_none_id;
   int pitot_simulate_id;
-  int pitot_failure_id;
+  int pitot_failure_hw_id;
+  int pitot_failure_60_id;
 
   XPLMMenuID graph_menu_id;
   int graph_id;
@@ -123,18 +126,16 @@ public:
   int map_clear_tracks;
   int map_teleport;
 
+  XPLMMenuID action_menu_id;
+  int action_id;
+  int autolaunch_id;
+
   XPLMMenuID noise_menu_id;
   int noise_id;
   int noise_none_id;
   int noise_2KM_id;
   int noise_10KM_id;
   int noise_50KM_id;
-
-	int gps_spoofing_1_id;
-	int gps_spoofing_2_id;
-	int gps_spoofing_3_id;
-	int gps_spoofing_4_id;
-	int gps_spoofing_5_id;
 
 	static void static_menu_handler(void * in_menu_ref, void * in_item_ref);
   void menu_handler(void * in_menu_ref, void * in_item_ref);

@@ -15,6 +15,7 @@
 #define GPS_GLITCH_LINEAR   3
 #define GPS_GLITCH_CIRCLE   4
 #define GPS_GLITCH_ALTITUDE 5
+#define GPS_GLITCH_ALTITUDE_5 6
 
 #define DEBUG_U32_COUNT 8
 
@@ -128,7 +129,8 @@ public:
 	float baro;
 
   bool simulatePitot;
-  bool simulatePitotFailure;
+  bool simulatePitotFailureHW;
+  bool simulatePitotFailure60;
 
   //meters/sec, the ground speed of the aircraft
   XPLMDataRef df_airspeed;
@@ -170,6 +172,8 @@ public:
   TBatteryEmulationType batEmulation;
   uint32_t battery_lastUpdate;
   float battery_chargeV;
+
+  uint32_t autolaunch_kickStart = 0;
 
 	void init();
 

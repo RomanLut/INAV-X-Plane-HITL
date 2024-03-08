@@ -62,6 +62,8 @@ void TMenu::_cbConnect(TCBConnectParm state)
 void TMenu::updateGPSMenu()
 {
   XPLMCheckMenuItem(this->gps_fix_menu_id, this->gps_fix_0_id, (g_simData.gps_numSat == 0) && !g_simData.gps_timeout? xplm_Menu_Checked : xplm_Menu_Unchecked);
+  XPLMCheckMenuItem(this->gps_fix_menu_id, this->gps_fix_3_id, (g_simData.gps_numSat == 3) && !g_simData.gps_timeout ? xplm_Menu_Checked : xplm_Menu_Unchecked);
+  XPLMCheckMenuItem(this->gps_fix_menu_id, this->gps_fix_5_id, (g_simData.gps_numSat == 5) && !g_simData.gps_timeout && !g_simData.gps_glitch ? xplm_Menu_Checked : xplm_Menu_Unchecked);
   XPLMCheckMenuItem(this->gps_fix_menu_id, this->gps_fix_12_id, (g_simData.gps_numSat == 12) && !g_simData.gps_timeout && !g_simData.gps_glitch? xplm_Menu_Checked : xplm_Menu_Unchecked);
   XPLMCheckMenuItem(this->gps_fix_menu_id, this->gps_timeout_id, g_simData.gps_timeout ? xplm_Menu_Checked : xplm_Menu_Unchecked);
   XPLMCheckMenuItem(this->gps_fix_menu_id, this->gps_freeze_id, g_simData.gps_glitch == GPS_GLITCH_FREEZE ? xplm_Menu_Checked : xplm_Menu_Unchecked);
@@ -69,6 +71,7 @@ void TMenu::updateGPSMenu()
   XPLMCheckMenuItem(this->gps_fix_menu_id, this->gps_linear_id, g_simData.gps_glitch == GPS_GLITCH_LINEAR ? xplm_Menu_Checked : xplm_Menu_Unchecked);
   XPLMCheckMenuItem(this->gps_fix_menu_id, this->gps_circle_id, g_simData.gps_glitch == GPS_GLITCH_CIRCLE ? xplm_Menu_Checked : xplm_Menu_Unchecked);
   XPLMCheckMenuItem(this->gps_fix_menu_id, this->gps_altitude_id, g_simData.gps_glitch == GPS_GLITCH_ALTITUDE ? xplm_Menu_Checked : xplm_Menu_Unchecked);
+  XPLMCheckMenuItem(this->gps_fix_menu_id, this->gps_altitude5_id, g_simData.gps_glitch == GPS_GLITCH_ALTITUDE_5 ? xplm_Menu_Checked : xplm_Menu_Unchecked);
 }
 
 //==============================================================
@@ -127,8 +130,9 @@ void TMenu::updateBeeperMenu()
 void TMenu::updatePitotMenu()
 {
   XPLMCheckMenuItem(this->pitot_menu_id, this->pitot_none_id, (g_simData.simulatePitot == false) ? xplm_Menu_Checked : xplm_Menu_Unchecked);
-  XPLMCheckMenuItem(this->pitot_menu_id, this->pitot_simulate_id, (g_simData.simulatePitot == true) && (g_simData.simulatePitotFailure == false) ? xplm_Menu_Checked : xplm_Menu_Unchecked);
-  XPLMCheckMenuItem(this->pitot_menu_id, this->pitot_failure_id, (g_simData.simulatePitot == true) && (g_simData.simulatePitotFailure == true) ? xplm_Menu_Checked : xplm_Menu_Unchecked);
+  XPLMCheckMenuItem(this->pitot_menu_id, this->pitot_simulate_id, (g_simData.simulatePitot == true) && ((g_simData.simulatePitotFailureHW || g_simData.simulatePitotFailure60 )== false) ? xplm_Menu_Checked : xplm_Menu_Unchecked);
+  XPLMCheckMenuItem(this->pitot_menu_id, this->pitot_failure_hw_id, (g_simData.simulatePitot == true) && (g_simData.simulatePitotFailureHW == true) ? xplm_Menu_Checked : xplm_Menu_Unchecked);
+  XPLMCheckMenuItem(this->pitot_menu_id, this->pitot_failure_60_id, (g_simData.simulatePitot == true) && (g_simData.simulatePitotFailure60 == true) ? xplm_Menu_Checked : xplm_Menu_Unchecked);
 }
 
 //==============================================================
@@ -233,6 +237,20 @@ void TMenu::menu_handler(void * in_menu_ref, void * in_item_ref)
     g_simData.gps_glitch = 0;
     g_simData.gps_timeout = false;
   }
+  else if (!strcmp((const char *)in_item_ref, "gps_fix_3"))
+  {
+    g_simData.gps_numSat = 3;
+    g_simData.gps_fix = GPS_NO_FIX;
+    g_simData.gps_glitch = 0;
+    g_simData.gps_timeout = false;
+  }
+  else if (!strcmp((const char *)in_item_ref, "gps_fix_5"))
+  {
+    g_simData.gps_numSat = 5;
+    g_simData.gps_fix = GPS_FIX_3D;
+    g_simData.gps_glitch = 0;
+    g_simData.gps_timeout = false;
+  }
   else if (!strcmp((const char *)in_item_ref, "gps_fix_12"))
   {
     g_simData.gps_numSat = 12;
@@ -278,6 +296,13 @@ void TMenu::menu_handler(void * in_menu_ref, void * in_item_ref)
   else if (!strcmp((const char *)in_item_ref, "gps_glitch_altitude"))
   {
     g_simData.gps_numSat = 12;
+    g_simData.gps_fix = GPS_FIX_3D;
+    g_simData.gps_glitch = GPS_GLITCH_ALTITUDE;
+    g_simData.gps_timeout = false;
+  }
+  else if (!strcmp((const char *)in_item_ref, "gps_glitch_altitude_5"))
+  {
+    g_simData.gps_numSat = 5;
     g_simData.gps_fix = GPS_FIX_3D;
     g_simData.gps_glitch = GPS_GLITCH_ALTITUDE;
     g_simData.gps_timeout = false;
@@ -353,17 +378,26 @@ void TMenu::menu_handler(void * in_menu_ref, void * in_item_ref)
   else if (!strcmp((const char *)in_item_ref, "pitot_none"))
   {
     g_simData.simulatePitot = false;
-    g_simData.simulatePitotFailure = false;
+    g_simData.simulatePitotFailureHW = false;
+    g_simData.simulatePitotFailure60 = false;
   }
   else if (!strcmp((const char *)in_item_ref, "pitot_simulate"))
   {
     g_simData.simulatePitot = true;
-    g_simData.simulatePitotFailure = false;
+    g_simData.simulatePitotFailureHW = false;
+    g_simData.simulatePitotFailure60 = false;
   }
-  else if (!strcmp((const char *)in_item_ref, "pitot_simulate_failure"))
+  else if (!strcmp((const char *)in_item_ref, "pitot_simulate_failure_hw"))
   {
     g_simData.simulatePitot = true;
-    g_simData.simulatePitotFailure = true;
+    g_simData.simulatePitotFailureHW = true;
+    g_simData.simulatePitotFailure60 = false;
+  }
+  else if (!strcmp((const char *)in_item_ref, "pitot_simulate_failure_60"))
+  {
+  g_simData.simulatePitot = true;
+  g_simData.simulatePitotFailureHW = false;
+  g_simData.simulatePitotFailure60 = true;
   }
   else if (!strcmp((const char *)in_item_ref, "attitude_force"))
   {
@@ -450,6 +484,10 @@ void TMenu::menu_handler(void * in_menu_ref, void * in_item_ref)
     g_IPInputWidget.setValue(this->SITLIP);
     g_IPInputWidget.show();
   }
+  else if (!strcmp((const char*)in_item_ref, "autolaunch_kick"))
+  {
+    g_simData.autolaunch_kickStart = GetTickCount();
+  }
   else
   {
     int index = g_osd.getFontIndexByName((const char *)in_item_ref);
@@ -510,13 +548,16 @@ void TMenu::createMenu()
   this->gps_fix_id = XPLMAppendMenuItem(this->menu_id, "GPS Fix", (void *)"gps_fix", 1);
   this->gps_fix_menu_id = XPLMCreateMenu("GPS Fix", this->menu_id, this->gps_fix_id, static_menu_handler, NULL);              
   this->gps_fix_0_id = XPLMAppendMenuItem(this->gps_fix_menu_id, "0 satellites (No fix)", (void *)"gps_fix_0", 1);
+  this->gps_fix_3_id = XPLMAppendMenuItem(this->gps_fix_menu_id, "3 satellites (No fix)", (void *)"gps_fix_3", 1);
+  this->gps_fix_5_id = XPLMAppendMenuItem(this->gps_fix_menu_id, "5 satellites (3D fix)", (void *)"gps_fix_5", 1);
   this->gps_fix_12_id = XPLMAppendMenuItem(this->gps_fix_menu_id, "12 satellites (3D fix)", (void *)"gps_fix_12", 1);
   this->gps_timeout_id = XPLMAppendMenuItem(this->gps_fix_menu_id, "[HW Failure] Sensor timeout", (void *)"gps_timeout", 1);
   this->gps_freeze_id = XPLMAppendMenuItem(this->gps_fix_menu_id, "[GPS Glitch] Freeze position", (void *)"gps_glitch_freeze", 1);
   this->gps_offset_id = XPLMAppendMenuItem(this->gps_fix_menu_id, "[GPS Glitch] Apply 5km offset", (void *)"gps_glitch_offset", 1);
   this->gps_linear_id = XPLMAppendMenuItem(this->gps_fix_menu_id, "[GPS Glitch] Apply linear shift 10m/s", (void *)"gps_glitch_linear", 1);
   this->gps_circle_id = XPLMAppendMenuItem(this->gps_fix_menu_id, "[GPS Glitch] Circle 1km", (void *)"gps_glitch_circle", 1);
-  this->gps_altitude_id = XPLMAppendMenuItem(this->gps_fix_menu_id, "[GPS Glitch] Circle + altitude up ", (void *)"gps_glitch_altitude", 1);
+  this->gps_altitude_id = XPLMAppendMenuItem(this->gps_fix_menu_id, "[GPS Glitch] Circle + altitude up", (void *)"gps_glitch_altitude", 1);
+  this->gps_altitude5_id = XPLMAppendMenuItem(this->gps_fix_menu_id, "[GPS Glitch] Circle + altitude up, 5 satellites ", (void *)"gps_glitch_altitude_5", 1);
 
   this->mag_id = XPLMAppendMenuItem(this->menu_id, "Compass", (void *)"Compass", 1);
   this->mag_menu_id = XPLMCreateMenu("Compass", this->menu_id, this->mag_id, static_menu_handler, NULL);
@@ -575,7 +616,8 @@ void TMenu::createMenu()
   this->pitot_menu_id = XPLMCreateMenu("Pitot", this->menu_id, this->pitot_id, static_menu_handler, NULL);
   this->pitot_none_id = XPLMAppendMenuItem(this->pitot_menu_id, "Do not simulate", (void *)"pitot_none", 1);
   this->pitot_simulate_id = XPLMAppendMenuItem(this->pitot_menu_id, "Simulate", (void *)"pitot_simulate", 1);
-  this->pitot_failure_id = XPLMAppendMenuItem(this->pitot_menu_id, "Simulate failure", (void *)"pitot_simulate_failure", 1);
+  this->pitot_failure_hw_id = XPLMAppendMenuItem(this->pitot_menu_id, "Simulate failure", (void *)"pitot_simulate_failure_hw", 1);
+  this->pitot_failure_60_id = XPLMAppendMenuItem(this->pitot_menu_id, "Simulate failure: stuck at 60 km/h", (void *)"pitot_simulate_failure_60", 1);
 
   //XPLMAppendMenuSeparator(this->menu_id);
 
@@ -608,6 +650,10 @@ void TMenu::createMenu()
   this->graph_gyro_id = XPLMAppendMenuItem(this->graph_menu_id, "Gyroscope", (void *)"graph_gyroscope", 1);
   this->graph_debug_altitude_id = XPLMAppendMenuItem(this->graph_menu_id, "debug_mode = altitude", (void *)"graph_debug_altitude", 1);
   this->graph_debug_custom_id = XPLMAppendMenuItem(this->graph_menu_id, "debug[8] array", (void *)"graph_debug_custom", 1);
+
+  this->action_id = XPLMAppendMenuItem(this->menu_id, "Action", (void *)"Action", 1);
+  this->action_menu_id = XPLMCreateMenu("Action", this->menu_id, this->action_id, static_menu_handler, NULL);
+  this->autolaunch_id = XPLMAppendMenuItem(this->action_menu_id, "Autolaunch kick 4g", (void *)"autolaunch_kick", 1);
 
   g_osd.addFontsToMenu();
 
@@ -712,14 +758,14 @@ void TMenu::setFeatures()
   if (!b)
   {
     XPLMMenuCheck check;
-    XPLMCheckMenuItemState(this->pitot_menu_id, this->pitot_failure_id, &check);
+    XPLMCheckMenuItemState(this->pitot_menu_id, this->pitot_failure_hw_id, &check);
     if (check == xplm_Menu_Checked)
     {
-      g_simData.simulatePitotFailure = false;
+      g_simData.simulatePitotFailureHW = false;
       this->updatePitotMenu();
     }
   }
-  XPLMEnableMenuItem(this->pitot_menu_id, pitot_failure_id, b);
+  XPLMEnableMenuItem(this->pitot_menu_id, pitot_failure_hw_id, b);
 }
 
 //==============================================================
