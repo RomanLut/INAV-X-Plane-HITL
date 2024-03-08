@@ -126,7 +126,7 @@ It is possible to use VIRTUAL pitot device.
 
 *Virtual pitot measurements will be overwritten by simulator if emulation is selected in the menu. Otherwise, virtual pitot will estimate speed as usual.*
 
-*Note: VIRTUAL pitot is not supported on 411 and 722 CPUs (you will not be able to arm).*
+*Note: VIRTUAL pitot is not supported on 411 and 722 CPUs in INav 5.x and 6.x - you will not be able to arm.*
 
 *Note: VIRTUAL pitot will fail initialize if GPS sensor is disabled in configuration.*
 
