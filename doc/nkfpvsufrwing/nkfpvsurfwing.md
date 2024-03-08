@@ -8,8 +8,18 @@
 
 Platform: Flying wing
 
+```
+INav 7.x:
+Roll   5 2 2 50
+Pitch  5 2 2 50
+
+Roll Rate  200
+Pitch Rate 200
+```
+
 
 ```
+INav 6.x:
 Roll   6 0 21 120
 Pitch  10 30 69 209
 

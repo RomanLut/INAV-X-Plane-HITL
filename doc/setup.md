@@ -126,7 +126,7 @@ It is possible to use VIRTUAL pitot device.
 
 *Virtual pitot measurements will be overwritten by simulator if emulation is selected in the menu. Otherwise, virtual pitot will estimate speed as usual.*
 
-*Note: VIRTUAL pitot is not supported on 411 and 722 CPUs (you will not be able to arm).*
+*Note: VIRTUAL pitot is not supported on 411 and 722 CPUs in INav 5.x and 6.x - you will not be able to arm.*
 
 *Note: VIRTUAL pitot will fail initialize if GPS sensor is disabled in configuration.*
 
@@ -136,7 +136,7 @@ OSD is rendered in **X-Plane** exactly as configured in **INAV Configurator**.
 
 ![](osd.jpg)
 
-Both analog OSD and HD OSD are supported (HD OSD requires Plugin v1.4.0 and INav 7.0)
+Both **Analog OSD** and **HD OSD** are supported (HD OSD requires Plugin v1.4.0 and INav 7.0)
 
 The following requirements should be met to have **analog OSD** drawn in **X-Plane**:
 
@@ -218,12 +218,22 @@ Please download fixed SITL executable from artefacts of pull request: https://gi
 
 Start SITL in configurator-only mode (do not select X-Plane/Realflight simulator).
 
-Connect using an option in X-Plane menu: select virtual **UART** which has MSP connection enabled in configurator.
+![](sitl_start.png)
+
+Connect INav Configurator to SITL and do minimal setup:
+
+![](sitl_cfg_connect.png)
+
+Connect simulator using an option in X-Plane menu: select virtual **UART** which has MSP connection enabled in configurator and is not occupied by curent configurator connection:
+
+![](sitl_connect_sim.png)
+
 
 ## Known issues with SITL
-- Configrator stuck while appling presets ("Airplane without tail etc") https://github.com/iNavFlight/inav-configurator/pull/1922. Give it a minute, close, recomment and "Load and apply" mixer settings in Mixer tab manually.
+- Configrator stuck while appling presets ("Airplane without tail etc") https://github.com/iNavFlight/inav-configurator/pull/1922. 
+Give it a minute, close, reconnect and "Load and apply" mixer settings in Mixer tab manually.
 
-- Serial-to-TCP app may not start. You may need to start it manually, f.e. "\resources\sitl\windows\Ser2TCP.exe --comport=COM7 --baudrate=420000 --stopbits=One --parity=None --ip=127.0.0.1 --tcpport=5762" for ELRS receiver connected to COM7.
+- Serial-to-TCP app may not start. You may need to start it manually, f.e. ```\resources\sitl\windows\Ser2TCP.exe --comport=COM7 --baudrate=420000 --stopbits=One --parity=None --ip=127.0.0.1 --tcpport=5762``` for ELRS receiver connected to COM7.
 
 - If you see "unable to bind socket" error while starting SITL, kill inav_STIL.exe process in Task Manager.
 
