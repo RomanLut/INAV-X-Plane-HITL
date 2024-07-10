@@ -4,9 +4,13 @@
 #include <math.h>
 #include <stdarg.h>
 
-#if LIN
+#if LIN || APL
 #include <dlfcn.h>
 #include <gtk/gtk.h>
+#endif
+
+#if APL
+#include <CoreFoundation/CoreFoundation.h>
 #endif
 
 //==============================================================
@@ -162,7 +166,7 @@ void delayMS(uint32_t valueMS)
 #endif
 }
 
-#if LIN
+#if LIN || APL
 //==============================================================
 //==============================================================
 bool IsDebuggerPresent()
@@ -187,6 +191,13 @@ uint32_t GetTickCount()
   };
   struct timespec spec;
   clock_gettime(boot_time_id, &spec);
+  return (uint32_t)(((uint64_t)spec.tv_sec) * 1000 + ((uint64_t)spec.tv_nsec) / 1000000);
+}
+#elif APL
+uint32_t GetTickCount()
+{
+  struct timespec spec;
+  clock_gettime(CLOCK_MONOTONIC, &spec);
   return (uint32_t)(((uint64_t)spec.tv_sec) * 1000 + ((uint64_t)spec.tv_nsec) / 1000000);
 }
 #endif
@@ -235,7 +246,7 @@ extern void getClipboardText(char str[1024])
 }
 #endif
 
-#if LIN
+#if LIN || APL
 //==============================================================
 //==============================================================
 extern void getClipboardText(char str[1024])
