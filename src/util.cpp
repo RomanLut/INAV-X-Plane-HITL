@@ -13,6 +13,28 @@
 #include <CoreFoundation/CoreFoundation.h>
 #endif
 
+#if APL
+//==============================================================
+//==============================================================
+// Mac specific: this converts file paths from HFS (which we get from the SDK) to Unix (which the OS wants).
+// See this for more info:
+// http://www.xsquawkbox.net/xpsdk/mediawiki/FilePathsAndMacho
+static int ConvertPath(const char * inPath, char * outPath, int outPathMaxLen) {
+
+  CFStringRef inStr = CFStringCreateWithCString(kCFAllocatorDefault, inPath, kCFStringEncodingMacRoman);
+  if (inStr == NULL)
+    return -1;
+  CFURLRef url = CFURLCreateWithFileSystemPath(kCFAllocatorDefault, inStr, kCFURLHFSPathStyle, 0);
+  CFStringRef outStr = CFURLCopyFileSystemPath(url, kCFURLPOSIXPathStyle);
+  if (!CFStringGetCString(outStr, outPath, outPathMaxLen, kCFURLPOSIXPathStyle))
+    return -1;
+  CFRelease(outStr);
+  CFRelease(url);
+  CFRelease(inStr);
+  return 0;
+}
+#endif
+
 //==============================================================
 //==============================================================
 void buildAssetFilename(char pName[MAX_PATH], const char* pFileName)
@@ -35,6 +57,14 @@ void buildAssetFilename(char pName[MAX_PATH], const char* pFileName)
     if (*slash == '\\') *slash = dirchar;
     ++slash;
   }
+#if APL
+  // Convert the path for Mac
+  char convertedPath[MAX_PATH];
+  if (ConvertPath(pName, convertedPath, sizeof(convertedPath)) == 0)
+  {
+    strncpy(pName, convertedPath, MAX_PATH);
+  }
+#endif
 }
 
 //==============================================================
@@ -199,28 +229,6 @@ uint32_t GetTickCount()
   struct timespec spec;
   clock_gettime(CLOCK_MONOTONIC, &spec);
   return (uint32_t)(((uint64_t)spec.tv_sec) * 1000 + ((uint64_t)spec.tv_nsec) / 1000000);
-}
-#endif
-
-#if APL
-//==============================================================
-//==============================================================
-// Mac specific: this converts file paths from HFS (which we get from the SDK) to Unix (which the OS wants).
-// See this for more info:
-// http://www.xsquawkbox.net/xpsdk/mediawiki/FilePathsAndMacho
-static int ConvertPath(const char * inPath, char * outPath, int outPathMaxLen) {
-
-  CFStringRef inStr = CFStringCreateWithCString(kCFAllocatorDefault, inPath, kCFStringEncodingMacRoman);
-  if (inStr == NULL)
-    return -1;
-  CFURLRef url = CFURLCreateWithFileSystemPath(kCFAllocatorDefault, inStr, kCFURLHFSPathStyle, 0);
-  CFStringRef outStr = CFURLCopyFileSystemPath(url, kCFURLPOSIXPathStyle);
-  if (!CFStringGetCString(outStr, outPath, outPathMaxLen, kCFURLPOSIXPathStyle))
-    return -1;
-  CFRelease(outStr);
-  CFRelease(url);
-  CFRelease(inStr);
-  return 0;
 }
 #endif
 
