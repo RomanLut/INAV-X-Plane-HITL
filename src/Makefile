@@ -30,7 +30,6 @@ INCLUDES = \
 	-I$(SRC_BASE)/SDK/CHeaders/XPLM \
 	-I$(SRC_BASE)/SDK/CHeaders/Widgets 
 
-DEFINES = -DXPLM200=1 -DXPLM210=1 -DXPLM300=1 -DXPLM301=1 -DXPLM302=1 -DXPLM303=1 -DAPL=0 -DIBM=0 -DLIN=1
 
 ############################################################################
 
@@ -47,7 +46,6 @@ CXXOBJECTS64	:= $(patsubst %.cpp, $(BUILDDIR)/obj64/%.o, $(CXXSOURCES))
 ALL_DEPS64		:= $(sort $(CDEPS64) $(CXXDEPS64))
 ALL_OBJECTS64	:= $(sort $(COBJECTS64) $(CXXOBJECTS64))
 
-CFLAGS := $(DEFINES) $(INCLUDES) -fPIC -fvisibility=hidden `pkg-config --cflags gtk+-3.0` --std=c++17
 
 
 # Phony directive tells make that these are "virtual" targets, even if a file named "clean" exists.
@@ -56,17 +54,29 @@ CFLAGS := $(DEFINES) $(INCLUDES) -fPIC -fvisibility=hidden `pkg-config --cflags 
 # temporary build products.
 .SECONDARY: $(ALL_OBJECTS) $(ALL_OBJECTS64) $(ALL_DEPS)
 
-
+DEFINES = -DXPLM200=1 -DXPLM210=1 -DXPLM300=1 -DXPLM301=1 -DXPLM302=1 -DXPLM303=1
 
 # Target rules - these just induce the right .xpl files.
+$(TARGET): lin64
+lin64: $(BUILDDIR)/$(TARGET)/64/lin.xpl
+$(BUILDDIR)/$(TARGET)/64/lin.xpl: DEFINES := $(DEFINES) -DAPL=0 -DIBM=0 -DLIN=1
 
-$(TARGET): $(BUILDDIR)/$(TARGET)/64/lin.xpl
+mac64: $(BUILDDIR)/$(TARGET)/64/mac.xpl
+$(BUILDDIR)/$(TARGET)/64/mac.xpl: DEFINES := $(DEFINES) -DAPL=1 -DIBM=0 -DLIN=0
 
+
+CFLAGS := -fPIC -fvisibility=hidden `pkg-config --cflags gtk+-3.0` --std=c++17
 
 $(BUILDDIR)/$(TARGET)/64/lin.xpl: $(ALL_OBJECTS64)
 	@echo Linking $@
 	mkdir -p $(dir $@)
 	gcc -m64 -static-libgcc -shared -Wl,--version-script=exports.txt -o $@ $(ALL_OBJECTS64) $(LIBS)
+
+$(BUILDDIR)/$(TARGET)/64/mac.xpl: $(ALL_OBJECTS64)
+	@echo Linking $@
+	mkdir -p $(dir $@)
+	gcc -m64 -static-libgcc -shared -Wl,--version-script=exports.txt -o $@ $(ALL_OBJECTS64) $(LIBS)
+
 
 # Compiler rules
 
@@ -77,13 +87,13 @@ $(BUILDDIR)/$(TARGET)/64/lin.xpl: $(ALL_OBJECTS64)
 # - If any header file listed in the cdep turd is changed, rebuild the .o.
 $(BUILDDIR)/obj64/%.o : %.c
 	mkdir -p $(dir $@)
-	g++ $(CFLAGS) -m64 -c $< -o $@
-	g++ $(CFLAGS) -MM -MT $@ -o $(@:.o=.cdep) $<
+	g++ $(DEFINES) $(INCLUDES) $(CFLAGS) -m64 -c $< -o $@
+	g++ $(DEFINES) $(INCLUDES) $(CFLAGS) -MM -MT $@ -o $(@:.o=.cdep) $<
 
 $(BUILDDIR)/obj64/%.o : %.cpp
 	mkdir -p $(dir $@)
-	g++ $(CFLAGS) -m64 -c $< -o $@
-	g++ $(CFLAGS) -MM -MT $@ -o $(@:.o=.cppdep) $<
+	g++ $(DEFINES) $(INCLUDES) $(CFLAGS) -m64 -c $< -o $@
+	g++ $(DEFINES) $(INCLUDES) $(CFLAGS) -MM -MT $@ -o $(@:.o=.cppdep) $<
 
 clean:
 	@echo Cleaning out everything.
