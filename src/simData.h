@@ -9,13 +9,14 @@
 #define GPS_FIX_2D  1
 #define GPS_FIX_3D  2
 
-#define GPS_GLITCH_NONE     0
-#define GPS_GLITCH_FREEZE   1
-#define GPS_GLITCH_OFFSET   2
-#define GPS_GLITCH_LINEAR   3
-#define GPS_GLITCH_CIRCLE   4
-#define GPS_GLITCH_ALTITUDE 5
-#define GPS_GLITCH_ALTITUDE_5 6
+#define GPS_GLITCH_NONE               0
+#define GPS_GLITCH_FREEZE             1
+#define GPS_GLITCH_OFFSET             2
+#define GPS_GLITCH_LINEAR             3
+#define GPS_GLITCH_CIRCLE             4
+#define GPS_GLITCH_ALTITUDE           5
+#define GPS_GLITCH_CIRCLE_ALTITUDE    6
+#define GPS_GLITCH_CIRCLE_ALTITUDE_5  7
 
 #define DEBUG_U32_COUNT 8
 

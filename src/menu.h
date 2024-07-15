@@ -46,7 +46,8 @@ public:
   int gps_linear_id;
   int gps_circle_id;
   int gps_altitude_id;
-  int gps_altitude5_id;
+  int gps_circle_altitude_id;
+  int gps_circle_altitude5_id;
 
   XPLMMenuID osd_menu_id;
   int osd_id;
