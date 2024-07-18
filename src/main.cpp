@@ -14,7 +14,7 @@
 #include "map.h"
 
 uint32_t lastUpdateTime;
-bool wait;
+bool should_wait;
 bool firstRender = true;
 
 XPLMFlightLoopID loopId;
@@ -29,7 +29,7 @@ void cbConnect(TCBConnectParm state)
   g_osd.cbConnect(state);
   g_simData.setBateryEmulation(g_simData.batEmulation); //rechange battery
   lastUpdateTime = GetTickCount();
-  wait = false;
+  should_wait = false;
 }
 
 //==============================================================
@@ -75,7 +75,7 @@ void cbMessage(int code, const uint8_t* messageBuffer, int length)
 
         g_osd.updateFromINAV((const TMSPSimulatorFromINAV*)messageBuffer);
 
-        wait = false;
+        should_wait = false;
       }
     }
   }
@@ -103,12 +103,12 @@ float floop_cb(float elapsed1, float elapsed2, int ctr, void* refcon)
 
   if (g_msp.isConnected())
   {
-    if ((GetTickCount() - lastUpdateTime) > (wait ? MSP_TIMEOUT_MS : MSP_PERIOD_MS ))
+    if ((GetTickCount() - lastUpdateTime) > (should_wait ? MSP_TIMEOUT_MS : MSP_PERIOD_MS ))
     {
       g_simData.updateFromXPlane();
       g_simData.sendToINAV();
       lastUpdateTime = GetTickCount();
-      //wait = true; do not wait for answer, send next state after 10us passed
+      //should_wait = true; do not wait for answer, send next state after 10us passed
     }
   }
 
