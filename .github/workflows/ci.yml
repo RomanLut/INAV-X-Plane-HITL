@@ -20,4 +20,4 @@ jobs:
 
     - name: Build solution
       run: |
-        msbuild src/INAV-X-Plane-HITL-Plugin.sln /p:Configuration=Release
+        msbuild src/INAV-X-Plane-HITL-Plugin.sln /p:Configuration=Debug
