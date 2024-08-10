@@ -71,7 +71,8 @@ void TMenu::updateGPSMenu()
   XPLMCheckMenuItem(this->gps_fix_menu_id, this->gps_linear_id, g_simData.gps_glitch == GPS_GLITCH_LINEAR ? xplm_Menu_Checked : xplm_Menu_Unchecked);
   XPLMCheckMenuItem(this->gps_fix_menu_id, this->gps_circle_id, g_simData.gps_glitch == GPS_GLITCH_CIRCLE ? xplm_Menu_Checked : xplm_Menu_Unchecked);
   XPLMCheckMenuItem(this->gps_fix_menu_id, this->gps_altitude_id, g_simData.gps_glitch == GPS_GLITCH_ALTITUDE ? xplm_Menu_Checked : xplm_Menu_Unchecked);
-  XPLMCheckMenuItem(this->gps_fix_menu_id, this->gps_altitude5_id, g_simData.gps_glitch == GPS_GLITCH_ALTITUDE_5 ? xplm_Menu_Checked : xplm_Menu_Unchecked);
+  XPLMCheckMenuItem(this->gps_fix_menu_id, this->gps_circle_altitude_id, g_simData.gps_glitch == GPS_GLITCH_CIRCLE_ALTITUDE ? xplm_Menu_Checked : xplm_Menu_Unchecked);
+  XPLMCheckMenuItem(this->gps_fix_menu_id, this->gps_circle_altitude5_id, g_simData.gps_glitch == GPS_GLITCH_CIRCLE_ALTITUDE_5 ? xplm_Menu_Checked : xplm_Menu_Unchecked);
 }
 
 //==============================================================
@@ -300,11 +301,18 @@ void TMenu::menu_handler(void * in_menu_ref, void * in_item_ref)
     g_simData.gps_glitch = GPS_GLITCH_ALTITUDE;
     g_simData.gps_timeout = false;
   }
-  else if (!strcmp((const char *)in_item_ref, "gps_glitch_altitude_5"))
+  else if (!strcmp((const char *)in_item_ref, "gps_glitch_circle_altitude"))
+  {
+    g_simData.gps_numSat = 12;
+    g_simData.gps_fix = GPS_FIX_3D;
+    g_simData.gps_glitch = GPS_GLITCH_CIRCLE_ALTITUDE;
+    g_simData.gps_timeout = false;
+  }
+  else if (!strcmp((const char *)in_item_ref, "gps_glitch_circle_altitude_5"))
   {
     g_simData.gps_numSat = 5;
     g_simData.gps_fix = GPS_FIX_3D;
-    g_simData.gps_glitch = GPS_GLITCH_ALTITUDE;
+    g_simData.gps_glitch = GPS_GLITCH_CIRCLE_ALTITUDE;
     g_simData.gps_timeout = false;
   }
   else if (!strcmp((const char *)in_item_ref, "mag_normal"))
@@ -556,8 +564,9 @@ void TMenu::createMenu()
   this->gps_offset_id = XPLMAppendMenuItem(this->gps_fix_menu_id, "[GPS Glitch] Apply 5km offset", (void *)"gps_glitch_offset", 1);
   this->gps_linear_id = XPLMAppendMenuItem(this->gps_fix_menu_id, "[GPS Glitch] Apply linear shift 10m/s", (void *)"gps_glitch_linear", 1);
   this->gps_circle_id = XPLMAppendMenuItem(this->gps_fix_menu_id, "[GPS Glitch] Circle 1km", (void *)"gps_glitch_circle", 1);
-  this->gps_altitude_id = XPLMAppendMenuItem(this->gps_fix_menu_id, "[GPS Glitch] Circle + altitude up", (void *)"gps_glitch_altitude", 1);
-  this->gps_altitude5_id = XPLMAppendMenuItem(this->gps_fix_menu_id, "[GPS Glitch] Circle + altitude up, 5 satellites ", (void *)"gps_glitch_altitude_5", 1);
+  this->gps_altitude_id = XPLMAppendMenuItem(this->gps_fix_menu_id, "[GPS Glitch] Altitude up sawtooth", (void *)"gps_glitch_altitude", 1);
+  this->gps_circle_altitude_id = XPLMAppendMenuItem(this->gps_fix_menu_id, "[GPS Glitch] Circle + altitude up sawtooth", (void *)"gps_glitch_circle_altitude", 1);
+  this->gps_circle_altitude5_id = XPLMAppendMenuItem(this->gps_fix_menu_id, "[GPS Glitch] Circle + altitude up sawtooth, 5 satellites ", (void *)"gps_glitch_circle_altitude_5", 1);
 
   this->mag_id = XPLMAppendMenuItem(this->menu_id, "Compass", (void *)"Compass", 1);
   this->mag_menu_id = XPLMCreateMenu("Compass", this->menu_id, this->mag_id, static_menu_handler, NULL);

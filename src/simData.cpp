@@ -291,18 +291,25 @@ void TSimData::sendToINAV()
     data.lon = (int32_t)round(this->longitude * 10000000);
     data.alt = (int32_t)round(this->elevation * 100);
   }
-  else if ((this->gps_glitch == GPS_GLITCH_CIRCLE) || (this->gps_glitch == GPS_GLITCH_ALTITUDE) || (this->gps_glitch == GPS_GLITCH_ALTITUDE_5))
+  else if (this->gps_glitch == GPS_GLITCH_ALTITUDE)
+  {
+    float k = GetTickCount() / 100000.0f;
+    k -= (int)k;
+    data.alt = (int32_t)round(this->glitch_elevation * 100 + k * 100000);
+    data.velNED[2] = -(int16_t)round(k * 100000);
+  }
+  else if ((this->gps_glitch == GPS_GLITCH_CIRCLE) || (this->gps_glitch == GPS_GLITCH_CIRCLE_ALTITUDE) || (this->gps_glitch == GPS_GLITCH_CIRCLE_ALTITUDE_5))
   {
     float k = GetTickCount() / 100000.0f;
     k -= (int)k;
     double a = k * 2 * CONST_PI;
     data.lat = (int32_t)round((this->glitch_lattitude + 1 * sin(a) / 111.32) * 10000000);
     data.lon = (int32_t)round((this->glitch_longitude + 1 * cos(a) / 111.32) * 10000000);
-    data.alt = (int32_t)round(this->glitch_elevation * 100 + ((this->gps_glitch == GPS_GLITCH_ALTITUDE) ? k * 100000 : 0 ));
+    data.alt = (int32_t)round(this->glitch_elevation * 100 + ((this->gps_glitch == GPS_GLITCH_CIRCLE_ALTITUDE) ? k * 100000 : 0));
     data.velNED[0] = (int16_t)round(sin(a + CONST_PI / 2) * 6283);
     data.velNED[1] = (int16_t)round(cos(a + CONST_PI / 2) * 6283);
-    data.velNED[2] = (this->gps_glitch == GPS_GLITCH_ALTITUDE) ? -(int16_t)round(k * 100000)  : 0;
-    data.course = (int16_t)round( ( 360 - (a * 180 / CONST_PI) ) * 10);  // expected by inav: deg * 10
+    data.velNED[2] = (this->gps_glitch == GPS_GLITCH_CIRCLE_ALTITUDE) ? -(int16_t)round(k * 100000) : 0;
+    data.course = (int16_t)round((360 - (a * 180 / CONST_PI)) * 10);  // expected by inav: deg * 10
     if (data.course > 3600) data.course -= 3600;
     data.speed = 6283;
   }
