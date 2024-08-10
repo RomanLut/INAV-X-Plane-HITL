@@ -16,7 +16,7 @@ jobs:
     - name: Setup Visual Studio
       uses: microsoft/setup-msbuild@v1.0.2
       with:
-        vsVersion: '16.0'  # версия Visual Studio 2019
+        vsVersion: '15.0'  # версия Visual Studio 2019
 
     - name: Build solution
       run: |
