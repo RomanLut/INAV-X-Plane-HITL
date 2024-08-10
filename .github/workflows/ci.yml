@@ -18,6 +18,10 @@ jobs:
       with:
         vs-version: '15.0'  # Visual Studio 2017
 
+  - name: Install Visual Studio Build Tools
+      run: |
+        choco install visualstudio2017buildtools --version=15.9.28307.1029 --params "'/Install /NoRestart /Add BuildTools'"
+
     - name: Build solution
       run: |
         msbuild src/INAV-X-Plane-HITL-Plugin.sln /p:Configuration=Debug
