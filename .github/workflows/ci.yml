@@ -20,7 +20,7 @@ jobs:
 
     - name: Install Visual Studio Build Tools
       run: |
-        choco install visualstudio2017buildtools --params "'/Install /NoRestart /Add BuildTools'"
+        choco install visualstudio2017buildtools
 
     - name: Build solution
       run: |
