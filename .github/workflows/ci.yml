@@ -20,7 +20,8 @@ jobs:
 
     - name: Install Visual Studio Build Tools
       run: |
-        choco install visualstudio2017buildtools
+        choco install visualstudio2017-workload-vctools -y
+        choco install visualstudio2017buildtools -y
 
     - name: Build solution
       run: |
