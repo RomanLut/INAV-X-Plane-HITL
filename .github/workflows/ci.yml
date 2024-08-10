@@ -28,7 +28,7 @@ jobs:
         msbuild src/INAV-X-Plane-HITL-Plugin.sln /p:Configuration=Debug
 
     - name: Upload Artifacts
-        uses: actions/upload-artifact@v3
-        with:
-          name: INAV-HITL-Windows
-          path: D:/Games/X-Plane11/X-Plane 11/Aircraft/Extra Aircraft/NK_FPVSurfwing/**
+      uses: actions/upload-artifact@v3
+      with:
+        name: INAV-HITL-Windows
+        path: D:/Games/X-Plane11/X-Plane 11/Aircraft/Extra Aircraft/NK_FPVSurfwing/**
