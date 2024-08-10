@@ -18,7 +18,7 @@ jobs:
       with:
         vs-version: '15.0'
 
-	- name: Install Visual Studio Build Tools
+    - name: Install Visual Studio Build Tools
       run: |
         choco install visualstudio2017buildtools --version=15.9.28307.1029 --params "'/Install /NoRestart /Add BuildTools'"
 
