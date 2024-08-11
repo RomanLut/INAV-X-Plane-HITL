@@ -11,13 +11,24 @@ jobs:
 
     steps:
     - name: Checkout code
-      uses: actions/checkout@v2
+      uses: actions/checkout@v3
 
     - name: Setup Visual Studio
-      uses: microsoft/setup-msbuild@v1.0.2
+      uses: microsoft/setup-msbuild@v1.1
       with:
-        vsVersion: '15.0'  # версия Visual Studio 2019
+        vs-version: '15.0'
+
+    - name: Install Visual Studio Build Tools
+      run: |
+        choco install visualstudio2017-workload-vctools -y
+        choco install visualstudio2017buildtools -y
 
     - name: Build solution
       run: |
         msbuild src/INAV-X-Plane-HITL-Plugin.sln /p:Configuration=Debug
+
+    - name: Upload Artifacts
+      uses: actions/upload-artifact@v4
+      with:
+        name: INAV-HITL-Windows
+        path: D:/Games/X-Plane11/X-Plane 11/**
