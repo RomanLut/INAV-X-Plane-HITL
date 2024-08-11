@@ -66,7 +66,7 @@ $(BUILDDIR)/../../release/Aircraft/Extra\ Aircraft/NK_FPVSurfwing/plugins/INAV-X
 	DEFINES += -DAPL=1 -DIBM=0 -DLIN=0 -DGL_SILENCE_DEPRECATION
 	LIBDIRS := -F$(SRC_BASE)/SDK/Libraries/Mac $(GTK_INCLUDES)
 	LIBS2   := -framework XPLM -framework XPWidgets -framework OpenGL -framework GLUT -framework OpenAL -lc++
-	LDFLAGS := $(LIBDIRS) $(LIBS) $(LIBS2)
+	LDFLAGS := $(LIBDIRS) $(LIBS2)
 
 
 CFLAGS := -fPIC -fvisibility=hidden `pkg-config --cflags --libs gtk+-3.0` --std=c++17
