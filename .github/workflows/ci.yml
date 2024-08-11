@@ -6,7 +6,7 @@ on:
       - main
 
 jobs:
-  build:
+  build-windows:
     runs-on: windows-latest
 
     steps:
@@ -32,3 +32,45 @@ jobs:
       with:
         name: INAV-HITL-Windows
         path: D:/Games/X-Plane11/X-Plane 11/**
+
+  build-linux:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v3
+
+    - name: Install dependencies
+      run: sudo apt-get update && sudo apt-get -y install -y make gcc g++ libgl-dev libglu1-mesa-dev libalut-dev libgtk-3-dev pkg-config
+
+    - name: Build the project
+      run: |
+        cd src
+        make lin64
+
+    - name: Upload Artifacts
+      uses: actions/upload-artifact@v4
+      with:
+        name: INAV-HITL-Linux
+        path: release/**
+
+  build-mac:
+    runs-on: macos-latest
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v3
+
+    - name: Install Dependencies
+        run: brew install make
+
+    - name: Build the project
+      run: |
+        cd src
+        make mac64
+
+    - name: Upload Artifacts
+      uses: actions/upload-artifact@v4
+      with:
+        name: INAV-HITL-Mac
+        path: release/**

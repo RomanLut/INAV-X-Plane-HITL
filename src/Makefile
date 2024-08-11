@@ -58,28 +58,26 @@ DEFINES = -DXPLM200=1 -DXPLM210=1 -DXPLM300=1 -DXPLM301=1 -DXPLM302=1 -DXPLM303=
 
 # Target rules - these just induce the right .xpl files.
 $(TARGET): lin64
-lin64: $(BUILDDIR)/$(TARGET)/64/lin.xpl
-$(BUILDDIR)/$(TARGET)/64/lin.xpl: DEFINES += -DAPL=0 -DIBM=0 -DLIN=1
+lin64: $(BUILDDIR)/../../release/Aircraft/Extra\ Aircraft/NK_FPVSurfwing/plugins/INAV-X-Plane-HITL/64/lin.xpl
+$(BUILDDIR)/../../release/Aircraft/Extra\ Aircraft/NK_FPVSurfwing/plugins/INAV-X-Plane-HITL/64/lin.xpl: DEFINES += -DAPL=0 -DIBM=0 -DLIN=1
 
-mac64: $(BUILDDIR)/$(TARGET)/64/mac.xpl
-$(BUILDDIR)/$(TARGET)/64/mac.xpl: \
+mac64: $(BUILDDIR)/../../release/Aircraft/Extra\ Aircraft/NK_FPVSurfwing/plugins/INAV-X-Plane-HITL/64/mac.xpl
+$(BUILDDIR)/../../release/Aircraft/Extra\ Aircraft/NK_FPVSurfwing/plugins/INAV-X-Plane-HITL/64/mac.xpl: \
 	DEFINES += -DAPL=1 -DIBM=0 -DLIN=0 -DGL_SILENCE_DEPRECATION
 	LIBDIRS := -L/usr/local/opt/openal-soft/lib -F$(SRC_BASE)/SDK/Libraries/Mac $(GTK_INCLUDES)
-	LIBS    += -framework XPLM -framework XPWidgets -framework OpenGL -framework GLUT -lc++
-	LDFLAGS := $(LIBDIRS) $(LIBS)
+	LIBS2   := -framework XPLM -framework XPWidgets -framework OpenGL -framework GLUT -lc++
+	LDFLAGS := $(LIBDIRS) $(LIBS) $(LIBS2)
 
 
 CFLAGS := -fPIC -fvisibility=hidden `pkg-config --cflags --libs gtk+-3.0` --std=c++17
 
-$(BUILDDIR)/$(TARGET)/64/lin.xpl: $(ALL_OBJECTS64)
+$(BUILDDIR)/../../release/Aircraft/Extra\ Aircraft/NK_FPVSurfwing/plugins/INAV-X-Plane-HITL/64/lin.xpl: $(ALL_OBJECTS64)
 	@echo Linking $@
-	mkdir -p $(dir $@)
-	gcc -m64 -static-libgcc -shared -Wl,--version-script=exports.txt -o $@ $(ALL_OBJECTS64) $(LIBS)
+	gcc -m64 -static-libgcc -shared -Wl,--version-script=exports.txt -o "$@" $(ALL_OBJECTS64) $(LIBS)
 
-$(BUILDDIR)/$(TARGET)/64/mac.xpl: $(ALL_OBJECTS64)
+$(BUILDDIR)/../../release/Aircraft/Extra\ Aircraft/NK_FPVSurfwing/plugins/INAV-X-Plane-HITL/64/mac.xpl: $(ALL_OBJECTS64)
 	@echo Linking $@
-	mkdir -p $(dir $@)
-	gcc -m64 -shared -Wl -o $@ $(ALL_OBJECTS64) $(LDFLAGS) $(CFLAGS)
+	gcc -m64 -shared -Wl -o "$@" $(ALL_OBJECTS64) $(LDFLAGS) $(CFLAGS)
 
 
 # Compiler rules
