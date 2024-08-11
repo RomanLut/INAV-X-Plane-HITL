@@ -63,14 +63,7 @@ jobs:
 
     - name: Install Dependencies
       run: brew install make gtk+3 openal-soft
-
-  
-    - name: Set Environment Variables
-      run: |
-        echo 'export LDFLAGS="-L/opt/homebrew/opt/openal-soft/lib"' >> $GITHUB_ENV
-        echo 'export CPPFLAGS="-I/opt/homebrew/opt/openal-soft/include"' >> $GITHUB_ENV
-        echo 'export PKG_CONFIG_PATH="/opt/homebrew/opt/openal-soft/lib/pkgconfig"' >> $GITHUB_ENV
-
+ 
     - name: Build the project
       run: |
         cd src
