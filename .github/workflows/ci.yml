@@ -27,6 +27,15 @@ jobs:
       run: |
         msbuild src/INAV-X-Plane-HITL-Plugin.sln /p:Configuration=Debug
 
+    - name: Delete win.ilk and  win.pdb
+      run: |
+        if (Test-Path "release\Aircraft\Extra Aircraft\NK_FPVSurfwing\plugins\INAV-X-Plane-HITL\64\win.ilk") {
+          Remove-Item "release\Aircraft\Extra Aircraft\NK_FPVSurfwing\plugins\INAV-X-Plane-HITL\64\win.ilk" -Force
+        }
+        if (Test-Path "release\Aircraft\Extra Aircraft\NK_FPVSurfwing\plugins\INAV-X-Plane-HITL\64\win.pdb") {
+          Remove-Item "release\Aircraft\Extra Aircraft\NK_FPVSurfwing\plugins\INAV-X-Plane-HITL\64\win.pdb" -Force
+        }
+
     - name: Upload Artifacts
       uses: actions/upload-artifact@v4
       with:
@@ -47,15 +56,6 @@ jobs:
       run: |
         cd src
         make lin64
-
-    - name: Delete win.ilk and  win.pdb
-      run: |
-        if (Test-Path "release\Aircraft\Extra Aircraft\NK_FPVSurfwing\plugins\INAV-X-Plane-HITL\64\win.ilk") {
-          Remove-Item "release\Aircraft\Extra Aircraft\NK_FPVSurfwing\plugins\INAV-X-Plane-HITL\64\win.ilk" -Force
-        }
-        if (Test-Path "release\Aircraft\Extra Aircraft\NK_FPVSurfwing\plugins\INAV-X-Plane-HITL\64\win.pdb") {
-          Remove-Item "release\Aircraft\Extra Aircraft\NK_FPVSurfwing\plugins\INAV-X-Plane-HITL\64\win.pdb" -Force
-        }
 
     - name: Upload Artifacts
       uses: actions/upload-artifact@v4
