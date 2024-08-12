@@ -55,7 +55,7 @@ jobs:
         path: release/**
 
   build-mac:
-    runs-on: macos-11
+    runs-on: macos-13
 
     steps:
     - name: Checkout code
