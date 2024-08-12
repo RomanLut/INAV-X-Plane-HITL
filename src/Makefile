@@ -77,7 +77,7 @@ $(BUILDDIR)/../../release/Aircraft/Extra\ Aircraft/NK_FPVSurfwing/plugins/INAV-X
 
 $(BUILDDIR)/../../release/Aircraft/Extra\ Aircraft/NK_FPVSurfwing/plugins/INAV-X-Plane-HITL/64/mac.xpl: $(ALL_OBJECTS64)
 	@echo Linking $@
-	gcc -m64 -shared -Wl -o "$@" $(ALL_OBJECTS64) $(LDFLAGS) $(CFLAGS)
+	gcc -m64 -shared -arch x86_64 -Wl -o "$@" $(ALL_OBJECTS64) $(LDFLAGS) $(CFLAGS)
 
 
 # Compiler rules
