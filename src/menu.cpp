@@ -17,7 +17,7 @@ extern void cbMessage(int code, const uint8_t* messageBuffer, int length);
 //==============================================================
 void TMenu::setDisconnectedMenuState()
 {
-  XPLMSetMenuItemName(this->connect_menu_id, this->connect_disconnect_id, "Connect to Flight Controller_", 0);
+  XPLMSetMenuItemName(this->connect_menu_id, this->connect_disconnect_id, "Connect to Flight Controllerf", 0);
   for (int i = 0; i < 8; i++)
   {
     XPLMEnableMenuItem(this->connect_sitl_menu_id, this->connect_tcp_id[i], true);
