@@ -17,7 +17,7 @@ extern void cbMessage(int code, const uint8_t* messageBuffer, int length);
 //==============================================================
 void TMenu::setDisconnectedMenuState()
 {
-  XPLMSetMenuItemName(this->connect_menu_id, this->connect_disconnect_id, "Connect to Flight Controllerf", 0);
+  XPLMSetMenuItemName(this->connect_menu_id, this->connect_disconnect_id, "Connect to Flight Controller", 0);
   for (int i = 0; i < 8; i++)
   {
     XPLMEnableMenuItem(this->connect_sitl_menu_id, this->connect_tcp_id[i], true);
@@ -555,7 +555,7 @@ void TMenu::createMenu()
 
   this->gps_fix_id = XPLMAppendMenuItem(this->menu_id, "GPS Fix", (void *)"gps_fix", 1);
   this->gps_fix_menu_id = XPLMCreateMenu("GPS Fix", this->menu_id, this->gps_fix_id, static_menu_handler, NULL);              
-  this->gps_fix_0_id = XPLMAppendMenuItem(this->gps_fix_menu_id, "0 satellites (No fix)", (void *)"gps_fix_0", 1);
+  this->gps_fix_0_id = XPLMAppendMenuItem(this->gps_fix_menu_id, "0 satellites (No fix1)", (void *)"gps_fix_0", 1);
   this->gps_fix_3_id = XPLMAppendMenuItem(this->gps_fix_menu_id, "3 satellites (No fix)", (void *)"gps_fix_3", 1);
   this->gps_fix_5_id = XPLMAppendMenuItem(this->gps_fix_menu_id, "5 satellites (3D fix)", (void *)"gps_fix_5", 1);
   this->gps_fix_12_id = XPLMAppendMenuItem(this->gps_fix_menu_id, "12 satellites (3D fix)", (void *)"gps_fix_12", 1);
