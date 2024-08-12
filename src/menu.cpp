@@ -32,7 +32,7 @@ void TMenu::_cbConnect(TCBConnectParm state)
 {
   if (state == CBC_CONNECTED)                             
   {
-    XPLMSetMenuItemName(this->connect_menu_id, this->connect_disconnect_id, !this->isSITLConnection ? "Disconnect from Flight Controller" : "Disconnect from SITL", 0);
+    XPLMSetMenuItemName(this->connect_menu_id, this->connect_disconnect_id, !this->isSITLConnection ? "Disconnect from Flight Controller" : "Disconnect from SITLx", 0);
     for (int i = 0; i < 8; i++)
     {
       XPLMEnableMenuItem(this->connect_sitl_menu_id, this->connect_tcp_id[i], false);

@@ -31,7 +31,7 @@ jobs:
       uses: actions/upload-artifact@v4
       with:
         name: INAV-HITL-Windows
-        path: D:/Games/X-Plane11/X-Plane 11/**
+        path: release/**
 
   build-linux:
     runs-on: ubuntu-latest
