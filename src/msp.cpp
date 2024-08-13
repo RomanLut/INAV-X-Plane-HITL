@@ -4,6 +4,13 @@
 #include "serial.h"
 #include "tcpserial.h"
 
+#ifdef APL
+#include <iostream>
+#include <string>
+#include <dirent.h>
+#include <cstring>
+#endif
+
 #define MSP_DETECT_TIMEOUT_MS         300
 #define MSP_COMM_TIMEOUT_MS           3000
 #define MSP_COMM_DEBUG_TIMEOUT_MS     60000
