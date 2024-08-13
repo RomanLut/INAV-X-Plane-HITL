@@ -12,6 +12,10 @@
 #if APL
 #include <dlfcn.h>
 #include <CoreFoundation/CoreFoundation.h>
+#include <string>
+#include <iostream>
+#include <sstream>
+#include <stdio.h>
 #endif
 
 #if APL
@@ -288,7 +292,7 @@ extern void getClipboardText(char str[1024])
 //==============================================================
 extern void getClipboardText(char str[1024])
 {
-  str[0] = 0;
+  return exec("pbpaste");
 }
 #endif
 
