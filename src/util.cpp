@@ -6,10 +6,11 @@
 
 #if LIN
 #include <dlfcn.h>
+#include <gtk/gtk.h>
 #endif
 
 #if APL
-#include <gtk/gtk.h>
+#include <dlfcn.h>
 #include <CoreFoundation/CoreFoundation.h>
 #endif
 
