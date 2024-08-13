@@ -65,7 +65,7 @@ mac64: $(BUILDDIR)/../../release/Aircraft/Extra\ Aircraft/NK_FPVSurfwing/plugins
 $(BUILDDIR)/../../release/Aircraft/Extra\ Aircraft/NK_FPVSurfwing/plugins/INAV-X-Plane-HITL/64/mac.xpl: \
 	DEFINES += -arch x86_64 -DAPL=1 -DIBM=0 -DLIN=0 -DGL_SILENCE_DEPRECATION 
 	LIBDIRS := -F$(SRC_BASE)/SDK/Libraries/Mac
-	LIBS2   := -framework XPLM -framework XPWidgets -framework OpenGL -framework GLUT -framework OpenAL -lc++
+	LIBS2   := -framework XPLM -framework XPWidgets -framework OpenGL -framework GLUT -framework OpenAL -framework CoreFoundation -lc++
 	LDFLAGS := $(LIBDIRS) $(LIBS2)
 
 
