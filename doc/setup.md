@@ -26,7 +26,7 @@ This action will add **INAV Surfwing** flying wing model with this plugin.
 - Select **"Show extra aircraft from older versions"** to see **INAV Surfwing**
 ![](show_extra_aircraft.jpg)
 - Select **INAV Surfwing**, start flight
-- When scenery is loaded, select **Plugins->INAV HITL->Link->Connect to flight controller**. Plugin should automatically detect serial port.
+- When scenery is loaded, select **Plugins->INAV HITL->Link->Connect to Flight Controller**. Plugin should automatically detect serial port.
 - Flight using RC Controller, setup PIDs etc. 
 
 
@@ -46,7 +46,7 @@ This action will add **INAV Surfwing** flying wing model with this plugin.
 
 # Flight controller configuration
 
-Flight controller should be fully configured like for the real flight. There is no need to configure mixer and motors output.
+The flight controller should be fully configured as it would be for a real flight. There is no need to configure mixer and motors output.
 
 Configure **Platform type: Flying wing** for **INAV Sufwing** in **INAV Configurator**. 
 
