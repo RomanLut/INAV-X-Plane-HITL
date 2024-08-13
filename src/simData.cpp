@@ -567,9 +567,9 @@ void TSimData::loadConfig(mINI::INIStructure& ini)
   this->muteBeeper = ini[SETTINGS_SECTION].has(SETTINGS_MUTE_BEEPER) && (ini[SETTINGS_SECTION][SETTINGS_MUTE_BEEPER] != "0");
 
   this->simulatePitot = !ini[SETTINGS_SECTION].has(SETTINGS_SIMULATE_PITOT) || (ini[SETTINGS_SECTION][SETTINGS_SIMULATE_PITOT] != "0");
-  this->simulatePitotFailureHW = ini[SETTINGS_SECTION].has(SETTINGS_SIMULATE_PITOT_FAILURE_HW) && (ini[SETTINGS_SECTION][SETTINGS_SIMULATE_PITOT_FAILURE_HW] == "1");
-  this->simulatePitotFailure60 = ini[SETTINGS_SECTION].has(SETTINGS_SIMULATE_PITOT_FAILURE_60) && (ini[SETTINGS_SECTION][SETTINGS_SIMULATE_PITOT_FAILURE_60] == "1");
-  if (this->simulatePitot)
+  this->simulatePitotFailureHW = this->simulatePitot && ini[SETTINGS_SECTION].has(SETTINGS_SIMULATE_PITOT_FAILURE_HW) && (ini[SETTINGS_SECTION][SETTINGS_SIMULATE_PITOT_FAILURE_HW] == "1");
+  this->simulatePitotFailure60 = this->simulatePitot && ini[SETTINGS_SECTION].has(SETTINGS_SIMULATE_PITOT_FAILURE_60) && (ini[SETTINGS_SECTION][SETTINGS_SIMULATE_PITOT_FAILURE_60] == "1");
+  if (!this->simulatePitot)
   {
     this->simulatePitotFailureHW = false;
     this->simulatePitotFailure60 = false;
