@@ -36,6 +36,8 @@
 #elif LIN
 #include <unistd.h>
 #define USE_OPENAL
+#elif APL
+#define USE_OPENAL
 #endif
 
 
@@ -52,19 +54,23 @@
 #include <fstream>
 //#include <functional>
 
-
+#if APL
+#include <OpenGL/gl.h>
+#include <OpenGL/glu.h>
+#else
 #include <GL/gl.h>
 #include <GL/glu.h>
+#endif
 
-#include "mINI\ini.h"
+#include "mINI/ini.h"
 
-#if LIN
+#if LIN || APL
 #define MAX_PATH 1260
 #include <time.h>
 #include <cmath>
 #endif
 
-#if LIN
+#if LIN || APL
 #include <sys/types.h>
 #include <fcntl.h>
 #include <errno.h> 

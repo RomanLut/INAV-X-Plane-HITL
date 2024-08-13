@@ -564,10 +564,16 @@ void TSimData::loadConfig(mINI::INIStructure& ini)
     }
   }
 
-  this->muteBeeper = !ini[SETTINGS_SECTION].has(SETTINGS_MUTE_BEEPER) || (ini[SETTINGS_SECTION][SETTINGS_MUTE_BEEPER] != "0");
+  this->muteBeeper = ini[SETTINGS_SECTION].has(SETTINGS_MUTE_BEEPER) && (ini[SETTINGS_SECTION][SETTINGS_MUTE_BEEPER] != "0");
+
   this->simulatePitot = !ini[SETTINGS_SECTION].has(SETTINGS_SIMULATE_PITOT) || (ini[SETTINGS_SECTION][SETTINGS_SIMULATE_PITOT] != "0");
-  this->simulatePitotFailureHW = !ini[SETTINGS_SECTION].has(SETTINGS_SIMULATE_PITOT) || (ini[SETTINGS_SECTION][SETTINGS_SIMULATE_PITOT_FAILURE_HW] != "0");
-  this->simulatePitotFailure60 = !ini[SETTINGS_SECTION].has(SETTINGS_SIMULATE_PITOT) || (ini[SETTINGS_SECTION][SETTINGS_SIMULATE_PITOT_FAILURE_60] != "0");
+  this->simulatePitotFailureHW = ini[SETTINGS_SECTION].has(SETTINGS_SIMULATE_PITOT_FAILURE_HW) && (ini[SETTINGS_SECTION][SETTINGS_SIMULATE_PITOT_FAILURE_HW] == "1");
+  this->simulatePitotFailure60 = ini[SETTINGS_SECTION].has(SETTINGS_SIMULATE_PITOT_FAILURE_60) && (ini[SETTINGS_SECTION][SETTINGS_SIMULATE_PITOT_FAILURE_60] == "1");
+  if (this->simulatePitot)
+  {
+    this->simulatePitotFailureHW = false;
+    this->simulatePitotFailure60 = false;
+  }
   if (this->simulatePitotFailureHW) this->simulatePitotFailure60 = false;
 }
 
@@ -581,9 +587,9 @@ void TSimData::saveConfig(mINI::INIStructure& ini)
   ini[SETTINGS_SECTION][SETTINGS_GPS_GLITCH] = std::to_string(this->gps_glitch);
   ini[SETTINGS_SECTION][SETTINGS_MAG_FAILURE] = std::to_string(this->simulate_mag_failure ? 1 : 0);
   ini[SETTINGS_SECTION][SETTINGS_BATTERY_EMULATION] = std::to_string(this->batEmulation);
-  ini[SETTINGS_SECTION][SETTINGS_MUTE_BEEPER] = std::to_string(this->muteBeeper);
-  ini[SETTINGS_SECTION][SETTINGS_SIMULATE_PITOT] = std::to_string(this->simulatePitot);
-  ini[SETTINGS_SECTION][SETTINGS_SIMULATE_PITOT_FAILURE_HW] = std::to_string(this->simulatePitotFailureHW);
-  ini[SETTINGS_SECTION][SETTINGS_SIMULATE_PITOT_FAILURE_60] = std::to_string(this->simulatePitotFailure60);
+  ini[SETTINGS_SECTION][SETTINGS_MUTE_BEEPER] = std::to_string(this->muteBeeper ? 1 : 0);
+  ini[SETTINGS_SECTION][SETTINGS_SIMULATE_PITOT] = std::to_string(this->simulatePitot ? 1 : 0);
+  ini[SETTINGS_SECTION][SETTINGS_SIMULATE_PITOT_FAILURE_HW] = std::to_string(this->simulatePitotFailureHW ? 1 : 0);
+  ini[SETTINGS_SECTION][SETTINGS_SIMULATE_PITOT_FAILURE_60] = std::to_string(this->simulatePitotFailure60 ? 1 : 0);
 }
 
