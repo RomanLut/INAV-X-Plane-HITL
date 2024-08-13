@@ -79,7 +79,7 @@ void Serial::OpenConnection(char *portName)
       }
     }
   }
-#elif LIN
+#elif LIN || APL
   this->fd = open(portName, O_RDWR);
   if (fd == -1)
   {
@@ -132,7 +132,7 @@ void Serial::CloseConnection()
 {
 #if IBM
 	CloseHandle(this->hSerial);
-#elif LIN
+#elif LIN || APL
   close(this->fd);
 #endif
 }
@@ -162,7 +162,7 @@ int Serial::ReadData(unsigned char *buffer, unsigned int nbChar)
 		}
 	}
   return 0;
-#elif LIN
+#elif LIN || APL
 
   int bytesRead = read(this->fd, buffer, nbChar);
   g_stats.serialBytesReceived += bytesRead;
@@ -192,7 +192,7 @@ void Serial::flushOut()
     g_stats.serialPacketsSent ++;
 
     this->writeBufferCount = 0;
-#elif LIN
+#elif LIN || APL
     write(this->fd, this->writeBuffer, this->writeBufferCount);
 
     g_stats.serialBytesSent += this->writeBufferCount;

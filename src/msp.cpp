@@ -4,6 +4,13 @@
 #include "serial.h"
 #include "tcpserial.h"
 
+#ifdef APL
+#include <iostream>
+#include <string>
+#include <dirent.h>
+#include <cstring>
+#endif
+
 #define MSP_DETECT_TIMEOUT_MS         300
 #define MSP_COMM_TIMEOUT_MS           3000
 #define MSP_COMM_DEBUG_TIMEOUT_MS     60000
@@ -316,11 +323,44 @@ bool MSP::probeNextPort()
     this->portId++;
     if (this->portId == 32) return false;
 
-    char portName[16];
+    char portName[128];
 #if IBM
     sprintf(portName, "\\\\.\\COM%d", portId );
 #elif LIN
     sprintf(portName, "/dev/ttyACM%d", portId-1);  //start from zero on linux
+#elif APL
+    const char* devDir = "/dev";
+    DIR* dir = opendir(devDir);
+
+    if (dir == nullptr)
+    {
+      LOG("Unable to enumerate ports");
+      return false;
+    }
+
+    struct dirent* entry;
+    int i = this->portId;
+    while ((entry = readdir(dir)) != nullptr)
+    {
+      if (strncmp(entry->d_name, "cu.usbmodem", 11) == 0)
+      {
+        i--;
+        if (i == 0)
+        {
+          std::string portName1 = std::string(devDir) + "/" + entry->d_name;
+          strcpy(portName, portName1.c_str());
+          break;
+        }
+      }
+    }
+
+    if (entry == nullptr)
+    {
+      LOG("Unable to connect");
+      return false;
+    }
+
+    closedir(dir);
 #endif
 
     LOG("Probing port %s", portName);
