@@ -69,7 +69,8 @@ $(BUILDDIR)/../../release/Aircraft/Extra\ Aircraft/NK_FPVSurfwing/plugins/INAV-X
 	LDFLAGS := $(LIBDIRS) $(LIBS2)
 
 
-CFLAGS := -fPIC -fvisibility=hidden `pkg-config --cflags` --std=c++17
+CFLAGS := -fPIC -fvisibility=hidden `pkg-config --cflags --libs gtk+-3.0` --std=c++17
+CFLAGS2 := -fPIC -fvisibility=hidden `pkg-config --cflags` --std=c++17
 
 $(BUILDDIR)/../../release/Aircraft/Extra\ Aircraft/NK_FPVSurfwing/plugins/INAV-X-Plane-HITL/64/lin.xpl: $(ALL_OBJECTS64)
 	@echo Linking $@
@@ -77,7 +78,7 @@ $(BUILDDIR)/../../release/Aircraft/Extra\ Aircraft/NK_FPVSurfwing/plugins/INAV-X
 
 $(BUILDDIR)/../../release/Aircraft/Extra\ Aircraft/NK_FPVSurfwing/plugins/INAV-X-Plane-HITL/64/mac.xpl: $(ALL_OBJECTS64)
 	@echo Linking $@
-	gcc -m64 -shared -arch x86_64 -Wl -o "$@" $(ALL_OBJECTS64) $(LDFLAGS) $(CFLAGS)
+	gcc -m64 -shared -arch x86_64 -Wl -o "$@" $(ALL_OBJECTS64) $(LDFLAGS) $(CFLAGS2)
 
 
 # Compiler rules
