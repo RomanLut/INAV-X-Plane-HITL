@@ -1,4 +1,4 @@
-name: CI
+name: Build plugins in Release folder
 
 on:
   workflow_dispatch:  
