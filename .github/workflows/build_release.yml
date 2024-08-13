@@ -1,0 +1,98 @@
+name: CI
+
+on:
+  workflow_dispatch:  
+
+jobs:
+  build-windows:
+    runs-on: windows-latest
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v3
+
+    - name: Setup Visual Studio
+      uses: microsoft/setup-msbuild@v1.1
+      with:
+        vs-version: '15.0'
+
+    - name: Install Visual Studio Build Tools
+      run: |
+        choco install visualstudio2017-workload-vctools -y
+        choco install visualstudio2017buildtools -y
+
+    - name: Build solution
+      run: |
+        msbuild src/INAV-X-Plane-HITL-Plugin.sln /p:Configuration=Debug
+
+    - name: Delete win.ilk and win.pdb
+      run: |
+        if (Test-Path "release\Aircraft\Extra Aircraft\NK_FPVSurfwing\plugins\INAV-X-Plane-HITL\64\win.ilk") {
+          Remove-Item "release\Aircraft\Extra Aircraft\NK_FPVSurfwing\plugins\INAV-X-Plane-HITL\64\win.ilk" -Force
+        }
+        if (Test-Path "release\Aircraft\Extra Aircraft\NK_FPVSurfwing\plugins\INAV-X-Plane-HITL\64\win.pdb") {
+          Remove-Item "release\Aircraft\Extra Aircraft\NK_FPVSurfwing\plugins\INAV-X-Plane-HITL\64\win.pdb" -Force
+        }
+
+    - name: Commit win.xpl
+      run: |
+        git config --global user.name "github-actions"
+        git config --global user.email "github-actions@github.com"
+        git add "release\Aircraft\Extra Aircraft\NK_FPVSurfwing\plugins\INAV-X-Plane-HITL\64\win.xpl"
+        git commit -m "Action - Update win.xpl" || echo "No changes to commit"
+        git pull origin main --rebase
+        git push origin main
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+  build-linux:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v3
+
+    - name: Install dependencies
+      run: sudo apt-get update && sudo apt-get -y install -y make gcc g++ libgl-dev libglu1-mesa-dev libalut-dev libgtk-3-dev pkg-config
+
+    - name: Build the project
+      run: |
+        cd src
+        make lin64
+
+    - name: Commit lin.xpl
+      run: |
+        git config --global user.name "github-actions"
+        git config --global user.email "github-actions@github.com"
+        git add "release\Aircraft\Extra Aircraft\NK_FPVSurfwing\plugins\INAV-X-Plane-HITL\64\lin.xpl"
+        git commit -m "Action - Update lin.xpl" || echo "No changes to commit"
+        git pull origin main --rebase
+        git push origin main
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+  build-mac:
+    runs-on: macos-13
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v3
+
+    - name: Install Dependencies
+      run: brew install make gtk+3 openal-soft
+ 
+    - name: Build the project
+      run: |
+        cd src
+        make mac64
+
+    - name: Commit mac.xpl
+      run: |
+        git config --global user.name "github-actions"
+        git config --global user.email "github-actions@github.com"
+        git add "release\Aircraft\Extra Aircraft\NK_FPVSurfwing\plugins\INAV-X-Plane-HITL\64\mac.xpl"
+        git commit -m "Action - Update mac.xpl" || echo "No changes to commit"
+        git pull origin main --rebase
+        git push origin main
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
