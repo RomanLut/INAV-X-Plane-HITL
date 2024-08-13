@@ -42,7 +42,7 @@ This action will add **INAV Surfwing** flying wing model with this plugin.
 
 # Setup (MacOs)
 
- Sorry, MacOs in not supported currently *(assistance needed to build plugin for MacOs, see [development.md](development.md))*.
+For MacOs, all steps are analogous to Windows.
 
 # Flight controller configuration
 
