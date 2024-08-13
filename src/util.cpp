@@ -5,11 +5,11 @@
 #include <stdarg.h>
 
 #if LIN
-#include <gtk/gtk.h>
+#include <dlfcn.h>
 #endif
 
 #if APL
-#include <dlfcn.h>
+#include <gtk/gtk.h>
 #include <CoreFoundation/CoreFoundation.h>
 #endif
 
