@@ -16,7 +16,7 @@ class Serial : public SerialBase
 private:
 #if IBM
   HANDLE hSerial;
-#elif LIN
+#elif LIN || APL
   int fd;
 #endif
   void CloseConnection();
