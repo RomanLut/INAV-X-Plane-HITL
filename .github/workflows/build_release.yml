@@ -38,7 +38,7 @@ jobs:
       run: |
         git config --global user.name "github-actions"
         git config --global user.email "github-actions@github.com"
-        git add "release\Aircraft\Extra Aircraft\NK_FPVSurfwing\plugins\INAV-X-Plane-HITL\64\win.xpl"
+        git add "release/Aircraft/Extra Aircraft/NK_FPVSurfwing/plugins/INAV-X-Plane-HITL/64/win.xpl"
         git commit -m "Action - Update win.xpl" || echo "No changes to commit"
         git pull origin main --rebase
         git push origin main
@@ -64,7 +64,7 @@ jobs:
       run: |
         git config --global user.name "github-actions"
         git config --global user.email "github-actions@github.com"
-        git add "release\Aircraft\Extra Aircraft\NK_FPVSurfwing\plugins\INAV-X-Plane-HITL\64\lin.xpl"
+        git add "release/Aircraft/Extra Aircraft/NK_FPVSurfwing/plugins/INAV-X-Plane-HITL/64/lin.xpl"
         git commit -m "Action - Update lin.xpl" || echo "No changes to commit"
         git pull origin main --rebase
         git push origin main
@@ -90,7 +90,7 @@ jobs:
       run: |
         git config --global user.name "github-actions"
         git config --global user.email "github-actions@github.com"
-        git add "release\Aircraft\Extra Aircraft\NK_FPVSurfwing\plugins\INAV-X-Plane-HITL\64\mac.xpl"
+        git add "release/Aircraft/Extra Aircraft/NK_FPVSurfwing/plugins/INAV-X-Plane-HITL/64/mac.xpl"
         git commit -m "Action - Update mac.xpl" || echo "No changes to commit"
         git pull origin main --rebase
         git push origin main
