@@ -4,12 +4,12 @@
 #include <math.h>
 #include <stdarg.h>
 
-#if LIN || APL
-#include <dlfcn.h>
+#if LIN
 #include <gtk/gtk.h>
 #endif
 
 #if APL
+#include <dlfcn.h>
 #include <CoreFoundation/CoreFoundation.h>
 #endif
 
@@ -254,7 +254,7 @@ extern void getClipboardText(char str[1024])
 }
 #endif
 
-#if LIN || APL
+#if LIN
 //==============================================================
 //==============================================================
 extern void getClipboardText(char str[1024])
@@ -279,6 +279,15 @@ extern void getClipboardText(char str[1024])
       g_free(text);
     }
   }
+}
+#endif
+
+#if APL
+//==============================================================
+//==============================================================
+extern void getClipboardText(char str[1024])
+{
+  str[0] = 0;
 }
 #endif
 

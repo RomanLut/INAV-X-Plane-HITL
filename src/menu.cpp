@@ -555,7 +555,7 @@ void TMenu::createMenu()
 
   this->gps_fix_id = XPLMAppendMenuItem(this->menu_id, "GPS Fix", (void *)"gps_fix", 1);
   this->gps_fix_menu_id = XPLMCreateMenu("GPS Fix", this->menu_id, this->gps_fix_id, static_menu_handler, NULL);              
-  this->gps_fix_0_id = XPLMAppendMenuItem(this->gps_fix_menu_id, "0 satellites (No fix2)", (void *)"gps_fix_0", 1);
+  this->gps_fix_0_id = XPLMAppendMenuItem(this->gps_fix_menu_id, "0 satellites (No fix3)", (void *)"gps_fix_0", 1);
   this->gps_fix_3_id = XPLMAppendMenuItem(this->gps_fix_menu_id, "3 satellites (No fix)", (void *)"gps_fix_3", 1);
   this->gps_fix_5_id = XPLMAppendMenuItem(this->gps_fix_menu_id, "5 satellites (3D fix)", (void *)"gps_fix_5", 1);
   this->gps_fix_12_id = XPLMAppendMenuItem(this->gps_fix_menu_id, "12 satellites (3D fix)", (void *)"gps_fix_12", 1);
