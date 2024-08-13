@@ -342,7 +342,8 @@ bool MSP::probeNextPort()
     int i = this->portId;
     while ((entry = readdir(dir)) != nullptr)
     {
-      if (strncmp(entry->d_name, "cu.usbmodem", 12) == 0)
+      LOG("%s", entry->d_name);
+      if (strncmp(entry->d_name, "cu.usbmodem", 11) == 0)
       {
         i--;
         if (i == 0)
