@@ -292,7 +292,16 @@ extern void getClipboardText(char str[1024])
 //==============================================================
 extern void getClipboardText(char str[1024])
 {
-  return exec("pbpaste");
+  memset(str, 0, 1024);
+
+  FILE* pipe = popen("pbpaste", "r");
+  if (!pipe) return;
+
+  if (!feof(pipe))
+  {
+    fgets(str, 1023, pipe);
+  }
+  pclose(pipe);
 }
 #endif
 
