@@ -342,14 +342,15 @@ bool MSP::probeNextPort()
     int i = this->portId;
     while ((entry = readdir(dir)) != nullptr)
     {
-      LOG("%s", entry->d_name);
       if (strncmp(entry->d_name, "cu.usbmodem", 11) == 0)
       {
+        LOG("%s", entry->d_name);
         i--;
         if (i == 0)
         {
           std::string portName1 = std::string(devDir) + "/" + entry->d_name;
           strcpy(portName, portName1.c_str());
+          LOG("t %s", portName);
           break;
         }
       }
