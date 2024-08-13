@@ -88,4 +88,4 @@
 
 
 
-#define HITL_VERSION_STRING "V1.4.0"
+#define HITL_VERSION_STRING "V1.5.0"
