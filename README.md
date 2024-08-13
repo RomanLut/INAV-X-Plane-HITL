@@ -27,15 +27,17 @@ While not been a main purpose, plugin can be used to improve pilot skils or gett
 
 **X-Plane** https://www.x-plane.com/ is flight simulator with accurate physics simulation. 
  
-X-Plane is extendable with plugins. This plugin connects to Flight Controller through USB cable and passes gyroscope, accelerometer, barometer, magnethometer, GPS and Pitot tube data from X-Plane, which replace data from physical sensors. 
+X-Plane is extendable with plugins. This plugin connects to Flight Controller through USB cable and passes gyroscope, accelerometer, barometer, magnethometer, GPS and Pitot data from X-Plane to FC. Simulated sensors data replaces readings from physical sensors. 
 
-FC sends back **yaw/pitch/roll** controls which are passed to X-Plane.
+FC sends back **yaw/pitch/roll/trottle** controls which are passed to X-Plane.
 
 ## X-Plane 11 or X-Plane 12?
 
 Simulation requires at least 50, or even better 100, solid FPS without freezing. 
 
 While **X-Plane 12** has better visual appearance, **X-Plane 11** is still recommented choice due to better performance. 
+
+Also, small aircraft physics seems to work better in X-Plane 11.
 
 # Setup and usage
 
@@ -52,7 +54,7 @@ Many thanks to:
 - NKDesign for NK FPV SurfWing RC plane for X-Plane
 - b14ckyy for Surfwing 3D model
 - Scavanger for HD OSD and SITL integration
-
+- Bart Slinger for MacOs plugin compilation
 
 
 # Links
