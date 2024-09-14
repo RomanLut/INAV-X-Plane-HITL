@@ -14,39 +14,26 @@ on:
 jobs:
   build-windows:
     runs-on: windows-latest
-
+    defaults:
+      run:
+        shell: C:\tools\cygwin\bin\bash.exe -o igncr '{0}'
     steps:
-    - name: Checkout code
-      uses: actions/checkout@v3
-
-    - name: Setup Visual Studio
-      uses: microsoft/setup-msbuild@v1.1
-      with:
-        vs-version: '15.0'
-
-    - name: Install Visual Studio Build Tools
-      run: |
-        choco install visualstudio2017-workload-vctools -y
-        choco install visualstudio2017buildtools -y
-
-    - name: Build solution
-      run: |
-        msbuild src/INAV-X-Plane-HITL-Plugin.sln /p:Configuration=Debug
-
-    - name: Delete win.ilk and  win.pdb
-      run: |
-        if (Test-Path "release\Aircraft\Extra Aircraft\NK_FPVSurfwing\plugins\INAV-X-Plane-HITL\64\win.ilk") {
-          Remove-Item "release\Aircraft\Extra Aircraft\NK_FPVSurfwing\plugins\INAV-X-Plane-HITL\64\win.ilk" -Force
-        }
-        if (Test-Path "release\Aircraft\Extra Aircraft\NK_FPVSurfwing\plugins\INAV-X-Plane-HITL\64\win.pdb") {
-          Remove-Item "release\Aircraft\Extra Aircraft\NK_FPVSurfwing\plugins\INAV-X-Plane-HITL\64\win.pdb" -Force
-        }
-
-    - name: Upload Artifacts
-      uses: actions/upload-artifact@v4
-      with:
-        name: INAV-HITL-Windows
-        path: release/**
+      - uses: actions/checkout@v4
+      - name: Setup Cygwin
+        uses: egor-tensin/setup-cygwin@v4
+        with:
+          packages: cmake ninja gcc-g++ cmake libgl-devel libglut-devel libgtk3-devel pkg-config
+      - name: Build the project
+        run: |
+          mkdir build
+          cd build
+          cmake -GNinja -DOUTPUT_DIR="../release/Aircraft/Extra Aircraft/NK_FPVSurfwing/plugins/INAV-X-Plane-HITL/64" ..
+          ninja
+      - name: Upload Artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: INAV-HITL-Windows
+          path: release/**
 
   build-linux:
     runs-on: ubuntu-latest
@@ -85,7 +72,7 @@ jobs:
       run: |
         make build
         cd build
-        cmake -DOUTPUT_DIR="../release/Aircraft/Extra Aircraft/NK_FPVSurfwing/plugins/INAV-X-Plane-HITL/64" ..
+        cmake -GNinja -DOUTPUT_DIR="../release/Aircraft/Extra Aircraft/NK_FPVSurfwing/plugins/INAV-X-Plane-HITL/64" ..
         ninja
 
     - name: Upload Artifacts
