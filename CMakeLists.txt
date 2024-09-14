@@ -59,7 +59,10 @@ add_compile_options(-fexceptions)
 add_compile_options(-fvisibility=hidden)
 add_compile_options(-Wall -Wpedantic -Wextra)
 add_compile_options(-Wno-unused)
-add_compile_options(-O3 -fPIC)
+
+if (NOT CMAKE_BUILD_TYPE STREQUAL "Debug")
+    add_compile_options(-O3 -fPIC)
+endif ()
 
 if (APPLE)
     add_compile_options(-Wno-nested-anon-types)
@@ -71,9 +74,6 @@ add_library(plugin SHARED ${PLUGIN_SOURCES})
 
 target_compile_features(plugin PUBLIC cxx_std_17)
 
-IF(CMAKE_COMPILER_IS_GNUCXX)
-    set(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} -g -Og -DDEBUG")
-ENDIF()
 
 if (APPLE)
     target_compile_options(plugin PUBLIC -mmacosx-version-min=11.3)

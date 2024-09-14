@@ -186,7 +186,7 @@ void TGraph::drawCallback()
 
   for (int i = 0; i < this->activeCount; i++)
   {
-    char msg[100];
+    char msg[331];
     char msg1[100];
     char msg2[100];
 
