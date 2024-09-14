@@ -61,6 +61,12 @@ add_compile_options(-Wall -Wpedantic -Wextra)
 add_compile_options(-Wno-unused)
 add_compile_options(-O3 -fPIC)
 
+if (APPLE)
+    add_compile_options(-Wno-nested-anon-types)
+    add_compile_options(-Wno-unused-parameter)
+    add_compile_options(-Wno-deprecated-declarations)
+endif()
+
 add_library(plugin SHARED ${PLUGIN_SOURCES})
 
 target_compile_features(plugin PUBLIC cxx_std_17)
@@ -100,9 +106,10 @@ if (APPLE)
     find_library(GLUT_LIBRARY GLUT)
     find_library(OpenGL_LIBRARY OpenGL)
     find_library(Cocoa_LIBRARY Cocoa)
+    find_library(OpenAL_Library OpenAL)
 
     target_link_libraries(plugin ${IOKIT_LIBRARY} ${CORE_FOUNDATION_LIBRARY} ${GLUT_LIBRARY})
-    target_link_libraries(plugin ${OpenGL_LIBRARY} ${Cocoa_LIBRARY})
+    target_link_libraries(plugin ${OpenGL_LIBRARY} ${Cocoa_LIBRARY} ${OpenAL_Library})
 endif ()
 
 if (WIN32)
