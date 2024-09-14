@@ -44,12 +44,14 @@ make
 
 Some predefined tasks are avaiable, use `STRG-Shift-B` to execute the Tasks;
 
-`CMAKE Build Release`: Prepares a `build` directory for a release build
-`CMAKE Build Debug`: Prepares a `debug` directory for a debug build
-`CMAKE Build Release`: Builds a release build and copies the plugin library to the `release` folder
-`CMAKE Build Debug`: Builds a debug build and copies the plugin library to the X-Plane folder, edit `setting.json` before, see "Debugging" section.
-`Clean Release`: Cleans up the build folder
-`Clean Debug`: Cleans up the debug folder
+| Task                  | Description                                                                                                                       |
+|-----------------------|-----------------------------------------------------------------------------------------------------------------------------------|
+|`CMAKE Build Release`: | Prepares a `build` directory for a release build                                                                                  | 
+|`CMAKE Build Debug`:   | Prepares a `debug` directory for a debug build                                                                                    |
+|`CMAKE Build Release`: | Builds a release build and copies the plugin library to the `release` folder                                                      |
+|`CMAKE Build Debug`:   | Builds a debug build and copies the plugin library to the X-Plane folder, edit `setting.json` before, see "Debugging" section.    |
+|`Clean Release`:       | Cleans up the build folder                                                                                                        |
+|`Clean Debug`:         | Cleans up the debug folder                                                                                                        |
 
 # Concerns
 
