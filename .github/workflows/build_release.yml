@@ -53,7 +53,7 @@ jobs:
       uses: actions/checkout@v3
 
     - name: Install dependencies
-+      run: sudo apt-get update && sudo apt-get -y install -y ninja-build cmake gcc g++ libgl-dev libglu1-mesa-dev libalut-dev libgtk-3-dev pkg-config
+      run: sudo apt-get update && sudo apt-get -y install -y ninja-build cmake gcc g++ libgl-dev libglu1-mesa-dev libalut-dev libgtk-3-dev pkg-config
 
     - name: Build the project
       run: |
