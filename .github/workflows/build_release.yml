@@ -53,12 +53,14 @@ jobs:
       uses: actions/checkout@v3
 
     - name: Install dependencies
-      run: sudo apt-get update && sudo apt-get -y install -y make gcc g++ libgl-dev libglu1-mesa-dev libalut-dev libgtk-3-dev pkg-config
+      run: sudo apt-get update && sudo apt-get -y install -y ninja-build cmake gcc g++ libgl-dev libglu1-mesa-dev libalut-dev libgtk-3-dev pkg-config
 
     - name: Build the project
       run: |
-        cd src
-        make lin64
+        mkdir build
+        cd build
+        cmake -GNinja -DOUTPUT_DIR="../release/Aircraft/Extra Aircraft/NK_FPVSurfwing/plugins/INAV-X-Plane-HITL/64" ..
+        ninja
 
     - name: Commit lin.xpl
       run: |
@@ -79,12 +81,14 @@ jobs:
       uses: actions/checkout@v3
 
     - name: Install Dependencies
-      run: brew install make gtk+3 openal-soft
+      run: brew install ninja cmake gtk+3 openal-soft
  
     - name: Build the project
       run: |
-        cd src
-        make mac64
+        mkdir build
+        cd build
+        cmake -GNinja -DOUTPUT_DIR="../release/Aircraft/Extra Aircraft/NK_FPVSurfwing/plugins/INAV-X-Plane-HITL/64" ..
+        ninja
 
     - name: Commit mac.xpl
       run: |

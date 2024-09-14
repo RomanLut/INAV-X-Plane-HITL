@@ -14,6 +14,45 @@ Can be built on Windows using docker:
 
 ```docker run --rm -it -u root -v //d/Github/inav/INAV-X-Plane-HITL-Plugin/INAV-X-Plane-HITL/:/trunk inav-hitl-build ```
 
+# Building in Linux
+ 
+## Command line
+
+Installation of the prerequisites (Debian, Ubuntu and Co.):
+```shell
+ sudo apt-get update 
+ sudo apt-get install ninja-build cmake gcc g++ libgl-dev libglu1-mesa-dev libalut-dev libgtk-3-dev pkg-con
+``` 
+
+Building:
+```shell
+mkdir build
+cd build
+cmake -GNinja -DOUTPUT_DIR="../release/Aircraft/Extra Aircraft/NK_FPVSurfwing/plugins/INAV-X-Plane-HITL/64" ..
+ninja
+```
+
+Alternative (using make):
+```shell
+mkdir build
+cd build
+cmake -DOUTPUT_DIR="../release/Aircraft/Extra Aircraft/NK_FPVSurfwing/plugins/INAV-X-Plane-HITL/64" ..
+make
+```
+
+## VSCode
+
+Some predefined tasks are avaiable, use `STRG-Shift-B` to execute the Tasks;
+
+| Task                  | Description                                                                                                                       |
+|-----------------------|-----------------------------------------------------------------------------------------------------------------------------------|
+|`CMAKE Build Release`: | Prepares a `build` directory for a release build                                                                                  | 
+|`CMAKE Build Debug`:   | Prepares a `debug` directory for a debug build                                                                                    |
+|`CMAKE Build Release`: | Builds a release build and copies the plugin library to the `release` folder                                                      |
+|`CMAKE Build Debug`:   | Builds a debug build and copies the plugin library to the X-Plane folder, edit `setting.json` before, see "Debugging" section.    |
+|`Clean Release`:       | Cleans up the build folder                                                                                                        |
+|`Clean Debug`:         | Cleans up the debug folder                                                                                                        |
+
 # Concerns
 
 Plugin communicates with FC using MSP protocol.
@@ -35,6 +74,23 @@ X-Plane renders 40-100 FPS ( physics and rendering ) per second.
 We send new MSP_SIMULATOR command every frame, but not earlier than 10us from the last command. This allows to have update rate similar to FPS.
 
 # Debugging
+
+To avoid restarting X-Plane every time, download, build and install this plugin:
+[X-Plane Reload Plugins](https://developer.x-plane.com/code-sample/reloadplugins/)
+
+Select in X-PLane: Plugins -> ReloadPlugins -> Reload.
+All plugins will now be unloaded.
+
+### Windows / Visual Studio:
+Set the path to the HITL plugin under Project Properties -> Build -> Events -> Post-Build Event
+Start debugging with Debug -> Attach to Process, and select the X-Plane process
+
+### Linux/VSCode:
+Set the path to the HITL plugin in  `.vscode/settings.json`
+Start debugging with Run and Debug -> Attach to X-Plane (or just hit F5).
+
+When the project has been rebuilt and successfully attached to X-Plane, click on ‘Understood’ in the reload plugin.
+Now you should be able to debug the project directly in X-Plane.
 
 ## Plugin->Data Ref Editor->Show Datarefs
 

@@ -11,7 +11,7 @@
 TMenu g_menu;
 
 extern void cbConnect(TCBConnectParm state);
-extern void cbMessage(int code, const uint8_t* messageBuffer, int length);
+extern void cbMessage(int code, const uint8_t* messageBuffer, unsigned int length);
 
 //==============================================================
 //==============================================================
@@ -715,14 +715,14 @@ void TMenu::addFontEntry(bool analog, const char* fontName)
 
 //==============================================================
 //==============================================================
-void TMenu::updateFontsMenu(int activeAnalogFontIndex, int activeDigitalFontIndex)
+void TMenu::updateFontsMenu(unsigned int activeAnalogFontIndex, unsigned int activeDigitalFontIndex)
 {
-  for (int i = 0; i < this->analogFontMenuItems.size(); i++)
+  for (size_t i = 0; i < this->analogFontMenuItems.size(); i++)
   {
     XPLMCheckMenuItem(this->osd_analog_fonts_menu_id, this->analogFontMenuItems[i], i == activeAnalogFontIndex ? xplm_Menu_Checked : xplm_Menu_Unchecked);
   }
 
-  for (int i = 0; i < this->digitalFontMenuItems.size(); i++)
+  for (size_t i = 0; i < this->digitalFontMenuItems.size(); i++)
   {
     XPLMCheckMenuItem(this->osd_digital_fonts_menu_id, this->digitalFontMenuItems[i], i == (activeDigitalFontIndex - analogFontMenuItems.size()) ? xplm_Menu_Checked : xplm_Menu_Unchecked);
   }

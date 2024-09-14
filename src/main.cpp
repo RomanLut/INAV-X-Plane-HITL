@@ -34,7 +34,7 @@ void cbConnect(TCBConnectParm state)
 
 //==============================================================
 //==============================================================
-void cbMessage(int code, const uint8_t* messageBuffer, int length)
+void cbMessage(int code, const uint8_t* messageBuffer, unsigned int length)
 {
   if (code == MSP_SIMULATOR)
   {
@@ -177,7 +177,7 @@ bool buildIniFileName( char* iniFileName )
   XPLMGetPrefsPath(iniFileName);
   char* p = XPLMExtractFileAndPath(iniFileName);
   if (!p) return false;
-  strncat(iniFileName, XPLMGetDirectorySeparator(), MAX_PATH);
+  strncat(iniFileName, XPLMGetDirectorySeparator(), MAX_PATH - 1);
   strcat(iniFileName, "inavhitl.ini");
   return true;
 }

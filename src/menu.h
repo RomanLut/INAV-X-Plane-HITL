@@ -156,7 +156,7 @@ public:
   void updateSITLMenu();
   void updateAll();
 
-  void updateFontsMenu(int activeAnalogFontIndex, int activeDigitalFontIndex);
+  void updateFontsMenu(unsigned int activeAnalogFontIndex, unsigned int activeDigitalFontIndex);
 
   void actionDisconnect();
 

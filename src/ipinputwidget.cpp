@@ -66,8 +66,8 @@ int TIPInputWidget::widgetMessage(XPWidgetMessage inMessage, XPWidgetID  inWidge
 {
   if (this->shown)
   {
-    if (inWidget == this->widget && inMessage == xpMessage_CloseButtonPushed ||
-      inWidget == this->cancelButton && inMessage == xpMsg_PushButtonPressed)
+    if (((inWidget == this->widget) && (inMessage == xpMessage_CloseButtonPushed)) ||
+      ((inWidget == this->cancelButton) && (inMessage == xpMsg_PushButtonPressed)))
     {
       close();
       return 1;

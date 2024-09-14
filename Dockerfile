@@ -2,7 +2,7 @@ FROM ubuntu:focal
 
 ENV DEBIAN_FRONTEND noninteractive
 
-RUN apt-get update && apt-get install -y make gcc g++ libgl-dev libglu1-mesa-dev libalut-dev libgtk-3-dev pkg-config
+RUN apt-get update && apt-get install -y ninja-build cmake gcc g++ libgl-dev libglu1-mesa-dev libalut-dev libgtk-3-dev pkg-config
 
 VOLUME /trunk
 
