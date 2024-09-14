@@ -1,0 +1,23 @@
+{
+    "configurations": [
+        {
+            "name": "(gdb) Attach to XPlane",
+            "type": "cppdbg",
+            "request": "attach",
+            // For Liunx, if you want to use VScode with Windows or Mac replace "lin.xpl" with "win.xpl" or "mac.xpl"
+            "program": "${config:xplane.folder}/Aircraft/NK_FPVSurfwing/plugins/INAV-X-Plane-HITL/64/lin.xpl",
+            "processId": "${command:pickProcess}",
+            // You may want to change the following two lines when using Windows or Mac
+            "MIMode": "gdb",
+            "miDebuggerPath": "/usr/bin/gdb",
+            "preLaunchTask": "Build Debug",
+            "setupCommands": [
+            {
+                "description": "Enable pretty-printing for gdb",
+                "text": "-enable-pretty-printing",
+                "ignoreFailures": true
+            },
+            ]       
+        }
+    ]
+}

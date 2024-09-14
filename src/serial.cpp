@@ -193,7 +193,10 @@ void Serial::flushOut()
 
     this->writeBufferCount = 0;
 #elif LIN || APL
-    write(this->fd, this->writeBuffer, this->writeBufferCount);
+    ssize_t written = write(this->fd, this->writeBuffer, this->writeBufferCount);
+    if (written != this->writeBufferCount) {
+      LOG("WARN: %i bytes written, but %i bytes requested");
+    }
 
     g_stats.serialBytesSent += this->writeBufferCount;
     g_stats.serialPacketsSent++;

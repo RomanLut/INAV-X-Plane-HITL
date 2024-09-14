@@ -67,7 +67,7 @@ static char*	find_chunk(char * file_begin, char * file_end, int desired_id, int 
 		chunk_header * h = (chunk_header *) file_begin;
 		if(h->id == desired_id && !swapped)
 			return file_begin+sizeof(chunk_header);
-		if(h->id == SWAP_32(desired_id) && swapped)
+		if(h->id == (int)(SWAP_32(desired_id) && swapped))
 			return file_begin+sizeof(chunk_header);
 		int chunk_size = swapped ? SWAP_32(h->size) : h->size;
 		char * next = file_begin + chunk_size + sizeof(chunk_header);
@@ -100,7 +100,7 @@ ALuint load_wave(const char * file_name)
 		return 0;
 	}
 	fseek(fi,0,SEEK_END);
-	int file_size = ftell(fi);
+	size_t file_size = ftell(fi);
 	fseek(fi,0,SEEK_SET);
 	char * mem = (char*) malloc(file_size);
 	if(mem == NULL)

@@ -497,7 +497,7 @@ void TSimData::recalculateBattery()
   //use linear dependency for simplicity
 
   //12.6-9.6 = 3V
-  float n = 0;
+  float n;
   switch (this->batEmulation)
   {
   case BATTERY_3MIN:
@@ -508,6 +508,9 @@ void TSimData::recalculateBattery()
     break;
   case BATTERY_30MIN:
     n = 30.0f;
+    break;
+  default:
+    n = 0;
     break;
   }
 

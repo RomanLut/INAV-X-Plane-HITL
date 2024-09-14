@@ -206,7 +206,7 @@ public:
   TMSPFCVersion version;
 
   typedef void (*TCBConnect)(TCBConnectParm state);
-  typedef void(*TCBMessage)(int code, const uint8_t* messageBuffer, int length);
+  typedef void(*TCBMessage)(int code, const uint8_t* messageBuffer, unsigned int length);
 
   void connect(TCBConnect cbConnect, TCBMessage cbMessage);
   void connect(TCBConnect cbConnect, TCBMessage cbMessage, const char* ip, int port);

@@ -1,0 +1,66 @@
+{
+    "version": "2.0.0",
+    "tasks": [
+        
+        {
+            "label": "CMAKE Build Debug",
+            "type": "shell",
+            "command": "mkdir -p debug && cd debug && cmake -GNinja -DCMAKE_BUILD_TYPE=Debug -DOUTPUT_DIR=\"${config:xplane.folder}/Aircraft/NK_FPVSurfwing/plugins/INAV-X-Plane-HITL/64\" ..", 
+            "group": "build",
+            "problemMatcher": [],
+            "options": {
+                "cwd": "${workspaceFolder}"
+            }
+        },
+        {
+            "label": "CMAKE Build Release",
+            "type": "shell",
+            "command": "mkdir -p build && cd build && cmake -GNinja -DOUTPUT_DIR=\"${workspaceFolder}/release/Aircraft/Extra Aircraft/NK_FPVSurfwing/plugins/INAV-X-Plane-HITL/64\" ..", 
+            "group": "build",
+            "problemMatcher": [],
+            "options": {
+                "cwd": "${workspaceFolder}"
+            }
+        },
+        {
+            "label": "Build Debug",
+            "type": "shell",
+            "command": "ninja",
+            "group": "build",
+            "problemMatcher": [],
+            "options": {
+                "cwd": "${workspaceFolder}/debug"
+            }
+        },
+        {
+            "label": "Build Release",
+            "type": "shell",
+            "command": "ninja",
+            "group": "build",
+            "problemMatcher": [],
+            "options": {
+                "cwd": "${workspaceFolder}/build"
+            }
+        },
+        {
+            "label": "Clean Release",
+            "type": "shell",
+            "command": "ninja clean",
+            "group": "build",
+            "problemMatcher": [],
+            "options": {
+                "cwd": "${workspaceFolder}/build"
+            }
+        },
+        {
+            "label": "Clean Debug",
+            "type": "shell",
+            "command": "ninja clean",
+            "group": "build",
+            "problemMatcher": [],
+            "options": {
+                "cwd": "${workspaceFolder}/debug"
+            }
+        }
+    ]
+}

@@ -344,6 +344,8 @@ void TGraph::setGraphType(TGraphType type)
     this->series[6].setName("debug[6] ");
     this->series[7].setName("debug[7] ");
     break;
+  default:
+    break;
 
   }
 }

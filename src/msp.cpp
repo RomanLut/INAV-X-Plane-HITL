@@ -482,6 +482,8 @@ void MSP::processMessage()
   case STATE_CONNECTED:
     this->cbMessage(this->code, this->message_buffer, this->message_length_received);
     break;
+  default:
+    break;
   }
 }
 
@@ -552,6 +554,8 @@ void MSP::loop()
       this->state = STATE_DISCONNECTED;
       this->cbConnect(CBC_CONNECTION_FAILED);
     }
+    break;
+  default:
     break;
 
   }

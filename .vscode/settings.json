@@ -1,0 +1,4 @@
+{
+    // Set your X-PLane install folder to delply the plugin directly to X-Plane while debugging
+    "xplane.folder" : "/home/andi/.steam/steam/steamapps/common/X-Plane 11"
+}
