@@ -33,9 +33,11 @@ extern std::string toLower(const std::string& str);
 
 extern bool validateIpAddress(const std::string ipAddress);
 
+extern uint32_t GetTicks();
+
 #if LIN || APL
 extern bool IsDebuggerPresent();
-extern uint32_t GetTickCount();
+
 #endif
 
 #define SETTINGS_SECTION                    "settings"

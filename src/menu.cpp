@@ -494,7 +494,7 @@ void TMenu::menu_handler(void * in_menu_ref, void * in_item_ref)
   }
   else if (!strcmp((const char*)in_item_ref, "autolaunch_kick"))
   {
-    g_simData.autolaunch_kickStart = GetTickCount();
+    g_simData.autolaunch_kickStart = GetTicks();
   }
   else
   {

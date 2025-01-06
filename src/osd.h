@@ -1,10 +1,10 @@
 #pragma once
 
-#include "config.h"
 
 #include "msp.h"
 
 #include "fontbase.h"
+#include "osdRenderer.h"
 
 #include <vector>
 
@@ -31,6 +31,15 @@
 
 #define OSD_MAX_COLS      DJI_COLS
 #define OSD_MAX_ROWS      DJI_ROWS
+
+#define MAX7456_MODE_BLINK    (1 << 4)
+#define MAKE_CHAR_MODE(c, m)    (MAKE_CHAR_MODE_U8(c, m) | (c > 255 ? CHAR_MODE_EXT : 0))
+#define MAKE_CHAR_MODE_U8(c, m) ((((uint16_t)c) << 8) | m)
+#define CHAR_MODE_EXT           (1 << 2)
+#define CHAR_BYTE(x)            (x >> 8)
+#define MODE_BYTE(x)            (x & 0xFF)
+#define CHAR_IS_BLANK(x)        ((CHAR_BYTE(x) == 0x20 || CHAR_BYTE(x) == 0x00) && !CHAR_MODE_IS_EXT(MODE_BYTE(x)))
+#define CHAR_MODE_IS_EXT(m)     ((m) & CHAR_MODE_EXT)
 
 typedef enum
 {
@@ -90,34 +99,38 @@ public:
   void setActiveFontByIndex(int index);
 
 private:
-  int rows;
-  int cols;
+  int rows = 0;
+  int cols = 0;
 
   int noiseTextureId = 0;
   int interferenceTextureId = 0;
 
-  double home_lattitude;
-  double home_longitude;
-  double home_elevation;
-  float roll;
+  int textureWidth = 0;
+  int textureHeight = 0;
+
+  double home_lattitude = 0.0f;
+  double home_longitude = 0.0f;
+  double home_elevation = 0.0f;
+  float roll = 0.0f;
+
+  OsdRenderer *osdRenderer = nullptr;
+  int noiseTexture = -1;
+  int interferenceTexture = -1;
 
   uint16_t osdData[OSD_MAX_ROWS*OSD_MAX_COLS];
 
-  unsigned int activeAnalogFontIndex = 0;
-  unsigned int activeDigitalFontIndex = 0;
+  int activeAnalogFontIndex = -1;
+  int activeDigitalFontIndex = -1;
   unsigned int analogFontsCount = 0;
   std::vector<FontBase*> fonts;
 
   void loadFonts();
-  int loadTexture(const char* pFileName);
-
-  FontBase* getActiveFont();
+  void LoadFont(int index);
 
   void clear();
 
   void drawString(int row, int col, const char* str);
 
-  void destroyTexture(int textureId);
   void drawOSD();
   void drawNoise( float amount);
   void drawInterference( float amount );
@@ -127,8 +140,6 @@ private:
   float extractFloat(int index);
 
   bool isAnalogOSD();
-  float getModeAspectRatio();
-  int getForcedRowsCount();
 };
 
 extern TOSD g_osd;

@@ -59,7 +59,7 @@ XPLMDataRef TStats::registerFloatDataRef(const char* pName, float *pValue)
 //==============================================================
 void TStats::init()
 {
-  this->lastUpdate = GetTickCount();
+  this->lastUpdate = GetTicks();
 
   this->df_serialPacketsSent = this->registerIntDataRef("inav_hitl/serial/packetsSent", &g_stats.serialPacketsSent);
   this->df_serialPacketsSentPerSecond = this->registerIntDataRef("inav_hitl/serial/packetsSentPerSecond", &g_stats.serialPacketsSentPerSecond);
@@ -97,7 +97,7 @@ void TStats::init()
 //==============================================================
 void TStats::loop()
 {
-  uint32_t delta = GetTickCount() - this->lastUpdate;
+  uint32_t delta = GetTicks() - this->lastUpdate;
   if (delta >= 1000)
   {
     this->serialBytesSentPerSecond = this->serialBytesSent - this->serialBytesSentLast;
@@ -118,7 +118,7 @@ void TStats::loop()
     this->OSDUpdatesPerSecond = this->OSDUpdates - this->OSDUpdatesLast;
     this->OSDUpdatesLast = this->OSDUpdates;
 
-    this->lastUpdate = GetTickCount();
+    this->lastUpdate = GetTicks();
   }
 }
 

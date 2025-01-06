@@ -1,117 +1,89 @@
-#include "lodepng.h"
 
 #include "fontanalog.h"
 #include "util.h"
 
+#include "stb/stb_image.h"
+
 #define FONT_IMAGE_WIDTH   209
 #define FONT_IMAGE_HEIGHT  609
 
-#define FONT_TEXTURE_WIDTH   512
-#define FONT_TEXTURE_HEIGHT  1024
 
 #define OSD_CHAR_WIDTH 12
 #define OSD_CHAR_HEIGHT 18
 
+#define CHARS_PER_FONT_ROW 16
+#define CHARS_PER_FONT_COLUMN 32
+#define CHARS_PER_FILE (CHARS_PER_FONT_ROW * CHARS_PER_FONT_COLUMN)
+
+
 //======================================================
 //======================================================
-FontAnalog::FontAnalog(const char* fileName, const char* fontName) : FontBase( fontName )
+FontAnalog::FontAnalog(std::filesystem::path path) : FontBase()
 {
-  this->charWidth = OSD_CHAR_WIDTH;
-  this->charHeight = OSD_CHAR_HEIGHT;
-
-  unsigned char* image = 0;
-  unsigned width, height;
-
-  unsigned int error = lodepng_decode32_file(&image, &width, &height, fileName);
-  if (error)
+  strcpy(this->name, path.filename().replace_extension().string().c_str());
+  unsigned int charByteSize = 0, charByteWidth = 0;
+  int width, height, channels;
+  uint8_t* image = stbi_load(path.string().c_str(), &width, &height, &channels, 0);
+  if (!image)
   {
-    LOG("error %u: %s\n", error, lodepng_error_text(error));
+    LOG("Unable to load font file: ", path);
     return;
   }
 
   if (width != FONT_IMAGE_WIDTH || height != FONT_IMAGE_HEIGHT)
   {
-    LOG("Unexpected image size: %s\n", fileName);
+    LOG("Unexpected image size: %s\n", path);
+    stbi_image_free(image);
     return;
   }
 
-  this->fontTextureWidth = FONT_TEXTURE_WIDTH;
-  this->fontTextureHeight = FONT_TEXTURE_HEIGHT;
+  this->charWidth = OSD_CHAR_WIDTH;
+  this->charHeight = OSD_CHAR_HEIGHT;
+  charByteSize = this->charWidth * this->charHeight * BYTES_PER_PIXEL_RGBA;
+  charByteWidth = this->charWidth * BYTES_PER_PIXEL_RGBA;
 
-  uint8_t* buffer = new uint8_t[this->fontTextureWidth * this->fontTextureHeight * 4];
+  for (int charIndex = 0; charIndex < CHARS_PER_FILE; charIndex++) {
+    std::vector<uint8_t> character(charByteSize);
+    int charHeigthIdx = charByteSize - charByteWidth;
+    int imgXIdx = charIndex % CHARS_PER_FONT_ROW;
+    int imgYIdx = charIndex / CHARS_PER_FONT_ROW;
+    int ix = imgXIdx * this->charWidth + imgXIdx + 1; // Border
+    int iy = imgYIdx * this->charHeight + imgYIdx + 1; // Border
+    for (unsigned int y = 0; y < this->charHeight; y++) {
+      for (unsigned int x = 0; x < this->charWidth; x++) {
 
-  memset((void*)buffer, 0, this->fontTextureWidth * this->fontTextureHeight * 4);
+        unsigned int idx = ((iy + y) * channels * width) + ((ix + x) * channels);
+        uint8_t r = image[idx];
+        uint8_t g = image[idx + 1];
+        uint8_t b = image[idx + 2];
 
-  for (unsigned int cy = 0; cy < height; cy++)
-  {
-    if ((cy % (OSD_CHAR_HEIGHT + 1)) == 0) continue;
-
-    const uint8_t* pi = image + cy * width * 4;
-    uint8_t* pt = buffer + cy * this->fontTextureWidth * 4;
-
-    for (unsigned int cx = 0; cx < width; cx++)
-    {
-      if (((cx % (OSD_CHAR_WIDTH + 1)) != 0) && (pi[0] != 128))
-      {
-        pt[0] = pt[1] = pt[2] = pi[0];
-        pt[3] = 255;
+        if (r != 0x80 || g != 0x80 || b != 0x80) {
+          int cp = charHeigthIdx + (x * BYTES_PER_PIXEL_RGBA);
+          character[cp] = r;
+          character[cp + 1] = g;
+          character[cp + 2] = b;
+          character[cp + 3] = 0xff;
+        }
       }
-
-      pi += 4;
-      pt += 4;
+      charHeigthIdx -= charByteWidth;
     }
+    this->textures.push_back(character);
   }
+  stbi_image_free(image);
 
-  XPLMGenerateTextureNumbers(&this->fontTextureId, 1);
-  XPLMBindTexture2d(this->fontTextureId, 0);
-  glTexImage2D(
-    GL_TEXTURE_2D,
-    0,                   // mipmap level
-    GL_RGBA,             // internal format for the GL to use.  (We could ask for a floating point tex or 16-bit tex if we were crazy!)
-    this->fontTextureWidth,
-    this->fontTextureHeight,
-    0,                   // border size
-    GL_RGBA,             // format of color we are giving to GL
-    GL_UNSIGNED_BYTE,    // encoding of our data
-    buffer);
-
-  free(image);
 }
 
 
-//======================================================
-//======================================================
-FontAnalog::~FontAnalog()
+int FontAnalog::getCols()
 {
+  return 0;
 }
 
-//======================================================
-//======================================================
-void FontAnalog::drawChar(uint16_t code, float x1, float y1, float width, float height)
+int FontAnalog::getRows()
 {
-  if (this->fontTextureId == 0) return;
+  return 0;
+}
 
-  int code9 = code % 0xff;
-
-  int px = 1 + (code % 16) * (OSD_CHAR_WIDTH + 1);
-  int py = 1 + (code / 16) * (OSD_CHAR_HEIGHT + 1);
-
-  float u1 = (float)px;
-  float u2 = u1 + OSD_CHAR_WIDTH;
-
-  float v1 = (float)py;
-  float v2 = v1 + OSD_CHAR_HEIGHT;
-
-  u1 /= FONT_TEXTURE_WIDTH;
-  v1 /= FONT_TEXTURE_HEIGHT;
-  u2 /= FONT_TEXTURE_WIDTH;
-  v2 /= FONT_TEXTURE_HEIGHT;
-
-  float x2 = x1 + width;
-  float y2 = y1 - height;
-
-  glTexCoord2f(u1, v1);        glVertex2f(x1, y1);
-  glTexCoord2f(u2, v1);        glVertex2f(x2, y1);
-  glTexCoord2f(u2, v2);        glVertex2f(x2, y2);
-  glTexCoord2f(u1, v2);        glVertex2f(x1, y2);
+bool FontAnalog::isAnalog() {
+  return true;
 }

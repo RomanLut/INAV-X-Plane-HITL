@@ -13,7 +13,7 @@
   <PropertyGroup Label="Globals">
     <SccProjectName />
     <SccLocalPath />
-    <WindowsTargetPlatformVersion>10.0.17763.0</WindowsTargetPlatformVersion>
+    <WindowsTargetPlatformVersion>10.0</WindowsTargetPlatformVersion>
     <ProjectGuid>{C4AD41C2-2FC0-4526-A80D-69EB45701B27}</ProjectGuid>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
@@ -21,13 +21,13 @@
     <ConfigurationType>DynamicLibrary</ConfigurationType>
     <UseOfMfc>false</UseOfMfc>
     <CharacterSet>MultiByte</CharacterSet>
-    <PlatformToolset>v141</PlatformToolset>
+    <PlatformToolset>v143</PlatformToolset>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="Configuration">
     <ConfigurationType>DynamicLibrary</ConfigurationType>
     <UseOfMfc>false</UseOfMfc>
     <CharacterSet>MultiByte</CharacterSet>
-    <PlatformToolset>v141</PlatformToolset>
+    <PlatformToolset>v143</PlatformToolset>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
   <ImportGroup Label="ExtensionSettings">
@@ -42,7 +42,7 @@
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
-    <OutDir>.\Release\plugins\$(TargetName)\64\</OutDir>
+    <OutDir>$(ProjectDir)..\release\Aircraft\Extra Aircraft\NK_FPVSurfwing\plugins\INAV-X-Plane-HITL\64\</OutDir>
     <IntDir>.\Release\64\</IntDir>
     <LinkIncremental>false</LinkIncremental>
     <TargetExt>.xpl</TargetExt>
@@ -50,12 +50,14 @@
     <TargetName>win</TargetName>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
-    <OutDir>..\release\Aircraft\Extra Aircraft\NK_FPVSurfwing\plugins\INAV-X-Plane-HITL\64\</OutDir>
+    <OutDir>D:\SteamLibrary\steamapps\common\X-Plane 11\Aircraft\Extra Aircraft\NK_FPVSurfwing\plugins\INAV-X-Plane-HITL\64\</OutDir>
     <IntDir>.\Debug\64\</IntDir>
     <LinkIncremental>true</LinkIncremental>
     <TargetExt>.xpl</TargetExt>
     <GenerateManifest>false</GenerateManifest>
     <TargetName>win</TargetName>
+    <ExternalIncludePath>$(ExternalIncludePath)</ExternalIncludePath>
+    <LibraryPath>$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <ClCompile>
@@ -66,7 +68,7 @@
       <Optimization>MaxSpeed</Optimization>
       <SuppressStartupBanner>true</SuppressStartupBanner>
       <WarningLevel>Level3</WarningLevel>
-      <AdditionalIncludeDirectories>SDK\CHeaders\XPLM;SDK\CHeaders\Widgets;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>SDK\CHeaders\XPLM;SDK\CHeaders\Widgets;GL;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>WINVER=0x0601;_WIN32_WINNT=0x0601;_WIN32_WINDOWS=0x0601;WIN32;NDEBUG;_WINDOWS;_USRDLL;SIMDATA_EXPORTS;IBM=1;XPLM200=1;XPLM210=1;XPLM300=1;XPLM301=1;XPLM302=1;XPLM303=1;_CRT_SECURE_NO_WARNINGS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <AssemblerListingLocation>.\Release\64\</AssemblerListingLocation>
       <PrecompiledHeaderOutputFile>.\Release\64\INAV-X-Plane-HITL-Plugin.pch</PrecompiledHeaderOutputFile>
@@ -99,19 +101,21 @@
       <LinkDLL>true</LinkDLL>
       <SubSystem>Console</SubSystem>
       <ImportLibrary>.\Release\64\INAV-X-Plane-HITL-Plugin.lib</ImportLibrary>
-      <AdditionalLibraryDirectories>SDK\Libraries\Win;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
-      <AdditionalDependencies>Opengl32.lib;odbc32.lib;odbccp32.lib;XPLM_64.lib;XPWidgets_64.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>SDK\Libraries\Win;GL\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalDependencies>glew32.lib;Opengl32.lib;odbc32.lib;Winmm.lib;odbccp32.lib;XPLM_64.lib;XPWidgets_64.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
+    <PostBuildEvent>
+      <Command>del "$(OutputPath)win.pdb"</Command>
+    </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <ClCompile>
-      <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
       <InlineFunctionExpansion>Default</InlineFunctionExpansion>
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <Optimization>Disabled</Optimization>
       <SuppressStartupBanner>true</SuppressStartupBanner>
       <DebugInformationFormat>EditAndContinue</DebugInformationFormat>
-      <AdditionalIncludeDirectories>SDK\CHeaders\XPLM;SDK\CHeaders\Widgets;OpenAL\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>SDK\CHeaders\XPLM;SDK\CHeaders\Widgets;OpenAL\include;GL;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>WINVER=0x0601;_WIN32_WINNT=0x0601;_WIN32_WINDOWS=0x0601;WIN32;_DEBUG;_WINDOWS;_USRDLL;SIMDATA_EXPORTS;IBM=1;XPLM200=1;XPLM210=1;XPLM300=1;XPLM301=1;XPLM302=1;XPLM303=1;_CRT_SECURE_NO_WARNINGS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <AssemblerListingLocation>.\Debug\64\</AssemblerListingLocation>
       <PrecompiledHeaderOutputFile>.\Debug\64\INAV-X-Plane-HITL-Plugin.pch</PrecompiledHeaderOutputFile>
@@ -123,6 +127,7 @@
       <StructMemberAlignment>Default</StructMemberAlignment>
       <WarningLevel>Level3</WarningLevel>
       <LanguageStandard>stdcpp17</LanguageStandard>
+      <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
     </ClCompile>
     <Midl>
       <SuppressStartupBanner>true</SuppressStartupBanner>
@@ -144,8 +149,8 @@
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <SubSystem>Console</SubSystem>
       <ImportLibrary>.\Debug\64\INAV-X-Plane-HITL-Plugin.lib</ImportLibrary>
-      <AdditionalLibraryDirectories>SDK\Libraries\Win;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
-      <AdditionalDependencies>Opengl32.lib;odbc32.lib;odbccp32.lib;XPLM_64.lib;XPWidgets_64.lib;%(AdditionalDependencies);Winmm.lib;glu32.lib</AdditionalDependencies>
+      <AdditionalLibraryDirectories>SDK\Libraries\Win;GL\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalDependencies>glew32.lib;Opengl32.lib;odbc32.lib;odbccp32.lib;XPLM_64.lib;XPWidgets_64.lib;%(AdditionalDependencies);Winmm.lib;glu32.lib</AdditionalDependencies>
     </Link>
     <PostBuildEvent>
       <Command>if exist "$(ProjectDir)..\..\..\..\..\Games\X-Plane11\X-Plane 11\Aircraft\Extra Aircraft\NK_FPVSurfwing\plugins\INAV-X-Plane-HITL\64" (xcopy "$(ProjectDir)..\release\Aircraft\Extra Aircraft\NK_FPVSurfwing\plugins\INAV-X-Plane-HITL\64\*.*" "$(ProjectDir)..\..\..\..\..\Games\X-Plane11\X-Plane 11\Aircraft\Extra Aircraft\NK_FPVSurfwing\plugins\INAV-X-Plane-HITL\64" /E /I /Y)</Command>
@@ -163,16 +168,19 @@
     <ClInclude Include="fonthdzero.h" />
     <ClInclude Include="fontwalksnail.h" />
     <ClInclude Include="fontwtfos.h" />
+    <ClInclude Include="GL\glew.h" />
     <ClInclude Include="graph.h" />
     <ClInclude Include="ipinputwidget.h" />
-    <ClInclude Include="lodepng.h" />
     <ClInclude Include="menu.h" />
     <ClInclude Include="msp.h" />
     <ClInclude Include="osd.h" />
+    <ClInclude Include="osdRenderer.h" />
     <ClInclude Include="serial.h" />
     <ClInclude Include="serialbase.h" />
+    <ClInclude Include="shader.h" />
     <ClInclude Include="simData.h" />
     <ClInclude Include="stats.h" />
+    <ClInclude Include="stb\stb_image.h" />
     <ClInclude Include="tcpserial.h" />
     <ClInclude Include="util.h" />
     <ClInclude Include="sound.h" />
@@ -184,16 +192,18 @@
     <ClCompile Include="fontwtfos.cpp" />
     <ClCompile Include="graph.cpp" />
     <ClCompile Include="ipinputwidget.cpp" />
-    <ClCompile Include="lodepng.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="menu.cpp" />
     <ClCompile Include="msp.cpp" />
     <ClCompile Include="osd.cpp" />
+    <ClCompile Include="osdRenderer.cpp" />
     <ClCompile Include="serial.cpp" />
     <ClCompile Include="serialbase.cpp" />
+    <ClCompile Include="shader.cpp" />
     <ClCompile Include="simData.cpp" />
     <ClCompile Include="stats.cpp" />
     <ClCompile Include="sound.cpp" />
+    <ClCompile Include="stb\stbi_image.cpp" />
     <ClCompile Include="tcpserial.cpp" />
     <ClCompile Include="util.cpp" />
     <ClCompile Include="map.cpp" />

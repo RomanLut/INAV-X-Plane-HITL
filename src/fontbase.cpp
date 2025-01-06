@@ -1,44 +1,16 @@
 #include "fontbase.h"
-#include "util.h"
 
-
-//======================================================
-//======================================================
-FontBase::FontBase(const char* fontName)
+unsigned int FontBase::getCharWidth()
 {
-  strcpy(this->name, fontName);
+  return this->charWidth;
 }
 
-//======================================================
-//======================================================
-void FontBase::calculateTextureHeight(unsigned int imageWidth, unsigned int imageHeight)
+unsigned int FontBase::getCharHeight()
 {
-  this->fontTextureWidth = smallestPowerOfTwo( imageWidth, 8 );
-  this->fontTextureHeight = smallestPowerOfTwo( imageHeight, 8 );
+  return this->charHeight;
 }
 
-//======================================================
-//======================================================
-FontBase::~FontBase()
+std::vector<std::vector<uint8_t>> FontBase::getTextures()
 {
-}
-
-//==============================================================
-//==============================================================
-void FontBase::destroy()
-{
-  XPLMBindTexture2d(this->fontTextureId, 0);
-  GLuint t = this->fontTextureId;
-  glDeleteTextures(1, &t);
-
-  this->fontTextureId = 0;
-}
-
-//==============================================================
-//==============================================================
-void FontBase::bindTexture()
-{
-  if (this->fontTextureId == 0) return;
-
-  XPLMBindTexture2d(this->fontTextureId, 0);
+  return this->textures;
 }

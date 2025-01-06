@@ -96,7 +96,7 @@ void LOG(const char* fmt, ...)
   va_list args;
   char msg[1024];
 
-  snprintf(msg, 256, "INAVHITL[%ul]: ", GetTickCount());
+  snprintf(msg, 256, "INAVHITL[%ul]: ", GetTicks());
   size_t hl = strlen(msg);
 
   va_start(args, fmt);
@@ -211,11 +211,12 @@ bool IsDebuggerPresent()
 
 #endif
 
-#if LIN
+
 //==============================================================
 //==============================================================
-uint32_t GetTickCount()
+uint32_t GetTicks()
 {
+  #if LIN
   enum
   {
 #ifdef CLOCK_BOOTTIME
@@ -227,15 +228,15 @@ uint32_t GetTickCount()
   struct timespec spec;
   clock_gettime(boot_time_id, &spec);
   return (uint32_t)(((uint64_t)spec.tv_sec) * 1000 + ((uint64_t)spec.tv_nsec) / 1000000);
-}
 #elif APL
-uint32_t GetTickCount()
-{
   struct timespec spec;
   clock_gettime(CLOCK_MONOTONIC, &spec);
   return (uint32_t)(((uint64_t)spec.tv_sec) * 1000 + ((uint64_t)spec.tv_nsec) / 1000000);
-}
+#elif IBM
+  return (uint32_t)GetTickCount64();
 #endif
+}
+
 
 #if IBM
 //==============================================================

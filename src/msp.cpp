@@ -68,9 +68,9 @@ void MSP::decode()
 
   if (len > 0)
   {
-    this->lastUpdate = GetTickCount();
+    this->lastUpdate = GetTicks();
   }
-  else if (GetTickCount() > this->lastUpdate + (IsDebuggerPresent()? MSP_COMM_DEBUG_TIMEOUT_MS : MSP_COMM_TIMEOUT_MS))
+  else if (GetTicks() > this->lastUpdate + (IsDebuggerPresent()? MSP_COMM_DEBUG_TIMEOUT_MS : MSP_COMM_TIMEOUT_MS))
   {
     this->state = STATE_TIMEOUT;
     this->disconnect();
@@ -374,8 +374,8 @@ bool MSP::probeNextPort()
       {
         LOG("MSP_FC_VERSION sent");
         this->state = STATE_ENUMERATE_WAIT;
-        this->probeTime = GetTickCount();
-        this->lastUpdate = GetTickCount();
+        this->probeTime = GetTicks();
+        this->lastUpdate = GetTicks();
         this->decoderState = DS_IDLE;
         return true;
       }
@@ -401,8 +401,8 @@ bool MSP::connectTCP()
     {
       LOG("MSP_VERSION sent");
       this->state = STATE_CONNECT_TCP_WAIT;
-      this->probeTime = GetTickCount();
-      this->lastUpdate = GetTickCount();
+      this->probeTime = GetTicks();
+      this->lastUpdate = GetTicks();
       this->decoderState = DS_IDLE;
       return true;
     }
@@ -514,7 +514,7 @@ void MSP::loop()
     break;
 
   case STATE_ENUMERATE_WAIT:
-    if (GetTickCount() - this->probeTime > MSP_DETECT_TIMEOUT_MS)
+    if (GetTicks() - this->probeTime > MSP_DETECT_TIMEOUT_MS)
     {
       LOG("Probe Timeout");
       delete this->serial;
@@ -528,7 +528,7 @@ void MSP::loop()
     break;
 
   case STATE_CONNECT_TCP_WAIT:
-    if (GetTickCount() - this->probeTime > MSP_DETECT_TIMEOUT_MS)
+    if (GetTicks() - this->probeTime > MSP_DETECT_TIMEOUT_MS)
     {
       LOG("Connection Timeout");
       delete this->serial;

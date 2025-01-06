@@ -28,7 +28,7 @@ void cbConnect(TCBConnectParm state)
   g_menu._cbConnect(state);
   g_osd.cbConnect(state);
   g_simData.setBateryEmulation(g_simData.batEmulation); //rechange battery
-  lastUpdateTime = GetTickCount();
+  lastUpdateTime = GetTicks();
   should_wait = false;
 }
 
@@ -103,11 +103,11 @@ float floop_cb(float elapsed1, float elapsed2, int ctr, void* refcon)
 
   if (g_msp.isConnected())
   {
-    if ((GetTickCount() - lastUpdateTime) > (should_wait ? MSP_TIMEOUT_MS : MSP_PERIOD_MS ))
+    if ((GetTicks() - lastUpdateTime) > (should_wait ? MSP_TIMEOUT_MS : MSP_PERIOD_MS ))
     {
       g_simData.updateFromXPlane();
       g_simData.sendToINAV();
-      lastUpdateTime = GetTickCount();
+      lastUpdateTime = GetTicks();
       //should_wait = true; do not wait for answer, send next state after 10us passed
     }
   }
@@ -149,8 +149,6 @@ PLUGIN_API int XPluginStart(
 	strcpy(outSig, "https://github.com/RomanLut/INAV-X-Plane-HITL");
 	strcpy(outDesc, "INAV Hardware In The Loop");
 
-  g_osd.init();
-
   XPLMRegisterDrawCallback(&drawCallback, xplm_Phase_Window/*xplm_Phase_LastCockpit*/, 0, NULL);
 
 	return 1;
@@ -164,7 +162,6 @@ PLUGIN_API void	XPluginStop(void)
 
   XPLMUnregisterDrawCallback(&drawCallback, xplm_Phase_FirstCockpit, 0, NULL);
 
-  g_osd.destroy();
   g_sound.destroy();
   g_map.destroy();
 
@@ -232,6 +229,7 @@ PLUGIN_API int XPluginEnable(void)
 {
   LOG("Plugin enable");
 
+  g_osd.init();
   g_stats.init();
   g_simData.init(); //initialize before memu
   g_simData.updateFromXPlane();
@@ -263,6 +261,7 @@ PLUGIN_API void XPluginDisable(void)
 {
   LOG("Plugin disable");
 
+  g_osd.destroy();
   g_stats.close();
 
   if (g_msp.isConnected())

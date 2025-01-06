@@ -1,5 +1,4 @@
 
-#include "lodepng.h"
 
 #include "graph.h"
 #include "util.h"
@@ -7,6 +6,8 @@
 #include <math.h>
 
 TGraph g_graph;
+
+
 
 //=============================================================
 //=============================================================
@@ -51,7 +52,7 @@ void TGraphSeries::addPoint(float value)
 
 //=============================================================
 //=============================================================
-void TGraphSeries::draw(float bx, float by, float width, float height)
+void TGraphSeries::drawOSD(float bx, float by, float width, float height)
 {
   if (this->min == this->max)
   {
@@ -131,6 +132,11 @@ TGraph::TGraph()
   this->series[6].color = (128ul << 8) + 255ul;
   this->series[7].color = (255ul << 8) + 255ul;
 
+  this->activeCount = 0;
+  this->lastLen = 0;
+  this->pSeriesName = "";
+  memset(this->debug, 0, sizeof(float) * 8);
+
   this->lastUpdatesCountTime = 0;
   this->updatesCount = 0;
   this->updatesCountValue = 0;
@@ -172,7 +178,7 @@ void TGraph::drawCallback()
 
   for (int i = this->activeCount-1; i >=0 ; i--)       
   {
-    this->series[i].draw(bx, by, width, height);
+    this->series[i].drawOSD(bx, by, width, height);
   }
 
   float lineHeight = 16.0f;
@@ -440,7 +446,7 @@ void TGraph::addUpdatePeriodMS(uint32_t period)
   this->series[0].addPoint((float)period);
 
   this->updatesCount++;
-  uint32_t t = GetTickCount();
+  uint32_t t = GetTicks();
   uint32_t delta = t - this->lastUpdatesCountTime;
   if (delta >= 1000)
   {

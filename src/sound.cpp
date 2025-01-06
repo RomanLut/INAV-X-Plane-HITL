@@ -1,10 +1,7 @@
 #include "sound.h"
 #include "util.h"
 
-#if IBM
-#include <al.h>
-#include <alc.h>
-#elif LIN
+#if LIN
 #include <AL/al.h>
 #include <AL/alc.h>
 #elif APL

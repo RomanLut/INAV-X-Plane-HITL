@@ -18,7 +18,7 @@ TSimData g_simData;
 //==============================================================
 void TSimData::init()
 {
-  this->gps_lastUpdate = GetTickCount() - 1000;
+  this->gps_lastUpdate = GetTicks() - 1000;
   this->GPSHasNewData = false;
 
   this->gps_fix = GPS_FIX_3D;
@@ -105,7 +105,7 @@ void TSimData::init()
 //==============================================================
 void TSimData::updateFromXPlane()
 {
-  uint32_t t = GetTickCount();
+  uint32_t t = GetTicks();
 
   if ((t - this->gps_lastUpdate) >= (1000 / GPS_RATE_HZ) )                
   {
@@ -133,7 +133,7 @@ void TSimData::updateFromXPlane()
   float kick = 0;
   if (this->autolaunch_kickStart != 0)
   {
-    uint32_t t = GetTickCount();
+    uint32_t t = GetTicks();
     uint32_t dt = t - this->autolaunch_kickStart;
     if (dt > 1000)
     {
@@ -202,7 +202,7 @@ void TSimData::updateFromINAV(const TMSPSimulatorFromINAV* data)
     g_map.addDebug(g_stats.debug[0], g_stats.debug[1]);
   }
 
-  uint32_t t = GetTickCount();
+  uint32_t t = GetTicks();
   uint32_t delta = t - this->lastUpdateMS;
   if ((this->lastUpdateMS != 0) && (delta < 300))
   {
@@ -285,7 +285,7 @@ void TSimData::sendToINAV()
   }
   else if (this->gps_glitch == GPS_GLITCH_LINEAR)
   {
-    float k = GetTickCount() / 100000.0f;
+    float k = GetTicks() / 100000.0f;
     k -= (int)k;
     data.lat = (int32_t)round((this->lattitude + 1 * k / 111.32) * 10000000);
     data.lon = (int32_t)round(this->longitude * 10000000);
@@ -293,14 +293,14 @@ void TSimData::sendToINAV()
   }
   else if (this->gps_glitch == GPS_GLITCH_ALTITUDE)
   {
-    float k = GetTickCount() / 100000.0f;
+    float k = GetTicks() / 100000.0f;
     k -= (int)k;
     data.alt = (int32_t)round(this->glitch_elevation * 100 + k * 100000);
     data.velNED[2] = -(int16_t)round(k * 100000);
   }
   else if ((this->gps_glitch == GPS_GLITCH_CIRCLE) || (this->gps_glitch == GPS_GLITCH_CIRCLE_ALTITUDE) || (this->gps_glitch == GPS_GLITCH_CIRCLE_ALTITUDE_5))
   {
-    float k = GetTickCount() / 100000.0f;
+    float k = GetTicks() / 100000.0f;
     k -= (int)k;
     double a = k * 2 * CONST_PI;
     data.lat = (int32_t)round((this->glitch_lattitude + 1 * sin(a) / 111.32) * 10000000);
@@ -476,7 +476,7 @@ void TSimData::disconnect()
 void TSimData::setBateryEmulation(TBatteryEmulationType s)
 {
   this->batEmulation = s;
-  this->battery_lastUpdate = GetTickCount();
+  this->battery_lastUpdate = GetTicks();
   this->battery_chargeV = (s == BATTERY_DISCHAGED) ? 9.8f : 12.6f;
 }
 
@@ -484,7 +484,7 @@ void TSimData::setBateryEmulation(TBatteryEmulationType s)
 //==============================================================
 void TSimData::recalculateBattery()
 {
-  uint32_t t = GetTickCount();
+  uint32_t t = GetTicks();
   uint32_t dt = t - this->battery_lastUpdate;
   this->battery_lastUpdate = t;
   if (dt > 1000) dt = 1000;

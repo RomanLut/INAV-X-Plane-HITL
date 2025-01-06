@@ -3,9 +3,10 @@ SRC_BASE	:=	.
 TARGET		:= INAV-X-Plane-HITL
 
 SOURCES = \
+	GL/glew.c \
+	stb/stbi_image.cpp \
 	main.cpp \
 	graph.cpp \
-	lodepng.cpp \
 	menu.cpp \
 	msp.cpp \
 	osd.cpp \
@@ -22,13 +23,16 @@ SOURCES = \
     fontwalksnail.cpp \
     fonthdzero.cpp \
     fontwtfos.cpp \
-    ipinputwidget.cpp
+    ipinputwidget.cpp \
+	osdRenderer.cpp \
+	shader.cpp
 
-LIBS = -lopenal 
+LIBS = -lopenal
 
 INCLUDES = \
 	-I$(SRC_BASE)/SDK/CHeaders/XPLM \
-	-I$(SRC_BASE)/SDK/CHeaders/Widgets 
+	-I$(SRC_BASE)/SDK/CHeaders/Widgets \
+	-I$(SRC_BASE)/GL
 
 
 ############################################################################

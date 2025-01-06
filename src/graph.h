@@ -24,16 +24,16 @@ class TGraphSeries
   public:
 
     float points[GRAPH_POINTS];
-    float max;
-    float min;
+    float max = 0.0f;
+    float min = 0.0;
 
-    bool autoRange;
+    bool autoRange = false;
 
-    int color;
+    int color = 0;
 
-    int head;
+    int head = 0;
 
-    char name[128];
+    char name[128] = "";
 
     void clear();
 
@@ -42,7 +42,7 @@ class TGraphSeries
 
     void addPoint(float value);
 
-    void draw(float bx, float by, float width, float height);
+    void drawOSD(float bx, float by, float width, float height);
 };
 
 

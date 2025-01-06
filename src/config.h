@@ -54,14 +54,7 @@
 #include <fstream>
 //#include <functional>
 
-#if APL
-#include <OpenGL/gl.h>
-#include <OpenGL/glu.h>
-#else
-#include <GL/gl.h>
-#include <GL/glu.h>
-#endif
-
+#include <GL/glew.h>
 #include "mINI/ini.h"
 
 #if LIN || APL
