@@ -3,7 +3,7 @@ SRC_BASE	:=	.
 TARGET		:= INAV-X-Plane-HITL
 
 SOURCES = \
-	GL/glew.c \
+	glew/GL/glew.c \
 	stb/stbi_image.cpp \
 	main.cpp \
 	graph.cpp \
