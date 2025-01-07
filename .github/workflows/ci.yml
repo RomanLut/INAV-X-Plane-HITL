@@ -27,15 +27,6 @@ jobs:
         choco install visualstudio2022-workload-vctools -y
         choco install visualstudio2022buildtools -y
 
-    - name: Install GLEW
-      uses: johnwason/vcpkg-action@v6
-      id: vcpkg
-      with:
-        pkgs: glew
-        triplet: x64-windows-release
-        token: ${{ github.token }}
-        github-binarycache: true
-
     - name: Build solution
       run: |
         msbuild src/INAV-X-Plane-HITL-Plugin.sln /p:Configuration=Debug
