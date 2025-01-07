@@ -21,13 +21,13 @@ FontWalksnail::FontWalksnail(std::filesystem::path path)
   uint8_t* image = stbi_load(path.string().c_str(), &width, &height, &channels, 0);
   if (!image)
   {
-    LOG("Unable to load font file: ", path, "Error: ", stbi_failure_reason());
+    LOG("Unable to load font file: ", path.string().c_str(), "Error: ", stbi_failure_reason());
     return;
   }
 
   if ((width != OSD_CHAR_WIDTH_24) && (width != OSD_CHAR_WIDTH_36))
   {
-    LOG("Unexpected image size: %s\n", path);
+    LOG("Unexpected image size: %s\n", path.string().c_str());
     return;
   }
 
@@ -38,14 +38,14 @@ FontWalksnail::FontWalksnail(std::filesystem::path path)
 
   if ((this->charWidth == OSD_CHAR_WIDTH_24) && (this->charHeight != OSD_CHAR_HEIGHT_24))
   {
-    LOG("Unexpected image size: %s\n", path);
+    LOG("Unexpected image size: %s\n", path.string().c_str());
     stbi_image_free(image);
     return;
   }
 
   if ((this->charWidth == OSD_CHAR_WIDTH_36) && (this->charHeight != OSD_CHAR_HEIGHT_36))
   {
-    LOG("Unexpected image size: %s\n", path);
+    LOG("Unexpected image size: %s\n", path.string().c_str());
     stbi_image_free(image);
     return;
   }

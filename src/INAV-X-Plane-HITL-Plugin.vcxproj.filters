@@ -52,6 +52,5 @@
     <ClInclude Include="stb\stb_image.h" />
     <ClInclude Include="osdRenderer.h" />
     <ClInclude Include="shader.h" />
-    <ClInclude Include="GL\glew.h" />
   </ItemGroup>
 </Project>

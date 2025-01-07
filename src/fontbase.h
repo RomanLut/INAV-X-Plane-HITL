@@ -14,7 +14,7 @@ protected:
 
 public:
 
-  char name[MAX_FONT_NAME];
+  char name[MAX_FONT_NAME] = {0};
 
   unsigned int getCharWidth();
   unsigned int getCharHeight();

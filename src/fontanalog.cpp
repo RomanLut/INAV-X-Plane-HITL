@@ -26,13 +26,13 @@ FontAnalog::FontAnalog(std::filesystem::path path) : FontBase()
   uint8_t* image = stbi_load(path.string().c_str(), &width, &height, &channels, 0);
   if (!image)
   {
-    LOG("Unable to load font file: ", path);
+    LOG("Unable to load font file: ", path.string().c_str());
     return;
   }
 
   if (width != FONT_IMAGE_WIDTH || height != FONT_IMAGE_HEIGHT)
   {
-    LOG("Unexpected image size: %s\n", path);
+    LOG("Unexpected image size: %s\n", path.string().c_str());
     stbi_image_free(image);
     return;
   }

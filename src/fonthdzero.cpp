@@ -21,12 +21,12 @@ FontHDZero::FontHDZero(std::filesystem::path path)
   uint8_t* image = stbi_load(path.string().c_str(), &width, &height, &channels, 0);
   if (!image)
   {
-    LOG("Unable to load font file: ", path);
+    LOG("Unable to load font file: ", path.string().c_str());
     return;
   }
 
   if ((width != OSD_CHAR_WIDTH_24 * CHARS_PER_FONT_ROW) && (width != OSD_CHAR_WIDTH_36 * CHARS_PER_FONT_ROW)) {
-    LOG("Unexpected font size: %s\n", path);
+    LOG("Unexpected font size: %s\n", path.string().c_str());
     stbi_image_free(image);
     return;
   }
@@ -37,13 +37,13 @@ FontHDZero::FontHDZero(std::filesystem::path path)
   charByteWidth = this->charWidth * BYTES_PER_PIXEL_RGBA;
 
   if ((this->charWidth == OSD_CHAR_WIDTH_24) && (this->charHeight != OSD_CHAR_HEIGHT_24)) {
-    LOG("Unexpected image size: %s\n", path);
+    LOG("Unexpected image size: %s\n", path.string().c_str());
     stbi_image_free(image);
     return;
   }
 
   if ((this->charWidth == OSD_CHAR_WIDTH_36) && (this->charHeight != OSD_CHAR_HEIGHT_36)) {
-    LOG("Unexpected image size: %s\n", path);
+    LOG("Unexpected image size: %s\n", path.string().c_str());
     stbi_image_free(image);
     return;
   }
