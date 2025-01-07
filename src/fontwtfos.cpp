@@ -73,14 +73,14 @@ std::vector<uint8_t> FontWtfOS::loadBin(std::filesystem::path path)
 
   if (!file.is_open())
   {
-    LOG("Unable to open file: %s\n", path);
+    LOG("Unable to open file: %s\n", path.string().c_str());
     return font;
   }
 
   size = static_cast<int>(file.tellg());
   if (size != FONT_FILE_SIZE)
   {
-    LOG("Incorrect file size: %s\n", path);
+    LOG("Incorrect file size: %s\n", path.string().c_str());
     file.close();
     return font;
   }
