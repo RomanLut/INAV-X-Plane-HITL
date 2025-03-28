@@ -105,12 +105,12 @@ struct TMSPSimulatorToINAV
   uint8_t flags; // TSimulatorFlags
   uint8_t fix;
   uint8_t numSat;
-  int32_t lat;
-  int32_t lon;
-  int32_t alt;
+  int32_t lat; // Latitude * 1e+7
+  int32_t lon; // Longitude * 1e+7
+  int32_t alt; // Altitude in centimeters (meters * 100)
   int16_t speed;
   int16_t course;
-  int16_t velNED[3];
+  int16_t velNED[3];  //cm/sec
 
   int16_t roll;
   int16_t pitch;
