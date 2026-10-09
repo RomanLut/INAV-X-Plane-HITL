@@ -26,6 +26,7 @@
     <ClCompile Include="serialbase.cpp" />
     <ClCompile Include="tcpserial.cpp" />
     <ClCompile Include="ipinputwidget.cpp" />
+    <ClCompile Include="traffic.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="config.h" />
@@ -48,5 +49,6 @@
     <ClInclude Include="serialbase.h" />
     <ClInclude Include="tcpserial.h" />
     <ClInclude Include="ipinputwidget.h" />
+    <ClInclude Include="traffic.h" />
   </ItemGroup>
 </Project>

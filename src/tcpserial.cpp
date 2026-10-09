@@ -55,6 +55,7 @@ void TCPSerial::OpenConnection(char *address, int port)
   {
     LOG("Failed to set socket mode to non-blocking\n");
     this->CloseConnection();
+    return;
   }
 #endif
 
@@ -65,7 +66,7 @@ void TCPSerial::OpenConnection(char *address, int port)
 //======================================================
 void TCPSerial::CloseConnection()
 {
-  if (!this->connected) return;
+  if (this->sockfd == INVALID_SOCKET) return;  //also closes a socket whose connect() failed
 
 #ifdef _WIN32
   closesocket(sockfd);
@@ -73,6 +74,7 @@ void TCPSerial::CloseConnection()
 #else
   close(sockfd);
 #endif
+  this->sockfd = INVALID_SOCKET;
   this->connected = false;
 }
 

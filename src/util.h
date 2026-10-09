@@ -57,4 +57,5 @@ extern uint32_t GetTickCount();
 #define SETTINGS_ANALOG_OSD_FONT            "analog_osd_font"
 #define SETTINGS_DIGITAL_OSD_FONT           "digital_osd_font"
 #define SETTINGS_SITL_IP                    "sitl_ip"
+#define SETTINGS_SEND_TRAFFIC               "send_traffic"
 

@@ -127,6 +127,11 @@ public:
   int map_clear_tracks;
   int map_teleport;
 
+  XPLMMenuID traffic_menu_id;
+  int traffic_id;
+  int traffic_none_id;
+  int traffic_send_id;
+
   XPLMMenuID action_menu_id;
   int action_id;
   int autolaunch_id;
@@ -152,6 +157,7 @@ public:
   void updateAttitudeMenu();
   void updateGraphMenu();
   void updateMapMenu();
+  void updateTrafficMenu();
   void updateNoiseMenu();
   void updateSITLMenu();
   void updateAll();
