@@ -177,6 +177,7 @@
     <ClInclude Include="util.h" />
     <ClInclude Include="sound.h" />
     <ClInclude Include="map.h" />
+    <ClInclude Include="traffic.h" />
     <ClCompile Include="fontbase.cpp" />
     <ClCompile Include="fontanalog.cpp" />
     <ClCompile Include="fonthdzero.cpp" />
@@ -197,6 +198,7 @@
     <ClCompile Include="tcpserial.cpp" />
     <ClCompile Include="util.cpp" />
     <ClCompile Include="map.cpp" />
+    <ClCompile Include="traffic.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

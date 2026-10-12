@@ -10,6 +10,8 @@
 #define MSP_DEBUGMSG      253
 #define MSP_WP_GETINFO    20
 #define MSP_WP            118    //out message         get a WP, WP# is in the payload, returns (WP#, lat, lon, alt, flags) WP#0-home, WP#16-poshold
+#define MSP2_COMMON_SERIAL_CONFIG  0x1009
+#define MSP2_COMMON_SERIAL_INJECT  0x1010
 
 
 #define MAX_MSP_MESSAGE 1024
@@ -217,6 +219,7 @@ public:
 
   bool isConnected();
   bool isConnecting();
+  bool isLastMessageUnsupported();
 
 private:
   typedef enum
