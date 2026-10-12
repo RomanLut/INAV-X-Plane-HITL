@@ -6,6 +6,7 @@
 #include "osd.h"
 #include "graph.h"
 #include "map.h"
+#include "traffic.h"
 #include "ipinputwidget.h"
 
 TMenu g_menu;
@@ -124,6 +125,14 @@ void TMenu::updateBeeperMenu()
 {
   XPLMCheckMenuItem(this->beeper_menu_id, this->beeper_default_id, g_simData.muteBeeper == false ? xplm_Menu_Checked : xplm_Menu_Unchecked);
   XPLMCheckMenuItem(this->beeper_menu_id, this->beeper_mute_id, g_simData.muteBeeper == true ? xplm_Menu_Checked : xplm_Menu_Unchecked);
+}
+
+//==============================================================
+//==============================================================
+void TMenu::updateTrafficMenu()
+{
+  XPLMCheckMenuItem(this->traffic_menu_id, this->traffic_none_id, g_traffic.sendTraffic == false ? xplm_Menu_Checked : xplm_Menu_Unchecked);
+  XPLMCheckMenuItem(this->traffic_menu_id, this->traffic_send_id, g_traffic.sendTraffic == true ? xplm_Menu_Checked : xplm_Menu_Unchecked);
 }
 
 //==============================================================
@@ -383,6 +392,16 @@ void TMenu::menu_handler(void * in_menu_ref, void * in_item_ref)
   {
     g_simData.muteBeeper = true;
   }
+  else if (!strcmp((const char *)in_item_ref, "traffic_none"))
+  {
+    g_traffic.sendTraffic = false;
+    g_traffic.reset();
+  }
+  else if (!strcmp((const char *)in_item_ref, "traffic_send"))
+  {
+    g_traffic.sendTraffic = true;
+    g_traffic.reset();
+  }
   else if (!strcmp((const char *)in_item_ref, "pitot_none"))
   {
     g_simData.simulatePitot = false;
@@ -639,6 +658,11 @@ void TMenu::createMenu()
 
   XPLMAppendMenuSeparator(this->menu_id);
 
+  this->traffic_id = XPLMAppendMenuItem(this->menu_id, "Traffic", (void *)"Traffic", 1);
+  this->traffic_menu_id = XPLMCreateMenu("Traffic", this->menu_id, this->traffic_id, static_menu_handler, NULL);
+  this->traffic_none_id = XPLMAppendMenuItem(this->traffic_menu_id, "Do not send", (void *)"traffic_none", 1);
+  this->traffic_send_id = XPLMAppendMenuItem(this->traffic_menu_id, "Send X-Plane traffic as ADS-B", (void *)"traffic_send", 1);
+
   this->map_id = XPLMAppendMenuItem(this->menu_id, "Map", (void *)"Map", 1);
   this->map_menu_id = XPLMCreateMenu("Map", this->menu_id, this->map_id, static_menu_handler, NULL);
   this->map_none_id = XPLMAppendMenuItem(this->map_menu_id, "None", (void *)"map_none", 1);
@@ -689,6 +713,7 @@ void TMenu::updateAll()
   this->updateNoiseMenu();
   this->updateGraphMenu();
   this->updateMapMenu();
+  this->updateTrafficMenu();
   this->updateSITLMenu();
 }
 

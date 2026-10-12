@@ -178,6 +178,32 @@ Plugin will simulate analog video link quality acccording to setting. Home point
 
 ![](noise.jpg)
 
+# Traffic (ADS-B)
+
+The plugin can pass X-Plane's traffic to INAV as ADS-B: X-Plane's own AI aircraft, or
+real-world aircraft shown by a traffic plugin such as LiveTraffic.
+
+![](traffic.png)
+
+Select **Plugins->INAV HITL/SITL->Traffic->Send X-Plane traffic as ADS-B** (off by default).
+
+Requirements:
+- X-Plane 11.50 or newer (the traffic is read from X-Plane's TCAS targets).
+- In INAV, one free serial port set to **MAVLink** telemetry on the Ports tab (not shared with
+  MSP or a receiver, nothing connected to it), and the **Telemetry** feature enabled
+  (`feature TELEMETRY` in the CLI): INAV opens telemetry ports only when it is on. The plugin
+  feeds the aircraft into that port.
+- HITL: an INAV version with the `MSP2_COMMON_SERIAL_INJECT` MSP message.
+  SITL: any version that accepts MAVLink ADS-B traffic. Without this message, the plugin writes
+  the aircraft straight into the port's TCP socket, which must not be in use by another client.
+
+Once per second the plugin sends the nearest eight aircraft within 64 km as MAVLink
+`ADSB_VEHICLE` messages, and INAV keeps the nearest of them (five in INAV 10). They appear on
+the GPS tab of INAV Configurator and in INAV's ADS-B OSD elements.
+
+LiveTraffic shows real-world traffic with its own buffering delay (90 s by default), so the
+aircraft in X-Plane and INAV are that much behind live tracking sites.
+
 # Flight path drawing 
 
 Plugin can draw flight path on X-Plane map. 

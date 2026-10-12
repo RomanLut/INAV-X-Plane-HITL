@@ -501,6 +501,13 @@ bool MSP::isConnecting()
 
 //======================================================
 //======================================================
+bool MSP::isLastMessageUnsupported()
+{
+  return this->unsupported != 0;  //INAV answered '!': unknown command or refused
+}
+
+//======================================================
+//======================================================
 void MSP::loop()
 {
   switch (state)

@@ -12,6 +12,7 @@
 #include "graph.h"
 #include "sound.h"
 #include "map.h"
+#include "traffic.h"
 
 uint32_t lastUpdateTime;
 bool should_wait;
@@ -27,6 +28,7 @@ void cbConnect(TCBConnectParm state)
 {
   g_menu._cbConnect(state);
   g_osd.cbConnect(state);
+  g_traffic.reset();
   g_simData.setBateryEmulation(g_simData.batEmulation); //rechange battery
   lastUpdateTime = GetTickCount();
   should_wait = false;
@@ -91,6 +93,14 @@ void cbMessage(int code, const uint8_t* messageBuffer, int length)
   {
     g_map.onWP((const TMSPWP*)messageBuffer);
   }
+  else if (code == MSP2_COMMON_SERIAL_CONFIG)
+  {
+    g_traffic.onSerialConfig(messageBuffer, length);
+  }
+  else if (code == MSP2_COMMON_SERIAL_INJECT)
+  {
+    g_traffic.onSerialInject(!g_msp.isLastMessageUnsupported());
+  }
 
 }
 
@@ -110,6 +120,8 @@ float floop_cb(float elapsed1, float elapsed2, int ctr, void* refcon)
       lastUpdateTime = GetTickCount();
       //should_wait = true; do not wait for answer, send next state after 10us passed
     }
+
+    g_traffic.loop();
   }
 
   g_stats.cycles++;
@@ -200,6 +212,7 @@ bool loadIniFile()
   g_osd.loadConfig(ini);
   g_graph.loadConfig(ini);
   g_map.loadConfig(ini);
+  g_traffic.loadConfig(ini);
   g_menu.loadConfig(ini);
 
   g_menu.updateAll();
@@ -216,6 +229,7 @@ bool saveIniFile()
   g_osd.saveConfig(ini);
   g_graph.saveConfig(ini);
   g_map.saveConfig(ini);
+  g_traffic.saveConfig(ini);
   g_menu.saveConfig(ini);
 
   char iniFileName[MAX_PATH];
@@ -237,6 +251,7 @@ PLUGIN_API int XPluginEnable(void)
   g_simData.updateFromXPlane();
 
   g_map.init();
+  g_traffic.init();
 
   g_menu.createMenu();
 

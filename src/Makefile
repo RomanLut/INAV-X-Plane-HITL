@@ -17,6 +17,7 @@ SOURCES = \
 	util.cpp \
 	sound.cpp \
 	map.cpp \
+	traffic.cpp \
     fontbase.cpp \
     fontanalog.cpp \
     fontwalksnail.cpp \
