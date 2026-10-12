@@ -42,7 +42,11 @@ This action will add **INAV Surfwing** flying wing model with this plugin.
 
 # Setup (MacOs)
 
-For MacOs, all steps are analogous to Windows.
+For MacOs, all steps are analogous to Windows, but since the X-Plane plugin is not signed, you may need to run these commands in the terminal:
+```bash
+xattr -rd com.apple.quarantine ~/Library/Application\ Support/Steam/SteamApps/common/X-Plane\ 11/Aircraft/Extra\ Aircraft/NK_FPVSurfwing/plugins/INAV-X-Plane-HITL/64/mac.xpl
+xattr -rd com.apple.quarantine ~/Library/Application\ Support/Steam/SteamApps/common/X-Plane\ 11/Aircraft/Extra\ Aircraft/NK_FPVSurfwing/plugins/xlua/64/mac.xpl
+```
 
 # Flight controller configuration
 
