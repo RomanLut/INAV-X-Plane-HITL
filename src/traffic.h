@@ -18,6 +18,7 @@ public:
   void loop();
 
   void onSerialConfig(const uint8_t* messageBuffer, int length);
+  void onSerialConfigRefused();
   void onSerialInject(bool accepted);
 
   void loadConfig(mINI::INIStructure& ini);
@@ -30,7 +31,7 @@ private:
     TS_PROBE,       // empty MSP2_COMMON_SERIAL_INJECT sent: does this INAV support it?
     TS_INJECT,      // traffic goes over the MSP link
     TS_SITL_TCP,    // SITL without MSP2_COMMON_SERIAL_INJECT: straight into the port's TCP socket
-    TS_IDLE         // nothing to do until the next connect
+    TS_RETRY        // something failed: start over after retryDelay
   } TState;
 
   TState state = TS_FIND_PORT;
@@ -38,6 +39,7 @@ private:
   uint32_t lastRequestTime = 0;
   uint32_t lastCycleTime = 0;
   uint32_t lastMessageTime = 0;
+  uint32_t retryDelay = 0;
   uint8_t sequence = 0;
   TCPSerial* sitlSerial = NULL;
 
@@ -70,6 +72,7 @@ private:
   float verticalSpeed[TRAFFIC_TCAS_SLOTS];
 
   void closeSITL();
+  void retryLater();
   void readTargets();
   int encodeHeartbeat(uint8_t* buffer);
   int encodeVehicle(uint8_t* buffer, int slot);

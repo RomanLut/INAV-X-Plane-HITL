@@ -8,6 +8,8 @@
 TTraffic g_traffic;
 
 #define TRAFFIC_PERIOD_MS           1000u
+#define TRAFFIC_RETRY_MIN_MS        2000u     // a failed setup is retried after this, doubling up to TRAFFIC_RETRY_MAX_MS
+#define TRAFFIC_RETRY_MAX_MS        32000u
 #define TRAFFIC_MESSAGE_PERIOD_MS   100u      // INAV runs one MSP command per serial task cycle (100 Hz), shared with MSP_SIMULATOR
 #define TRAFFIC_FRAMES_PER_MESSAGE  4         // 1 + 4 * 46 = 185 bytes: fits INAV's 192-byte MSP input buffer and 256-byte UART RX buffer
 #define TRAFFIC_MAX_FRAME           (8 + 38)
@@ -103,6 +105,7 @@ void TTraffic::reset()
   this->state = TS_FIND_PORT;
   this->portIdentifier = -1;
   this->lastRequestTime = GetTickCount() - TRAFFIC_PERIOD_MS;
+  this->retryDelay = TRAFFIC_RETRY_MIN_MS;
   this->targetsCount = 0;
   this->framesCount = 0;
   this->nextFrame = 0;
@@ -117,6 +120,16 @@ void TTraffic::closeSITL()
     delete this->sitlSerial;
     this->sitlSerial = NULL;
   }
+}
+
+//==============================================================
+//==============================================================
+void TTraffic::retryLater()
+{
+  LOG("Traffic: retrying in %d s", (int)(this->retryDelay / 1000));
+  this->closeSITL();
+  this->state = TS_RETRY;
+  this->lastRequestTime = GetTickCount();
 }
 
 //==============================================================
@@ -141,23 +154,33 @@ void TTraffic::loop()
     if (t - this->lastRequestTime >= TRAFFIC_PERIOD_MS) this->state = TS_FIND_PORT;  //no answer: ask again
     return;
 
+  case TS_RETRY:
+    if (t - this->lastRequestTime < this->retryDelay) return;
+    this->retryDelay = this->retryDelay * 2 < TRAFFIC_RETRY_MAX_MS ? this->retryDelay * 2 : TRAFFIC_RETRY_MAX_MS;
+    this->state = TS_FIND_PORT;
+    this->lastRequestTime = t - TRAFFIC_PERIOD_MS;
+    return;
+
   case TS_INJECT:
     break;
 
   case TS_SITL_TCP:
-    if (!this->sitlSerial->IsConnected())
+  {
+    TCPSerial::TConnectState connectState = this->sitlSerial->PollConnect();
+    if (connectState == TCPSerial::CS_PENDING) return;  //connect() still in progress
+    if (connectState == TCPSerial::CS_FAILED)
     {
       LOG("Traffic: SITL UART%d is not reachable over TCP (is the Telemetry feature on?)", this->portIdentifier + 1);
-      this->closeSITL();
-      this->state = TS_IDLE;
+      this->retryLater();
       return;
     }
-    {
-      //SITL transmits MAVLink on this port too: drain it so the socket never fills up
-      unsigned char scratch[256];
-      while (this->sitlSerial->ReadData(scratch, sizeof(scratch)) > 0);
-    }
+    this->retryDelay = TRAFFIC_RETRY_MIN_MS;  //working: the next failure retries quickly again
+
+    //SITL transmits MAVLink on this port too: drain it so the socket never fills up
+    unsigned char scratch[256];
+    while (this->sitlSerial->ReadData(scratch, sizeof(scratch)) > 0);
     break;
+  }
 
   default:
     return;
@@ -219,7 +242,17 @@ void TTraffic::onSerialConfig(const uint8_t* messageBuffer, int length)
   }
 
   LOG("Traffic: no free INAV serial port is set to MAVLink");
-  this->state = TS_IDLE;
+  this->retryLater();
+}
+
+//==============================================================
+//==============================================================
+void TTraffic::onSerialConfigRefused()
+{
+  if (this->state != TS_FIND_PORT) return;
+
+  LOG("Traffic: INAV refused MSP2_COMMON_SERIAL_CONFIG");
+  this->retryLater();
 }
 
 //==============================================================
@@ -232,6 +265,7 @@ void TTraffic::onSerialInject(bool accepted)
   {
     LOG("Traffic: sending to INAV serial port %d over MSP", this->portIdentifier);
     this->state = TS_INJECT;
+    this->retryDelay = TRAFFIC_RETRY_MIN_MS;
   }
   else if (g_menu.isSITLConnection && this->portIdentifier < 8)
   {
@@ -247,7 +281,7 @@ void TTraffic::onSerialInject(bool accepted)
   else
   {
     LOG("Traffic: INAV refused MSP2_COMMON_SERIAL_INJECT: the MAVLink port is not open (is the Telemetry feature on?) or this INAV version is too old");
-    this->state = TS_IDLE;
+    this->retryLater();
   }
 }
 

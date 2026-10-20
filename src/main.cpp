@@ -36,8 +36,27 @@ void cbConnect(TCBConnectParm state)
 
 //==============================================================
 //==============================================================
-void cbMessage(int code, const uint8_t* messageBuffer, int length)
+void cbMessage(int code, const uint8_t* messageBuffer, int length, bool unsupported)
 {
+  //INAV answered '!': there is no answer to parse. MSP_SIMULATOR goes on: its short answer is caught there as unsupported firmware
+  if (unsupported && code != MSP_SIMULATOR)
+  {
+    LOG("INAV refused MSP command %d", code);
+    if (code == MSP_WP_GETINFO || code == MSP_WP)
+    {
+      g_map.onWPRefused();
+    }
+    else if (code == MSP2_COMMON_SERIAL_CONFIG)
+    {
+      g_traffic.onSerialConfigRefused();
+    }
+    else if (code == MSP2_COMMON_SERIAL_INJECT)
+    {
+      g_traffic.onSerialInject(false);
+    }
+    return;
+  }
+
   if (code == MSP_SIMULATOR)
   {
     if (length < MSP_SIMULATOR_RESPOSE_MIN_LENGTH)
@@ -99,7 +118,7 @@ void cbMessage(int code, const uint8_t* messageBuffer, int length)
   }
   else if (code == MSP2_COMMON_SERIAL_INJECT)
   {
-    g_traffic.onSerialInject(!g_msp.isLastMessageUnsupported());
+    g_traffic.onSerialInject(true);
   }
 
 }

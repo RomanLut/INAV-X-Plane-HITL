@@ -35,6 +35,7 @@ public:
   void startDownloadWaypoints();
   void onWPInfo(const TMSPWPInfo* messageBuffer);
   void onWP(const TMSPWP* messageBuffer);
+  void onWPRefused();
 
   void teleport();
 

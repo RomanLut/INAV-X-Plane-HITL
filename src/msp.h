@@ -208,7 +208,8 @@ public:
   TMSPFCVersion version;
 
   typedef void (*TCBConnect)(TCBConnectParm state);
-  typedef void(*TCBMessage)(int code, const uint8_t* messageBuffer, int length);
+  // unsupported: INAV answered '!' (unknown command or refused), the payload is not the command's answer
+  typedef void(*TCBMessage)(int code, const uint8_t* messageBuffer, int length, bool unsupported);
 
   void connect(TCBConnect cbConnect, TCBMessage cbMessage);
   void connect(TCBConnect cbConnect, TCBMessage cbMessage, const char* ip, int port);
@@ -219,7 +220,6 @@ public:
 
   bool isConnected();
   bool isConnecting();
-  bool isLastMessageUnsupported();
 
 private:
   typedef enum
@@ -230,6 +230,7 @@ private:
     STATE_CONNECTED,
     STATE_TIMEOUT,
     STATE_CONNECT_TCP,
+    STATE_CONNECT_TCP_PENDING,  // non-blocking connect() in progress
     STATE_CONNECT_TCP_WAIT
   } TState;
 
@@ -285,6 +286,7 @@ private:
   void dispatchMessage(uint8_t expected_checksum);
   void processMessage();
   bool connectTCP();
+  bool requestTCPVersion();
 };
 
 extern MSP g_msp;

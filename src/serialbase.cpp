@@ -25,7 +25,7 @@ bool SerialBase::WriteData(unsigned char *buffer, unsigned int nbChar)
 {
   if (!this->IsConnected()) return false;
 
-  if (this->writeBufferCount + nbChar < SERIAL_BUFFER_SIZE)
+  if (this->CanWrite(nbChar))
   {
     for (unsigned int i = 0; i < nbChar; i++)
     {
@@ -38,6 +38,13 @@ bool SerialBase::WriteData(unsigned char *buffer, unsigned int nbChar)
   {
     return false;
   }
+}
+
+//======================================================
+//======================================================
+bool SerialBase::CanWrite(unsigned int nbChar)
+{
+  return this->writeBufferCount + nbChar < SERIAL_BUFFER_SIZE;
 }
 
 //======================================================

@@ -308,6 +308,15 @@ void TMap::onWP(const TMSPWP* messageBuffer)
 
 //==============================================================
 //==============================================================
+void TMap::onWPRefused()
+{
+  if (this->waypointsDownloadState < 0 || this->waypointsDownloadState > this->waypointsCount) return;  //no download in progress
+  XPLMSpeakString("Unable to download waypoints");
+  this->waypointsDownloadState = -1;
+}
+
+//==============================================================
+//==============================================================
 void TMap::retrieveNextWaypoint()
 {
   if (!g_msp.sendCommand(MSP_WP, &this->waypointsDownloadState, 1)) this->waypointsDownloadState = -100;

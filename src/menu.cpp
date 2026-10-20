@@ -12,7 +12,7 @@
 TMenu g_menu;
 
 extern void cbConnect(TCBConnectParm state);
-extern void cbMessage(int code, const uint8_t* messageBuffer, int length);
+extern void cbMessage(int code, const uint8_t* messageBuffer, int length, bool unsupported);
 
 //==============================================================
 //==============================================================

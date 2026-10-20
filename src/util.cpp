@@ -127,6 +127,9 @@ float latDistanceM(double lat1, double lon1, double elev1, double lat2, double l
 {
   double dist;
   dist = sin(toRad(lat1)) * sin(toRad(lat2)) + cos(toRad(lat1)) * cos(toRad(lat2)) * cos(toRad(lon1 - lon2));
+  //rounding can push identical points just past 1, and acos() of that is NaN
+  if (dist > 1.0) dist = 1.0;
+  if (dist < -1.0) dist = -1.0;
   dist = acos(dist);
   //        dist = (6371 * pi * dist) / 180;
   //got dist in radian, no need to change back to degree and convert to rad again.

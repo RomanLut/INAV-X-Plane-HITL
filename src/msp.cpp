@@ -284,6 +284,9 @@ bool MSP::sendCommand(uint16_t messageID, void * payload, uint16_t size)
 
   msg_size += (int)size;
 
+  //the whole frame or nothing: a TCP socket can hold unsent bytes, and a cut frame would corrupt the stream
+  if (!serial->CanWrite(msg_size)) return false;
+
   if (!serial->WriteData((unsigned char*)"$", 1)) return false;
   if (!serial->WriteData((unsigned char*)"X", 1)) return false;
   if (!serial->WriteData((unsigned char*)"<", 1)) return false;
@@ -394,6 +397,22 @@ bool MSP::connectTCP()
 
   this->serial = new TCPSerial();
   ((TCPSerial*)this->serial)->OpenConnection(this->tcpIp, this->tcpPort);
+  if (((TCPSerial*)this->serial)->PollConnect() != TCPSerial::CS_FAILED)
+  {
+    //connect() completes in the background: STATE_CONNECT_TCP_PENDING polls it every flight loop
+    this->state = STATE_CONNECT_TCP_PENDING;
+    return true;
+  }
+  LOG("Unable to connect");
+  delete this->serial;
+  this->serial = NULL;
+  return false;
+}
+
+//======================================================
+//======================================================
+bool MSP::requestTCPVersion()
+{
   if (this->serial->IsConnected())
   {
     LOG("Connected");
@@ -480,7 +499,7 @@ void MSP::processMessage()
     break;
 
   case STATE_CONNECTED:
-    this->cbMessage(this->code, this->message_buffer, this->message_length_received);
+    this->cbMessage(this->code, this->message_buffer, this->message_length_received, this->unsupported != 0);
     break;
   }
 }
@@ -497,13 +516,6 @@ bool MSP::isConnected()
 bool MSP::isConnecting()
 {
   return (this->state != STATE_CONNECTED) && (this->state != STATE_DISCONNECTED);
-}
-
-//======================================================
-//======================================================
-bool MSP::isLastMessageUnsupported()
-{
-  return this->unsupported != 0;  //INAV answered '!': unknown command or refused
 }
 
 //======================================================
@@ -555,6 +567,14 @@ void MSP::loop()
 
   case STATE_CONNECT_TCP:
     if (!this->connectTCP())
+    {
+      this->state = STATE_DISCONNECTED;
+      this->cbConnect(CBC_CONNECTION_FAILED);
+    }
+    break;
+
+  case STATE_CONNECT_TCP_PENDING:
+    if (((TCPSerial*)this->serial)->PollConnect() != TCPSerial::CS_PENDING && !this->requestTCPVersion())
     {
       this->state = STATE_DISCONNECTED;
       this->cbConnect(CBC_CONNECTION_FAILED);

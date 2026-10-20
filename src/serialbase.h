@@ -24,6 +24,7 @@ public:
   virtual ~SerialBase() {};
   virtual int ReadData(unsigned char *buffer, unsigned int nbChar) = 0;
 	bool WriteData(unsigned char *buffer, unsigned int nbChar);
+  bool CanWrite(unsigned int nbChar);
 	bool IsConnected();
 
   virtual void flushOut() = 0;
